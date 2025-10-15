@@ -57,6 +57,24 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        dojo: {
+          red: "hsl(var(--dojo-red))",
+          "red-dark": "hsl(var(--dojo-red-dark))",
+          "red-light": "hsl(var(--dojo-red-light))",
+          black: "hsl(var(--dojo-black))",
+          gray: "hsl(var(--dojo-gray))",
+        },
+      },
+      backgroundImage: {
+        "gradient-hero": "var(--gradient-hero)",
+        "gradient-overlay": "var(--gradient-overlay)",
+      },
+      boxShadow: {
+        glow: "var(--shadow-glow)",
+        card: "var(--shadow-card)",
+      },
+      transitionTimingFunction: {
+        smooth: "var(--transition-smooth)",
       },
       borderRadius: {
         lg: "var(--radius)",
