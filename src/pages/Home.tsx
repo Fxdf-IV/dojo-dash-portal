@@ -1,7 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Shield, Heart, Users, Trophy } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Shield, Heart, Users, Trophy, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
+import ctMaylsonImage from "@/assets/ct-maylson-campos.jpg";
+import bolaCidadaniaImage from "@/assets/bola-cidadania.jpg";
+import gotaVerdeImage from "@/assets/gota-verde.jpg";
+import colegioExpoenteImage from "@/assets/colegio-expoente.jpg";
 
 const Home = () => {
   const projects = [
@@ -106,6 +111,141 @@ const Home = () => {
               </Card>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Gallery Section */}
+      <section className="py-20 bg-gradient-to-br from-background to-secondary/30">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+              Nossos Locais de Treino
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+              Conheça cada um dos espaços onde levamos o karatê tradicional para a comunidade
+            </p>
+          </div>
+
+          <Tabs defaultValue="ct-maylson" className="max-w-6xl mx-auto">
+            <TabsList className="grid w-full grid-cols-2 lg:grid-cols-4 mb-8">
+              <TabsTrigger value="ct-maylson">CT Maylson Campos</TabsTrigger>
+              <TabsTrigger value="bola-cidadania">Bola e Cidadania</TabsTrigger>
+              <TabsTrigger value="gota-verde">Projeto Gota Verde</TabsTrigger>
+              <TabsTrigger value="colegio">Colégio Expoente</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="ct-maylson" className="animate-fade-in">
+              <Card className="border-primary/20 overflow-hidden">
+                <div className="aspect-video overflow-hidden">
+                  <img 
+                    src={ctMaylsonImage} 
+                    alt="CT Maylson Campos - Interior do dojo"
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                <CardContent className="p-8">
+                  <div className="flex items-center gap-2 mb-4">
+                    <MapPin className="w-5 h-5 text-primary" />
+                    <h3 className="text-2xl font-bold text-card-foreground">CT Maylson Campos</h3>
+                  </div>
+                  <p className="text-muted-foreground mb-4 leading-relaxed">
+                    Nosso centro de treinamento principal oferece infraestrutura completa e tradicional para o desenvolvimento 
+                    técnico e espiritual dos praticantes. Com tatames de alta qualidade, ambiente climatizado e equipamentos 
+                    modernos, o CT Maylson Campos é o coração do Alessandro Karatê Dojo. Aqui, mantemos viva a tradição do 
+                    Shorin-Ryu com treinos regulares para todas as faixas e idades.
+                  </p>
+                  <div className="flex items-center gap-2 text-primary font-semibold">
+                    <Users className="w-4 h-4" />
+                    <span>45+ alunos ativos</span>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="bola-cidadania" className="animate-fade-in">
+              <Card className="border-primary/20 overflow-hidden">
+                <div className="aspect-video overflow-hidden">
+                  <img 
+                    src={bolaCidadaniaImage} 
+                    alt="Projeto Bola e Cidadania"
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                <CardContent className="p-8">
+                  <div className="flex items-center gap-2 mb-4">
+                    <MapPin className="w-5 h-5 text-primary" />
+                    <h3 className="text-2xl font-bold text-card-foreground">Bola e Cidadania</h3>
+                  </div>
+                  <p className="text-muted-foreground mb-4 leading-relaxed">
+                    Um projeto social que transforma vidas através do esporte e da educação. O Bola e Cidadania leva os 
+                    ensinamentos do karatê tradicional para comunidades, promovendo inclusão social, disciplina e valores 
+                    morais. Mais do que técnicas de luta, ensinamos respeito, cidadania e trabalho em equipe. Um espaço 
+                    onde crianças e jovens encontram propósito e desenvolvem seu potencial.
+                  </p>
+                  <div className="flex items-center gap-2 text-primary font-semibold">
+                    <Users className="w-4 h-4" />
+                    <span>60+ alunos ativos</span>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="gota-verde" className="animate-fade-in">
+              <Card className="border-primary/20 overflow-hidden">
+                <div className="aspect-video overflow-hidden">
+                  <img 
+                    src={gotaVerdeImage} 
+                    alt="Projeto Gota Verde"
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                <CardContent className="p-8">
+                  <div className="flex items-center gap-2 mb-4">
+                    <MapPin className="w-5 h-5 text-primary" />
+                    <h3 className="text-2xl font-bold text-card-foreground">Projeto Gota Verde</h3>
+                  </div>
+                  <p className="text-muted-foreground mb-4 leading-relaxed">
+                    Uma iniciativa única que une o karatê tradicional à consciência ambiental e sustentabilidade. 
+                    No Projeto Gota Verde, praticamos em harmonia com a natureza, realizando treinos ao ar livre e 
+                    promovendo ações de preservação ambiental. Os alunos aprendem que o respeito ensinado no dojo 
+                    se estende ao planeta, desenvolvendo uma consciência ecológica aliada aos valores marciais.
+                  </p>
+                  <div className="flex items-center gap-2 text-primary font-semibold">
+                    <Users className="w-4 h-4" />
+                    <span>30+ alunos ativos</span>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="colegio" className="animate-fade-in">
+              <Card className="border-primary/20 overflow-hidden">
+                <div className="aspect-video overflow-hidden">
+                  <img 
+                    src={colegioExpoenteImage} 
+                    alt="Colégio Expoente"
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                <CardContent className="p-8">
+                  <div className="flex items-center gap-2 mb-4">
+                    <MapPin className="w-5 h-5 text-primary" />
+                    <h3 className="text-2xl font-bold text-card-foreground">Colégio Expoente</h3>
+                  </div>
+                  <p className="text-muted-foreground mb-4 leading-relaxed">
+                    Parceria educacional que integra o karatê ao ambiente escolar, proporcionando aos alunos do Colégio 
+                    Expoente uma formação completa que une corpo e mente. Durante as aulas, os estudantes desenvolvem 
+                    disciplina, concentração e autocontrole - qualidades que se refletem no desempenho acadêmico. 
+                    Uma oportunidade para vivenciar os valores do karatê tradicional dentro do contexto educacional.
+                  </p>
+                  <div className="flex items-center gap-2 text-primary font-semibold">
+                    <Users className="w-4 h-4" />
+                    <span>50+ alunos ativos</span>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
         </div>
       </section>
 
