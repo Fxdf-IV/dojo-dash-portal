@@ -7,8 +7,32 @@ import ctMaylsonImage from "@/assets/ct-maylson-campos.jpg";
 import bolaCidadaniaImage from "@/assets/bola-cidadania.jpg";
 import gotaVerdeImage from "@/assets/gota-verde.jpg";
 import colegioExpoenteImage from "@/assets/colegio-expoente.jpg";
+import senseiAlessandroImage from "@/assets/sensei-alessandro.jpg";
+import senseiMariaImage from "@/assets/sensei-maria.jpg";
+import senseiCarlosImage from "@/assets/sensei-carlos.jpg";
 
 const Home = () => {
+  const senseis = [
+    {
+      name: "Sensei Alessandro",
+      rank: "5º Dan - Faixa Preta",
+      image: senseiAlessandroImage,
+      description: "Fundador do Alessandro Karatê Dojo, com mais de 25 anos de experiência no Shorin-Ryu. Dedicado à formação técnica e filosófica dos alunos, mantendo viva a tradição do karatê de Okinawa.",
+    },
+    {
+      name: "Sensei Maria Santos",
+      rank: "3º Dan - Faixa Preta",
+      image: senseiMariaImage,
+      description: "Especialista em kata e bunkai, responsável pelo desenvolvimento técnico dos alunos. Referência em competições regionais e instrutora do projeto Bola e Cidadania.",
+    },
+    {
+      name: "Sensei Carlos Lima",
+      rank: "2º Dan - Faixa Preta",
+      image: senseiCarlosImage,
+      description: "Instrutor focado no trabalho com crianças e adolescentes. Coordena as atividades no Colégio Expoente e no Projeto Gota Verde, unindo disciplina marcial e consciência ambiental.",
+    },
+  ];
+
   const projects = [
     {
       name: "CT Maylson Campos",
@@ -88,8 +112,47 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Values Section */}
+      {/* Senseis Section */}
       <section className="py-20 bg-background">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+              Nossos Senseis
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+              Mestres dedicados a transmitir a tradição e os valores do karatê Shorin-Ryu
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {senseis.map((sensei, index) => (
+              <Card key={index} className="border-primary/20 hover:border-primary transition-all hover:shadow-glow overflow-hidden group">
+                <div className="aspect-square overflow-hidden bg-gradient-to-br from-secondary to-accent/50">
+                  <img 
+                    src={sensei.image} 
+                    alt={sensei.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                <CardContent className="p-6 text-center">
+                  <h3 className="text-2xl font-bold mb-1 text-card-foreground group-hover:text-primary transition-colors">
+                    {sensei.name}
+                  </h3>
+                  <p className="text-primary font-semibold mb-4 text-sm">
+                    {sensei.rank}
+                  </p>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {sensei.description}
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Values Section */}
+      <section className="py-20 bg-secondary/50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
