@@ -200,10 +200,7 @@ const Home = () => {
                     morais. Mais do que técnicas de luta, ensinamos respeito, cidadania e trabalho em equipe. Um espaço 
                     onde crianças e jovens encontram propósito e desenvolvem seu potencial.
                   </p>
-                  <div className="flex items-center gap-2 text-primary font-semibold">
-                    <Users className="w-4 h-4" />
-                    <span>60+ alunos ativos</span>
-                  </div>
+                  
                 </CardContent>
               </Card>
             </TabsContent>
@@ -224,10 +221,7 @@ const Home = () => {
                     promovendo ações de preservação ambiental. Os alunos aprendem que o respeito ensinado no dojo 
                     se estende ao planeta, desenvolvendo uma consciência ecológica aliada aos valores marciais.
                   </p>
-                  <div className="flex items-center gap-2 text-primary font-semibold">
-                    <Users className="w-4 h-4" />
-                    <span>30+ alunos ativos</span>
-                  </div>
+                  
                 </CardContent>
               </Card>
             </TabsContent>
@@ -248,10 +242,7 @@ const Home = () => {
                     disciplina, concentração e autocontrole - qualidades que se refletem no desempenho acadêmico. 
                     Uma oportunidade para vivenciar os valores do karatê tradicional dentro do contexto educacional.
                   </p>
-                  <div className="flex items-center gap-2 text-primary font-semibold">
-                    <Users className="w-4 h-4" />
-                    <span>50+ alunos ativos</span>
-                  </div>
+                  
                 </CardContent>
               </Card>
             </TabsContent>
