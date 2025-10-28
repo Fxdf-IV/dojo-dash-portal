@@ -17,13 +17,13 @@ const Home = () => {
     image: senseiAlessandroImage,
     description: "Fundador do Alessandro Karatê Dojo, com mais de 25 anos de experiência no Shorin-Ryu. Dedicado à formação técnica e filosófica dos alunos, mantendo viva a tradição do karatê de Okinawa."
   }, {
-    name: "Sensei Maria Santos",
-    rank: "3º Dan - Faixa Preta",
+    name: "Sensei Milena",
+    rank: "2º Dan - Faixa Preta",
     image: senseiMariaImage,
     description: "Especialista em kata e bunkai, responsável pelo desenvolvimento técnico dos alunos. Referência em competições regionais e instrutora do projeto Bola e Cidadania."
   }, {
-    name: "Sensei Carlos Lima",
-    rank: "2º Dan - Faixa Preta",
+    name: "Sensei Vinicius",
+    rank: "1º Dan - Faixa Preta",
     image: senseiCarlosImage,
     description: "Instrutor focado no trabalho com crianças e adolescentes. Coordena as atividades no Colégio Expoente e no Projeto Gota Verde, unindo disciplina marcial e consciência ambiental."
   }];
