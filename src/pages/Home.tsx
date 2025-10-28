@@ -7,25 +7,19 @@ import ctMaylsonImage from "@/assets/ct-maylson-campos-new.jpg";
 import bolaCidadaniaImage from "@/assets/bola-cidadania-new.jpg";
 import gotaVerdeImage from "@/assets/gota-verde-new.jpg";
 import colegioExpoenteImage from "@/assets/colegio-expoente-new.jpg";
-import senseiAlessandroImage from "@/assets/sensei-alessandro.jpg";
-import senseiMariaImage from "@/assets/sensei-maria.jpg";
-import senseiCarlosImage from "@/assets/sensei-carlos.jpg";
 import logo from "@/assets/logo.png";
 const Home = () => {
   const senseis = [{
     name: "Sensei Alessandro",
-    rank: "5º Dan - Faixa Preta",
-    image: senseiAlessandroImage,
+    rank: "4º Dan - Faixa Preta",
     description: "Fundador do Alessandro Karatê Dojo, com mais de 25 anos de experiência no Shorin-Ryu. Dedicado à formação técnica e filosófica dos alunos, mantendo viva a tradição do karatê de Okinawa."
   }, {
     name: "Sensei Milena",
     rank: "2º Dan - Faixa Preta",
-    image: senseiMariaImage,
     description: "Especialista em kata e bunkai, responsável pelo desenvolvimento técnico dos alunos. Referência em competições regionais e instrutora do projeto Bola e Cidadania."
   }, {
     name: "Sensei Vinicius",
     rank: "1º Dan - Faixa Preta",
-    image: senseiCarlosImage,
     description: "Instrutor focado no trabalho com crianças e adolescentes. Coordena as atividades no Colégio Expoente e no Projeto Gota Verde, unindo disciplina marcial e consciência ambiental."
   }];
   const projects = [{
