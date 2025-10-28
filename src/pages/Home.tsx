@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import ctMaylsonImage from "@/assets/ct-maylson-campos-new.jpg";
 import bolaCidadaniaImage from "@/assets/bola-cidadania-new.jpg";
 import gotaVerdeImage from "@/assets/gota-verde-new.jpg";
-import colegioExpoenteImage from "@/assets/colegio-expoente.jpg";
+import colegioExpoenteImage from "@/assets/colegio-expoente-new.jpg";
 import senseiAlessandroImage from "@/assets/sensei-alessandro.jpg";
 import senseiMariaImage from "@/assets/sensei-maria.jpg";
 import senseiCarlosImage from "@/assets/sensei-carlos.jpg";
