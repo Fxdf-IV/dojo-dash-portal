@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { MapPin, Phone, Mail, Facebook, Instagram, Youtube } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-const Contato = () => {
+const Contact = () => {
   const {
     toast
   } = useToast();
@@ -160,4 +160,4 @@ const Contato = () => {
       </section>
     </div>;
 };
-export default Contato;
+export default Contact;

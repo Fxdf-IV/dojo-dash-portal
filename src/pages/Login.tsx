@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -7,10 +8,12 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import logo from "@/assets/logo.png";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+
 const Login = () => {
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
+  const { login, register } = useAuth();
+  const navigate = useNavigate();
   const [loginData, setLoginData] = useState({
     email: "",
     password: ""
@@ -23,15 +26,26 @@ const Login = () => {
     location: ""
   });
   const locations = ["CT Maylson Campos", "Bola e Cidadania", "Projeto Gota Verde", "Colégio Expoente"];
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Aqui será integrado com Lovable Cloud (Supabase)
-    toast({
-      title: "Funcionalidade em desenvolvimento",
-      description: "O sistema de login será ativado em breve com o Lovable Cloud."
-    });
+    try {
+      await login(loginData.email, loginData.password);
+      toast({
+        title: "Login realizado com sucesso!",
+        description: "Redirecionando para sua área..."
+      });
+      setTimeout(() => {
+        navigate("/student");
+      }, 1000);
+    } catch (error) {
+      toast({
+        title: "Erro no login",
+        description: "Credenciais inválidas. Tente novamente.",
+        variant: "destructive"
+      });
+    }
   };
-  const handleSignup = (e: React.FormEvent) => {
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     if (signupData.password !== signupData.confirmPassword) {
       toast({
@@ -50,11 +64,22 @@ const Login = () => {
       return;
     }
 
-    // Aqui será integrado com Lovable Cloud (Supabase)
-    toast({
-      title: "Funcionalidade em desenvolvimento",
-      description: "O sistema de cadastro será ativado em breve com o Lovable Cloud."
-    });
+    try {
+      await register(signupData.name, signupData.email, signupData.password, signupData.location);
+      toast({
+        title: "Cadastro realizado com sucesso!",
+        description: "Redirecionando para sua área..."
+      });
+      setTimeout(() => {
+        navigate("/student");
+      }, 1000);
+    } catch (error) {
+      toast({
+        title: "Erro no cadastro",
+        description: "Não foi possível realizar o cadastro. Tente novamente.",
+        variant: "destructive"
+      });
+    }
   };
   return <div className="min-h-screen pt-20 flex items-center justify-center bg-background">
       <div className="absolute inset-0 bg-gradient-hero opacity-5" />

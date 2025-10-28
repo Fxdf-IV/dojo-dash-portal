@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { MapPin } from "lucide-react";
 
-const Fotos = () => {
+const Gallery = () => {
   const locations = [
     {
       name: "CT Maylson Campos",
@@ -78,4 +78,4 @@ const Fotos = () => {
   );
 };
 
-export default Fotos;
+export default Gallery;

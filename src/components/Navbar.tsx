@@ -1,26 +1,27 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import logo from "@/assets/logo.png";
+import { useAuth } from "@/contexts/AuthContext";
+
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { isAuthenticated, user, logout } = useAuth();
   const navLinks = [{
     name: "Início",
     path: "/"
   }, {
-    name: "Projetos",
-    path: "/#projetos"
-  }, {
     name: "História",
-    path: "/historia"
+    path: "/history"
   }, {
-    name: "Fotos",
-    path: "/fotos"
+    name: "Galeria",
+    path: "/gallery"
   }, {
     name: "Contato",
-    path: "/contato"
+    path: "/contact"
   }];
   const isActive = (path: string) => {
     if (path.includes("#")) {
@@ -44,9 +45,29 @@ const Navbar = () => {
             {navLinks.map(link => <Link key={link.path} to={link.path} className={`text-sm font-medium transition-colors hover:text-primary ${isActive(link.path) ? "text-primary" : "text-primary-foreground"}`}>
                 {link.name}
               </Link>)}
-            <Link to="/login">
-              <Button variant="default" size="sm" className="shadow-glow">Cadastrar-se / Entrar</Button>
-            </Link>
+            {isAuthenticated ? (
+              <>
+                <Link to={user?.role === "admin" ? "/admin" : "/student"}>
+                  <Button variant="default" size="sm" className="shadow-glow">
+                    {user?.role === "admin" ? "Área da Administração" : "Área do Aluno"}
+                  </Button>
+                </Link>
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={() => {
+                    logout();
+                    navigate("/");
+                  }}
+                >
+                  Sair
+                </Button>
+              </>
+            ) : (
+              <Link to="/login">
+                <Button variant="default" size="sm" className="shadow-glow">Cadastrar-se / Entrar</Button>
+              </Link>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -60,11 +81,33 @@ const Navbar = () => {
             {navLinks.map(link => <Link key={link.path} to={link.path} className={`block py-2 text-sm font-medium transition-colors ${isActive(link.path) ? "text-primary" : "text-primary-foreground"}`} onClick={() => setIsOpen(false)}>
                 {link.name}
               </Link>)}
-            <Link to="/login" onClick={() => setIsOpen(false)}>
-              <Button variant="default" size="sm" className="w-full shadow-glow">
-                Área do Aluno
-              </Button>
-            </Link>
+            {isAuthenticated ? (
+              <>
+                <Link to={user?.role === "admin" ? "/admin" : "/student"} onClick={() => setIsOpen(false)}>
+                  <Button variant="default" size="sm" className="w-full shadow-glow">
+                    {user?.role === "admin" ? "Área da Administração" : "Área do Aluno"}
+                  </Button>
+                </Link>
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  className="w-full"
+                  onClick={() => {
+                    logout();
+                    navigate("/");
+                    setIsOpen(false);
+                  }}
+                >
+                  Sair
+                </Button>
+              </>
+            ) : (
+              <Link to="/login" onClick={() => setIsOpen(false)}>
+                <Button variant="default" size="sm" className="w-full shadow-glow">
+                  Cadastrar-se / Entrar
+                </Button>
+              </Link>
+            )}
           </div>}
       </div>
     </nav>;
