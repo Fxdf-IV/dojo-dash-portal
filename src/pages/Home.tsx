@@ -10,77 +10,58 @@ import colegioExpoenteImage from "@/assets/colegio-expoente.jpg";
 import senseiAlessandroImage from "@/assets/sensei-alessandro.jpg";
 import senseiMariaImage from "@/assets/sensei-maria.jpg";
 import senseiCarlosImage from "@/assets/sensei-carlos.jpg";
-
 const Home = () => {
-  const senseis = [
-    {
-      name: "Sensei Alessandro",
-      rank: "5º Dan - Faixa Preta",
-      image: senseiAlessandroImage,
-      description: "Fundador do Alessandro Karatê Dojo, com mais de 25 anos de experiência no Shorin-Ryu. Dedicado à formação técnica e filosófica dos alunos, mantendo viva a tradição do karatê de Okinawa.",
-    },
-    {
-      name: "Sensei Maria Santos",
-      rank: "3º Dan - Faixa Preta",
-      image: senseiMariaImage,
-      description: "Especialista em kata e bunkai, responsável pelo desenvolvimento técnico dos alunos. Referência em competições regionais e instrutora do projeto Bola e Cidadania.",
-    },
-    {
-      name: "Sensei Carlos Lima",
-      rank: "2º Dan - Faixa Preta",
-      image: senseiCarlosImage,
-      description: "Instrutor focado no trabalho com crianças e adolescentes. Coordena as atividades no Colégio Expoente e no Projeto Gota Verde, unindo disciplina marcial e consciência ambiental.",
-    },
-  ];
-
-  const projects = [
-    {
-      name: "CT Maylson Campos",
-      description: "Centro de Treinamento com infraestrutura completa para o desenvolvimento dos atletas.",
-      students: "45+ alunos",
-    },
-    {
-      name: "Bola e Cidadania",
-      description: "Projeto social que une esporte e educação para transformar vidas.",
-      students: "60+ alunos",
-    },
-    {
-      name: "Projeto Gota Verde",
-      description: "Iniciativa de sustentabilidade aliada ao karatê tradicional.",
-      students: "30+ alunos",
-    },
-    {
-      name: "Colégio Expoente",
-      description: "Parceria educacional levando o karatê para o ambiente escolar.",
-      students: "50+ alunos",
-    },
-  ];
-
-  const values = [
-    {
-      icon: Shield,
-      title: "Disciplina",
-      description: "A base do karatê tradicional e formação de caráter",
-    },
-    {
-      icon: Heart,
-      title: "Respeito",
-      description: "Honra aos mestres, colegas e à tradição milenar",
-    },
-    {
-      icon: Users,
-      title: "Comunidade",
-      description: "Formando cidadãos comprometidos com a sociedade",
-    },
-    {
-      icon: Trophy,
-      title: "Excelência",
-      description: "Busca contínua pela perfeição técnica e pessoal",
-    },
-  ];
-
-  return (
-    <div className="min-h-screen">
+  const senseis = [{
+    name: "Sensei Alessandro",
+    rank: "5º Dan - Faixa Preta",
+    image: senseiAlessandroImage,
+    description: "Fundador do Alessandro Karatê Dojo, com mais de 25 anos de experiência no Shorin-Ryu. Dedicado à formação técnica e filosófica dos alunos, mantendo viva a tradição do karatê de Okinawa."
+  }, {
+    name: "Sensei Maria Santos",
+    rank: "3º Dan - Faixa Preta",
+    image: senseiMariaImage,
+    description: "Especialista em kata e bunkai, responsável pelo desenvolvimento técnico dos alunos. Referência em competições regionais e instrutora do projeto Bola e Cidadania."
+  }, {
+    name: "Sensei Carlos Lima",
+    rank: "2º Dan - Faixa Preta",
+    image: senseiCarlosImage,
+    description: "Instrutor focado no trabalho com crianças e adolescentes. Coordena as atividades no Colégio Expoente e no Projeto Gota Verde, unindo disciplina marcial e consciência ambiental."
+  }];
+  const projects = [{
+    name: "CT Maylson Campos",
+    description: "Centro de Treinamento com infraestrutura completa para o desenvolvimento dos atletas.",
+    students: "45+ alunos"
+  }, {
+    name: "Bola e Cidadania",
+    description: "Projeto social que une esporte e educação para transformar vidas.",
+    students: "60+ alunos"
+  }, {
+    name: "Projeto Gota Verde",
+    description: "Iniciativa de sustentabilidade aliada ao karatê tradicional.",
+    students: "30+ alunos"
+  }, {
+    name: "Colégio Expoente",
+    description: "Parceria educacional levando o karatê para o ambiente escolar.",
+    students: "50+ alunos"
+  }];
+  const values = [{
+    icon: Shield,
+    title: "Disciplina",
+    description: "A base do karatê tradicional e formação de caráter"
+  }, {
+    icon: Heart,
+    title: "Respeito",
+    description: "Honra aos mestres, colegas e à tradição milenar"
+  }, {
+    icon: Users,
+    title: "Comunidade",
+    description: "Formando cidadãos comprometidos com a sociedade"
+  }, {
+    icon: Trophy,
+    title: "Excelência",
+    description: "Busca contínua pela perfeição técnica e pessoal"
+  }];
+  return <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative h-[90vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-gradient-hero" />
@@ -104,7 +85,7 @@ const Home = () => {
               </Button>
             </Link>
             <a href="#projetos">
-              <Button size="lg" variant="outline" className="text-lg px-8 border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-secondary">
+              <Button size="lg" variant="outline" className="text-lg px-8 border-primary-foreground hover:bg-primary-foreground text-slate-950">
                 Conheça Nossos Projetos
               </Button>
             </a>
@@ -125,14 +106,9 @@ const Home = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {senseis.map((sensei, index) => (
-              <Card key={index} className="border-primary/20 hover:border-primary transition-all hover:shadow-glow overflow-hidden group">
+            {senseis.map((sensei, index) => <Card key={index} className="border-primary/20 hover:border-primary transition-all hover:shadow-glow overflow-hidden group">
                 <div className="aspect-square overflow-hidden bg-gradient-to-br from-secondary to-accent/50">
-                  <img 
-                    src={sensei.image} 
-                    alt={sensei.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
+                  <img src={sensei.image} alt={sensei.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 </div>
                 <CardContent className="p-6 text-center">
                   <h3 className="text-2xl font-bold mb-1 text-card-foreground group-hover:text-primary transition-colors">
@@ -145,8 +121,7 @@ const Home = () => {
                     {sensei.description}
                   </p>
                 </CardContent>
-              </Card>
-            ))}
+              </Card>)}
           </div>
         </div>
       </section>
@@ -164,15 +139,13 @@ const Home = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {values.map((value, index) => (
-              <Card key={index} className="border-primary/20 hover:border-primary transition-all hover:shadow-glow">
+            {values.map((value, index) => <Card key={index} className="border-primary/20 hover:border-primary transition-all hover:shadow-glow">
                 <CardContent className="p-6 text-center">
                   <value.icon className="w-12 h-12 mx-auto mb-4 text-primary" />
                   <h3 className="text-xl font-bold mb-2 text-card-foreground">{value.title}</h3>
                   <p className="text-muted-foreground">{value.description}</p>
                 </CardContent>
-              </Card>
-            ))}
+              </Card>)}
           </div>
         </div>
       </section>
@@ -200,11 +173,7 @@ const Home = () => {
             <TabsContent value="ct-maylson" className="animate-fade-in">
               <Card className="border-primary/20 overflow-hidden">
                 <div className="aspect-video overflow-hidden">
-                  <img 
-                    src={ctMaylsonImage} 
-                    alt="CT Maylson Campos - Interior do dojo"
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                  />
+                  <img src={ctMaylsonImage} alt="CT Maylson Campos - Interior do dojo" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
                 </div>
                 <CardContent className="p-8">
                   <div className="flex items-center gap-2 mb-4">
@@ -228,11 +197,7 @@ const Home = () => {
             <TabsContent value="bola-cidadania" className="animate-fade-in">
               <Card className="border-primary/20 overflow-hidden">
                 <div className="aspect-video overflow-hidden">
-                  <img 
-                    src={bolaCidadaniaImage} 
-                    alt="Projeto Bola e Cidadania"
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                  />
+                  <img src={bolaCidadaniaImage} alt="Projeto Bola e Cidadania" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
                 </div>
                 <CardContent className="p-8">
                   <div className="flex items-center gap-2 mb-4">
@@ -256,11 +221,7 @@ const Home = () => {
             <TabsContent value="gota-verde" className="animate-fade-in">
               <Card className="border-primary/20 overflow-hidden">
                 <div className="aspect-video overflow-hidden">
-                  <img 
-                    src={gotaVerdeImage} 
-                    alt="Projeto Gota Verde"
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                  />
+                  <img src={gotaVerdeImage} alt="Projeto Gota Verde" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
                 </div>
                 <CardContent className="p-8">
                   <div className="flex items-center gap-2 mb-4">
@@ -284,11 +245,7 @@ const Home = () => {
             <TabsContent value="colegio" className="animate-fade-in">
               <Card className="border-primary/20 overflow-hidden">
                 <div className="aspect-video overflow-hidden">
-                  <img 
-                    src={colegioExpoenteImage} 
-                    alt="Colégio Expoente"
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                  />
+                  <img src={colegioExpoenteImage} alt="Colégio Expoente" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
                 </div>
                 <CardContent className="p-8">
                   <div className="flex items-center gap-2 mb-4">
@@ -325,8 +282,7 @@ const Home = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            {projects.map((project, index) => (
-              <Card key={index} className="border-primary/20 hover:border-primary transition-all hover:shadow-card overflow-hidden group">
+            {projects.map((project, index) => <Card key={index} className="border-primary/20 hover:border-primary transition-all hover:shadow-card overflow-hidden group">
                 <div className="h-48 bg-gradient-to-br from-secondary to-accent" />
                 <CardContent className="p-6">
                   <h3 className="text-2xl font-bold mb-2 text-card-foreground group-hover:text-primary transition-colors">
@@ -338,8 +294,7 @@ const Home = () => {
                     <span className="text-sm font-semibold text-primary">{project.students}</span>
                   </div>
                 </CardContent>
-              </Card>
-            ))}
+              </Card>)}
           </div>
         </div>
       </section>
@@ -361,8 +316,6 @@ const Home = () => {
           </Link>
         </div>
       </section>
-    </div>
-  );
+    </div>;
 };
-
 export default Home;
