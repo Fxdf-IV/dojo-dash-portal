@@ -1,37 +1,28 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar } from "lucide-react";
-
 const Historia = () => {
-  const timeline = [
-    {
-      year: "1980s",
-      title: "As Raízes",
-      description: "A história do dojo começa com o Mestre Alessandro, introduzindo o karatê Shorin-Ryu em Palmital.",
-    },
-    {
-      year: "1995",
-      title: "Fundação Oficial",
-      description: "Abertura oficial do dojo, marcando o início de uma jornada dedicada ao karatê tradicional.",
-    },
-    {
-      year: "2005",
-      title: "Expansão Social",
-      description: "Início dos projetos sociais, levando o karatê para comunidades carentes.",
-    },
-    {
-      year: "2015",
-      title: "Reconhecimento",
-      description: "Conquistas em campeonatos regionais e formação de atletas de destaque.",
-    },
-    {
-      year: "2025",
-      title: "Presente",
-      description: "Mais de 180 alunos ativos em 4 projetos diferentes, formando campeões e cidadãos.",
-    },
-  ];
-
-  return (
-    <div className="min-h-screen pt-20">
+  const timeline = [{
+    year: "1980s",
+    title: "As Raízes",
+    description: "A história do dojo começa com o Mestre Alessandro, introduzindo o karatê Shorin-Ryu em Palmital."
+  }, {
+    year: "1995",
+    title: "Fundação Oficial",
+    description: "Abertura oficial do dojo, marcando o início de uma jornada dedicada ao karatê tradicional."
+  }, {
+    year: "2005",
+    title: "Expansão Social",
+    description: "Início dos projetos sociais, levando o karatê para comunidades carentes."
+  }, {
+    year: "2015",
+    title: "Reconhecimento",
+    description: "Conquistas em campeonatos regionais e formação de atletas de destaque."
+  }, {
+    year: "2025",
+    title: "Presente",
+    description: "Mais de 180 alunos ativos em 4 projetos diferentes, formando campeões e cidadãos."
+  }];
+  return <div className="min-h-screen pt-20">
       {/* Hero Section */}
       <section className="relative py-20 bg-gradient-hero">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1559827260-dc66d52bef19?q=80&w=2070')] bg-cover bg-center opacity-10" />
@@ -65,11 +56,11 @@ const Historia = () => {
               séculos de sabedoria transmitida de mestre para aluno.
             </p>
 
-            <div className="bg-secondary/50 border-l-4 border-primary p-6 my-8 rounded-r">
+            <div className="bg-secondary/50 border-l-4 border-primary p-6 my-8 rounded-r ">
               <p className="text-lg font-semibold text-foreground mb-2">
                 "Não há primeiro ataque no karatê"
               </p>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-gray-100">
                 - Gichin Funakoshi, Pai do Karatê Moderno
               </p>
             </div>
@@ -84,18 +75,14 @@ const Historia = () => {
       </section>
 
       {/* Timeline Section */}
-      <section className="py-20 bg-secondary/30">
+      <section className="py-20 bg-gradient-to-br from-background to-secondary/30">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-16 text-foreground">
             Linha do Tempo
           </h2>
 
           <div className="max-w-4xl mx-auto space-y-8">
-            {timeline.map((event, index) => (
-              <Card 
-                key={index} 
-                className="border-primary/20 hover:border-primary transition-all hover:shadow-glow"
-              >
+            {timeline.map((event, index) => <Card key={index} className="border-primary/20 hover:border-primary transition-all hover:shadow-glow">
                 <CardContent className="p-6">
                   <div className="flex items-start gap-4">
                     <div className="flex-shrink-0">
@@ -112,8 +99,7 @@ const Historia = () => {
                     </div>
                   </div>
                 </CardContent>
-              </Card>
-            ))}
+              </Card>)}
           </div>
         </div>
       </section>
@@ -176,8 +162,6 @@ const Historia = () => {
           </div>
         </div>
       </section>
-    </div>
-  );
+    </div>;
 };
-
 export default Historia;
