@@ -1,39 +1,27 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { MapPin } from "lucide-react";
-import ctMaylson1 from "@/assets/gallery/ct-maylson-1.jpg";
-import ctMaylson2 from "@/assets/gallery/ct-maylson-2.jpg";
-import ctMaylson3 from "@/assets/gallery/ct-maylson-3.jpg";
-import bolaCidadania1 from "@/assets/gallery/bola-cidadania-1.jpg";
-import bolaCidadania2 from "@/assets/gallery/bola-cidadania-2.jpg";
-import bolaCidadania3 from "@/assets/gallery/bola-cidadania-3.jpg";
-import gotaVerde1 from "@/assets/gallery/gota-verde-1.jpg";
-import gotaVerde2 from "@/assets/gallery/gota-verde-2.jpg";
-import gotaVerde3 from "@/assets/gallery/gota-verde-3.jpg";
-import colegioExpoente1 from "@/assets/gallery/colegio-expoente-1.jpg";
-import colegioExpoente2 from "@/assets/gallery/colegio-expoente-2.jpg";
-import colegioExpoente3 from "@/assets/gallery/colegio-expoente-3.jpg";
 
 const Fotos = () => {
   const locations = [
     {
       name: "CT Maylson Campos",
       description: "Centro de treinamento principal com infraestrutura completa para formação técnica e espiritual. Equipado com tatames profissionais, ambiente climatizado e espaço dedicado ao estudo da tradição Shorin-Ryu.",
-      images: [ctMaylson1, ctMaylson2, ctMaylson3],
+      imageCount: 3,
     },
     {
       name: "Bola e Cidadania",
       description: "Projeto social que transforma vidas através do karatê. Atendemos comunidades carentes levando valores como disciplina, respeito e cidadania. Mais que técnicas marciais, formamos cidadãos conscientes e comprometidos.",
-      images: [bolaCidadania1, bolaCidadania2, bolaCidadania3],
+      imageCount: 3,
     },
     {
       name: "Projeto Gota Verde",
       description: "Iniciativa que une karatê tradicional e consciência ambiental. Praticamos em harmonia com a natureza, realizando treinos ao ar livre e atividades de preservação. O respeito do dojo se estende ao planeta.",
-      images: [gotaVerde1, gotaVerde2, gotaVerde3],
+      imageCount: 3,
     },
     {
       name: "Colégio Expoente",
       description: "Parceria educacional que integra o karatê ao ambiente escolar. Os alunos desenvolvem disciplina, concentração e autocontrole que refletem no desempenho acadêmico. Uma formação que une corpo, mente e conhecimento.",
-      images: [colegioExpoente1, colegioExpoente2, colegioExpoente3],
+      imageCount: 3,
     },
   ];
 
@@ -72,19 +60,13 @@ const Fotos = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-              {location.images.map((image, imageIndex) => (
+              {Array.from({ length: location.imageCount }).map((_, imageIndex) => (
                 <Card 
                   key={imageIndex} 
                   className="border-primary/20 hover:border-primary transition-all hover:shadow-glow overflow-hidden group"
                 >
                   <CardContent className="p-0">
-                    <div className="aspect-[4/3] overflow-hidden">
-                      <img
-                        src={image}
-                        alt={`${location.name} - Foto ${imageIndex + 1}`}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                      />
-                    </div>
+                    <div className="aspect-[4/3] overflow-hidden bg-muted/50" />
                   </CardContent>
                 </Card>
               ))}
