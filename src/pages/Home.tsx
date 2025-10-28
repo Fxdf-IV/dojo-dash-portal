@@ -4,9 +4,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Shield, Heart, Users, Trophy, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 import ctMaylsonImage from "@/assets/ct-maylson-campos-new.jpg";
-import bolaCidadaniaImage from "@/assets/bola-cidadania.jpg";
-import gotaVerdeImage from "@/assets/gota-verde.jpg";
-import colegioExpoenteImage from "@/assets/colegio-expoente.jpg";
+import bolaCidadaniaImage from "@/assets/bola-cidadania-new.jpg";
+import gotaVerdeImage from "@/assets/gota-verde-new.jpg";
+import colegioExpoenteImage from "@/assets/colegio-expoente-new.jpg";
 import senseiAlessandroImage from "@/assets/sensei-alessandro.jpg";
 import senseiMariaImage from "@/assets/sensei-maria.jpg";
 import senseiCarlosImage from "@/assets/sensei-carlos.jpg";
@@ -101,7 +101,7 @@ const Home = () => {
               Nossos Senseis
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Mestres dedicados a transmitir a tradição e os valores do karatê Shorin-Ryu
+              Profissionais dedicados a transmitir a tradição e os valores do karatê Shorin-Ryu
             </p>
           </div>
 
@@ -200,7 +200,10 @@ const Home = () => {
                     morais. Mais do que técnicas de luta, ensinamos respeito, cidadania e trabalho em equipe. Um espaço 
                     onde crianças e jovens encontram propósito e desenvolvem seu potencial.
                   </p>
-                  
+                  <div className="flex items-center gap-2 text-primary font-semibold">
+                    <Users className="w-4 h-4" />
+                    <span>60+ alunos ativos</span>
+                  </div>
                 </CardContent>
               </Card>
             </TabsContent>
