@@ -101,7 +101,7 @@ const Home = () => {
               Nossos Senseis
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Mestres dedicados a transmitir a tradição e os valores do karatê Shorin-Ryu
+              Profissionais dedicados a transmitir a tradição e os valores do karatê Shorin-Ryu
             </p>
           </div>
 
