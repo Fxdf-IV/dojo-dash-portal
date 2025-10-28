@@ -7,51 +7,45 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import logo from "@/assets/logo.png";
 import { useToast } from "@/hooks/use-toast";
-
 const Login = () => {
-  const { toast } = useToast();
-  const [loginData, setLoginData] = useState({ email: "", password: "" });
+  const {
+    toast
+  } = useToast();
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: ""
+  });
   const [signupData, setSignupData] = useState({
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
-    location: "",
+    location: ""
   });
-
-  const locations = [
-    "CT Maylson Campos",
-    "Bola e Cidadania",
-    "Projeto Gota Verde",
-    "Colégio Expoente",
-  ];
-
+  const locations = ["CT Maylson Campos", "Bola e Cidadania", "Projeto Gota Verde", "Colégio Expoente"];
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     // Aqui será integrado com Lovable Cloud (Supabase)
     toast({
       title: "Funcionalidade em desenvolvimento",
-      description: "O sistema de login será ativado em breve com o Lovable Cloud.",
+      description: "O sistema de login será ativado em breve com o Lovable Cloud."
     });
   };
-
   const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (signupData.password !== signupData.confirmPassword) {
       toast({
         title: "Erro no cadastro",
         description: "As senhas não coincidem.",
-        variant: "destructive",
+        variant: "destructive"
       });
       return;
     }
-
     if (!signupData.location) {
       toast({
         title: "Erro no cadastro",
         description: "Por favor, selecione onde você treina.",
-        variant: "destructive",
+        variant: "destructive"
       });
       return;
     }
@@ -59,15 +53,13 @@ const Login = () => {
     // Aqui será integrado com Lovable Cloud (Supabase)
     toast({
       title: "Funcionalidade em desenvolvimento",
-      description: "O sistema de cadastro será ativado em breve com o Lovable Cloud.",
+      description: "O sistema de cadastro será ativado em breve com o Lovable Cloud."
     });
   };
-
-  return (
-    <div className="min-h-screen pt-20 flex items-center justify-center bg-background">
+  return <div className="min-h-screen pt-20 flex items-center justify-center bg-background">
       <div className="absolute inset-0 bg-gradient-hero opacity-5" />
       
-      <div className="container mx-auto px-4 py-12 relative z-10">
+      <div className="container mx-auto px-4 py-12 relative z-10 bg-slate-50">
         <div className="max-w-md mx-auto">
           <div className="text-center mb-8">
             <img src={logo} alt="Alessandro Karatê" className="h-20 w-20 mx-auto mb-4" />
@@ -91,25 +83,17 @@ const Login = () => {
                   <form onSubmit={handleLogin} className="space-y-4">
                     <div>
                       <Label htmlFor="login-email">Email</Label>
-                      <Input
-                        id="login-email"
-                        type="email"
-                        placeholder="seu@email.com"
-                        value={loginData.email}
-                        onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
-                        required
-                      />
+                      <Input id="login-email" type="email" placeholder="seu@email.com" value={loginData.email} onChange={e => setLoginData({
+                      ...loginData,
+                      email: e.target.value
+                    })} required />
                     </div>
                     <div>
                       <Label htmlFor="login-password">Senha</Label>
-                      <Input
-                        id="login-password"
-                        type="password"
-                        placeholder="••••••••"
-                        value={loginData.password}
-                        onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
-                        required
-                      />
+                      <Input id="login-password" type="password" placeholder="••••••••" value={loginData.password} onChange={e => setLoginData({
+                      ...loginData,
+                      password: e.target.value
+                    })} required />
                     </div>
                     <Button type="submit" className="w-full shadow-glow">
                       Entrar
@@ -137,67 +121,47 @@ const Login = () => {
                   <form onSubmit={handleSignup} className="space-y-4">
                     <div>
                       <Label htmlFor="signup-name">Nome Completo</Label>
-                      <Input
-                        id="signup-name"
-                        type="text"
-                        placeholder="Seu nome completo"
-                        value={signupData.name}
-                        onChange={(e) => setSignupData({ ...signupData, name: e.target.value })}
-                        required
-                      />
+                      <Input id="signup-name" type="text" placeholder="Seu nome completo" value={signupData.name} onChange={e => setSignupData({
+                      ...signupData,
+                      name: e.target.value
+                    })} required />
                     </div>
                     <div>
                       <Label htmlFor="signup-email">Email</Label>
-                      <Input
-                        id="signup-email"
-                        type="email"
-                        placeholder="seu@email.com"
-                        value={signupData.email}
-                        onChange={(e) => setSignupData({ ...signupData, email: e.target.value })}
-                        required
-                      />
+                      <Input id="signup-email" type="email" placeholder="seu@email.com" value={signupData.email} onChange={e => setSignupData({
+                      ...signupData,
+                      email: e.target.value
+                    })} required />
                     </div>
                     <div>
                       <Label htmlFor="signup-location">Onde você treina?</Label>
-                      <Select
-                        value={signupData.location}
-                        onValueChange={(value) => setSignupData({ ...signupData, location: value })}
-                      >
+                      <Select value={signupData.location} onValueChange={value => setSignupData({
+                      ...signupData,
+                      location: value
+                    })}>
                         <SelectTrigger>
                           <SelectValue placeholder="Selecione o local" />
                         </SelectTrigger>
                         <SelectContent>
-                          {locations.map((location) => (
-                            <SelectItem key={location} value={location}>
+                          {locations.map(location => <SelectItem key={location} value={location}>
                               {location}
-                            </SelectItem>
-                          ))}
+                            </SelectItem>)}
                         </SelectContent>
                       </Select>
                     </div>
                     <div>
                       <Label htmlFor="signup-password">Senha</Label>
-                      <Input
-                        id="signup-password"
-                        type="password"
-                        placeholder="••••••••"
-                        value={signupData.password}
-                        onChange={(e) => setSignupData({ ...signupData, password: e.target.value })}
-                        required
-                      />
+                      <Input id="signup-password" type="password" placeholder="••••••••" value={signupData.password} onChange={e => setSignupData({
+                      ...signupData,
+                      password: e.target.value
+                    })} required />
                     </div>
                     <div>
                       <Label htmlFor="signup-confirm">Confirmar Senha</Label>
-                      <Input
-                        id="signup-confirm"
-                        type="password"
-                        placeholder="••••••••"
-                        value={signupData.confirmPassword}
-                        onChange={(e) =>
-                          setSignupData({ ...signupData, confirmPassword: e.target.value })
-                        }
-                        required
-                      />
+                      <Input id="signup-confirm" type="password" placeholder="••••••••" value={signupData.confirmPassword} onChange={e => setSignupData({
+                      ...signupData,
+                      confirmPassword: e.target.value
+                    })} required />
                     </div>
                     <Button type="submit" className="w-full shadow-glow">
                       Solicitar Cadastro
@@ -212,8 +176,6 @@ const Login = () => {
           </Tabs>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default Login;
