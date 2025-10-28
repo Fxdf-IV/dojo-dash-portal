@@ -71,9 +71,7 @@ const Home = () => {
           <h1 className="text-5xl md:text-7xl font-bold text-primary-foreground mb-6 animate-fade-in">
             Alessandro Karatê Dojo
           </h1>
-          <p className="text-xl md:text-2xl text-primary-foreground/90 mb-8 max-w-2xl mx-auto">
-            Tradição Shorin-Ryu em Palmital-SP
-          </p>
+          <p className="text-xl md:text-2xl text-primary-foreground/90 mb-8 max-w-2xl mx-auto">Tradição Shorin-Ryu</p>
           <p className="text-lg text-primary-foreground/80 mb-12 max-w-3xl mx-auto">
             Mais que um dojo, uma família dedicada à formação integral através do karatê tradicional. 
             Disciplina, respeito e excelência em cada treino.
@@ -178,16 +176,8 @@ const Home = () => {
                     <MapPin className="w-5 h-5 text-primary" />
                     <h3 className="text-2xl font-bold text-card-foreground">CT Maylson Campos</h3>
                   </div>
-                  <p className="text-muted-foreground mb-4 leading-relaxed">
-                    Nosso centro de treinamento principal oferece infraestrutura completa e tradicional para o desenvolvimento 
-                    técnico e espiritual dos praticantes. Com tatames de alta qualidade, ambiente climatizado e equipamentos 
-                    modernos, o CT Maylson Campos é o coração do Alessandro Karatê Dojo. Aqui, mantemos viva a tradição do 
-                    Shorin-Ryu com treinos regulares para todas as faixas e idades.
-                  </p>
-                  <div className="flex items-center gap-2 text-primary font-semibold">
-                    <Users className="w-4 h-4" />
-                    <span>45+ alunos ativos</span>
-                  </div>
+                  <p className="text-muted-foreground mb-4 leading-relaxed">Nosso centro de treinamento principal oferece infraestrutura completa para o desenvolvimento dos praticantes. Com tatames de alta qualidade, ambiente arejado e equipamentos modernos, o CT Maylson Campos é o coração do Alessandro Karatê Dojo. Aqui, mantemos viva a tradição do Shorin-Ryu com treinos regulares para todas as faixas e idades.</p>
+                  
                 </CardContent>
               </Card>
             </TabsContent>
@@ -287,10 +277,7 @@ const Home = () => {
                     {project.name}
                   </h3>
                   <p className="text-muted-foreground mb-4">{project.description}</p>
-                  <div className="flex items-center gap-2">
-                    <Users className="w-4 h-4 text-primary" />
-                    <span className="text-sm font-semibold text-primary">{project.students}</span>
-                  </div>
+                  
                 </CardContent>
               </Card>)}
           </div>
