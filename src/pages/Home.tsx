@@ -251,31 +251,7 @@ const Home = () => {
       </section>
 
       {/* Projects Section */}
-      <section id="projetos" className="py-20 bg-gradient-to-br from-background py-20 ">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-              Nossos Projetos
-            </h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Levando o karatê tradicional para diferentes comunidades de Palmital
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            {projects.map((project, index) => <Card key={index} className="border-primary/20 hover:border-primary transition-all hover:shadow-card overflow-hidden group">
-                <div className="h-48 bg-gradient-to-br from-secondary to-accent" />
-                <CardContent className="p-6">
-                  <h3 className="text-2xl font-bold mb-2 text-card-foreground group-hover:text-primary transition-colors">
-                    {project.name}
-                  </h3>
-                  <p className="text-muted-foreground mb-4">{project.description}</p>
-                  
-                </CardContent>
-              </Card>)}
-          </div>
-        </div>
-      </section>
+      
 
       {/* CTA Section */}
       <section className="py-20 bg-gradient-hero relative overflow-hidden">
