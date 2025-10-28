@@ -295,7 +295,7 @@ const Home = () => {
             Junte-se a nós e descubra o verdadeiro espírito do karatê tradicional
           </p>
           <Link to="/contato">
-            <Button size="lg" variant="outline" className="shadow-glow text-lg px-8 border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-secondary">
+            <Button size="lg" variant="outline" className="shadow-glow text-lg px-8">
               Entre em Contato
             </Button>
           </Link>
