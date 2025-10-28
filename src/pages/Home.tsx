@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Shield, Heart, Users, Trophy, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
-import ctMaylsonImage from "@/assets/ct-maylson-campos.jpg";
+import ctMaylsonImage from "@/assets/ct-maylson-campos-new.jpg";
 import bolaCidadaniaImage from "@/assets/bola-cidadania.jpg";
 import gotaVerdeImage from "@/assets/gota-verde.jpg";
 import colegioExpoenteImage from "@/assets/colegio-expoente.jpg";
