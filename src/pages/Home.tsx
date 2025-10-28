@@ -270,7 +270,7 @@ const Home = () => {
       </section>
 
       {/* Projects Section */}
-      <section id="projetos" className="py-20 bg-secondary/50">
+      <section id="projetos" className="py-20 bg-gradient-to-br from-background py-20 ">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
