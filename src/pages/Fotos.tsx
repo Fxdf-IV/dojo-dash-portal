@@ -12,33 +12,25 @@ import gotaVerde3 from "@/assets/gallery/gota-verde-3.jpg";
 import colegioExpoente1 from "@/assets/gallery/colegio-expoente-1.jpg";
 import colegioExpoente2 from "@/assets/gallery/colegio-expoente-2.jpg";
 import colegioExpoente3 from "@/assets/gallery/colegio-expoente-3.jpg";
-
 const Fotos = () => {
-  const locations = [
-    {
-      name: "CT Maylson Campos",
-      description: "Centro de treinamento principal com infraestrutura completa para formação técnica e espiritual. Equipado com tatames profissionais, ambiente climatizado e espaço dedicado ao estudo da tradição Shorin-Ryu.",
-      images: [ctMaylson1, ctMaylson2, ctMaylson3],
-    },
-    {
-      name: "Bola e Cidadania",
-      description: "Projeto social que transforma vidas através do karatê. Atendemos comunidades carentes levando valores como disciplina, respeito e cidadania. Mais que técnicas marciais, formamos cidadãos conscientes e comprometidos.",
-      images: [bolaCidadania1, bolaCidadania2, bolaCidadania3],
-    },
-    {
-      name: "Projeto Gota Verde",
-      description: "Iniciativa que une karatê tradicional e consciência ambiental. Praticamos em harmonia com a natureza, realizando treinos ao ar livre e atividades de preservação. O respeito do dojo se estende ao planeta.",
-      images: [gotaVerde1, gotaVerde2, gotaVerde3],
-    },
-    {
-      name: "Colégio Expoente",
-      description: "Parceria educacional que integra o karatê ao ambiente escolar. Os alunos desenvolvem disciplina, concentração e autocontrole que refletem no desempenho acadêmico. Uma formação que une corpo, mente e conhecimento.",
-      images: [colegioExpoente1, colegioExpoente2, colegioExpoente3],
-    },
-  ];
-
-  return (
-    <div className="min-h-screen bg-background">
+  const locations = [{
+    name: "CT Maylson Campos",
+    description: "Centro de treinamento principal com infraestrutura completa para formação técnica e espiritual. Equipado com tatames profissionais, ambiente climatizado e espaço dedicado ao estudo da tradição Shorin-Ryu.",
+    images: [ctMaylson1, ctMaylson2, ctMaylson3]
+  }, {
+    name: "Bola e Cidadania",
+    description: "Projeto social que transforma vidas através do karatê. Atendemos comunidades carentes levando valores como disciplina, respeito e cidadania. Mais que técnicas marciais, formamos cidadãos conscientes e comprometidos.",
+    images: [bolaCidadania1, bolaCidadania2, bolaCidadania3]
+  }, {
+    name: "Projeto Gota Verde",
+    description: "Iniciativa que une karatê tradicional e consciência ambiental. Praticamos em harmonia com a natureza, realizando treinos ao ar livre e atividades de preservação. O respeito do dojo se estende ao planeta.",
+    images: [gotaVerde1, gotaVerde2, gotaVerde3]
+  }, {
+    name: "Colégio Expoente",
+    description: "Parceria educacional que integra o karatê ao ambiente escolar. Os alunos desenvolvem disciplina, concentração e autocontrole que refletem no desempenho acadêmico. Uma formação que une corpo, mente e conhecimento.",
+    images: [colegioExpoente1, colegioExpoente2, colegioExpoente3]
+  }];
+  return <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="py-20 bg-gradient-hero relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1555597673-b21d5c935865?q=80&w=2070')] bg-cover bg-center opacity-10" />
@@ -53,14 +45,10 @@ const Fotos = () => {
       </section>
 
       {/* Gallery Sections */}
-      {locations.map((location, locationIndex) => (
-        <section 
-          key={locationIndex} 
-          className={`py-20 ${locationIndex % 2 === 0 ? 'bg-background' : 'bg-secondary/30'}`}
-        >
+      {locations.map((location, locationIndex) => <section key={locationIndex} className={`py-20 ${locationIndex % 2 === 0 ? 'bg-background' : 'bg-secondary/30'}`}>
           <div className="container mx-auto px-4">
             <div className="mb-12">
-              <div className="flex items-center justify-center gap-3 mb-4">
+              <div className="py-20 bg-gradient-to-br from-background to-secondary/30">
                 <MapPin className="w-6 h-6 text-primary" />
                 <h2 className="text-3xl md:text-4xl font-bold text-foreground text-center">
                   {location.name}
@@ -72,28 +60,16 @@ const Fotos = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-              {location.images.map((image, imageIndex) => (
-                <Card 
-                  key={imageIndex} 
-                  className="border-primary/20 hover:border-primary transition-all hover:shadow-glow overflow-hidden group"
-                >
+              {location.images.map((image, imageIndex) => <Card key={imageIndex} className="border-primary/20 hover:border-primary transition-all hover:shadow-glow overflow-hidden group">
                   <CardContent className="p-0">
                     <div className="aspect-[4/3] overflow-hidden">
-                      <img
-                        src={image}
-                        alt={`${location.name} - Foto ${imageIndex + 1}`}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                      />
+                      <img src={image} alt={`${location.name} - Foto ${imageIndex + 1}`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                     </div>
                   </CardContent>
-                </Card>
-              ))}
+                </Card>)}
             </div>
           </div>
-        </section>
-      ))}
-    </div>
-  );
+        </section>)}
+    </div>;
 };
-
 export default Fotos;
