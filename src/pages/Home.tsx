@@ -10,6 +10,7 @@ import colegioExpoenteImage from "@/assets/colegio-expoente.jpg";
 import senseiAlessandroImage from "@/assets/sensei-alessandro.jpg";
 import senseiMariaImage from "@/assets/sensei-maria.jpg";
 import senseiCarlosImage from "@/assets/sensei-carlos.jpg";
+import logo from "@/assets/logo.png";
 const Home = () => {
   const senseis = [{
     name: "Sensei Alessandro",
@@ -68,6 +69,7 @@ const Home = () => {
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1555597673-b21d5c935865?q=80&w=2070')] bg-cover bg-center opacity-20" />
         
         <div className="relative z-10 container mx-auto px-4 text-center">
+          <img src={logo} alt="Alessandro Karatê Dojo" className="w-32 h-32 md:w-40 md:h-40 mx-auto mb-6 animate-fade-in" />
           <h1 className="text-5xl md:text-7xl font-bold text-primary-foreground mb-6 animate-fade-in">
             Alessandro Karatê Dojo
           </h1>
