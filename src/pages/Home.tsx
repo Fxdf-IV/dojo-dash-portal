@@ -12,18 +12,18 @@ import senseiMariaImage from "@/assets/sensei-maria.jpg";
 import senseiCarlosImage from "@/assets/sensei-carlos.jpg";
 const Home = () => {
   const senseis = [{
-    name: "Alessandro",
-    rank: "4º Dan - Faixa Preta",
+    name: "Sensei Alessandro",
+    rank: "5º Dan - Faixa Preta",
     image: senseiAlessandroImage,
     description: "Fundador do Alessandro Karatê Dojo, com mais de 25 anos de experiência no Shorin-Ryu. Dedicado à formação técnica e filosófica dos alunos, mantendo viva a tradição do karatê de Okinawa."
   }, {
-    name: "Milena",
-    rank: "2º Dan - Faixa Preta",
+    name: "Sensei Maria Santos",
+    rank: "3º Dan - Faixa Preta",
     image: senseiMariaImage,
     description: "Especialista em kata e bunkai, responsável pelo desenvolvimento técnico dos alunos. Referência em competições regionais e instrutora do projeto Bola e Cidadania."
   }, {
-    name: "Vinicius",
-    rank: "1º Dan - Faixa Preta",
+    name: "Sensei Carlos Lima",
+    rank: "2º Dan - Faixa Preta",
     image: senseiCarlosImage,
     description: "Instrutor focado no trabalho com crianças e adolescentes. Coordena as atividades no Colégio Expoente e no Projeto Gota Verde, unindo disciplina marcial e consciência ambiental."
   }];
@@ -117,9 +117,7 @@ const Home = () => {
                   <p className="text-primary font-semibold mb-4 text-sm">
                     {sensei.rank}
                   </p>
-                  <p className="text-muted-foreground leading-relaxed">
-                    {sensei.description}
-                  </p>
+                  
                 </CardContent>
               </Card>)}
           </div>
