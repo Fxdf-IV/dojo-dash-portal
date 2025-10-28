@@ -85,7 +85,7 @@ const Home = () => {
               </Button>
             </Link>
             <a href="#projetos">
-              <Button size="lg" variant="outline" className="text-lg px-8 bg-primary-foreground ">
+              <Button size="lg" variant="outline" className="shadow-glow text-lg px-8">
                 Conheça Nossos Projetos
               </Button>
             </a>
