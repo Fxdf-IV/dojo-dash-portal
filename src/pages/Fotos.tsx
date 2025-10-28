@@ -56,7 +56,7 @@ const Fotos = () => {
       {locations.map((location, locationIndex) => (
         <section 
           key={locationIndex} 
-          className="py-20 bg-gradient-to-br from-background to-secondary/30"
+          className={`py-20 ${locationIndex % 2 === 0 ? 'bg-gradient-to-br from-background to-secondary/30' : 'bg-gradient-to-br from-background'}`}
         >
           <div className="container mx-auto px-4">
             <div className="mb-12">
