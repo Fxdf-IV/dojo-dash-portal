@@ -107,8 +107,8 @@ const Home = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {senseis.map((sensei, index) => <Card key={index} className="border-primary/20 hover:border-primary transition-all hover:shadow-glow overflow-hidden group">
-                <div className="aspect-square overflow-hidden bg-gradient-to-br from-secondary to-accent/50">
-                  <img src={sensei.image} alt={sensei.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                <div className="aspect-square overflow-hidden bg-muted/50 flex items-center justify-center">
+                  {/* Espaço reservado para foto do sensei */}
                 </div>
                 <CardContent className="p-6 text-center">
                   <h3 className="text-2xl font-bold mb-1 text-card-foreground group-hover:text-primary transition-colors">
