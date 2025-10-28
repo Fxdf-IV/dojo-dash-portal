@@ -5,37 +5,38 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { MapPin, Phone, Mail, Facebook, Instagram, Youtube } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-
 const Contato = () => {
-  const { toast } = useToast();
+  const {
+    toast
+  } = useToast();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
-    message: "",
+    message: ""
   });
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Aqui seria integrado com backend/email
     toast({
       title: "Mensagem enviada!",
-      description: "Entraremos em contato em breve.",
+      description: "Entraremos em contato em breve."
     });
-    
-    setFormData({ name: "", email: "", phone: "", message: "" });
+    setFormData({
+      name: "",
+      email: "",
+      phone: "",
+      message: ""
+    });
   };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     });
   };
-
-  return (
-    <div className="min-h-screen pt-20">
+  return <div className="min-h-screen pt-20">
       {/* Hero Section */}
       <section className="relative py-20 bg-gradient-hero">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1571902943202-507ec2618e8f?q=80&w=2075')] bg-cover bg-center opacity-10" />
@@ -61,45 +62,19 @@ const Contato = () => {
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                       <label className="text-sm font-medium text-foreground mb-2 block">Nome</label>
-                      <Input
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        placeholder="Seu nome completo"
-                        required
-                      />
+                      <Input name="name" value={formData.name} onChange={handleChange} placeholder="Seu nome completo" required />
                     </div>
                     <div>
                       <label className="text-sm font-medium text-foreground mb-2 block">Email</label>
-                      <Input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        placeholder="seu@email.com"
-                        required
-                      />
+                      <Input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="seu@email.com" required />
                     </div>
                     <div>
                       <label className="text-sm font-medium text-foreground mb-2 block">Telefone</label>
-                      <Input
-                        type="tel"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        placeholder="(18) 99999-9999"
-                      />
+                      <Input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="(18) 99999-9999" />
                     </div>
                     <div>
                       <label className="text-sm font-medium text-foreground mb-2 block">Mensagem</label>
-                      <Textarea
-                        name="message"
-                        value={formData.message}
-                        onChange={handleChange}
-                        placeholder="Conte-nos como podemos ajudar..."
-                        rows={5}
-                        required
-                      />
+                      <Textarea name="message" value={formData.message} onChange={handleChange} placeholder="Conte-nos como podemos ajudar..." rows={5} required />
                     </div>
                     <Button type="submit" className="w-full shadow-glow">
                       Enviar Mensagem
@@ -159,30 +134,13 @@ const Contato = () => {
                   Acompanhe nossas atividades, eventos e conquistas
                 </p>
                 <div className="flex gap-4">
-                  <a
-                    href="https://facebook.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-3 bg-primary/10 rounded-full text-primary hover:bg-primary hover:text-primary-foreground transition-all"
-                  >
+                  <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="p-3 bg-primary/10 rounded-full text-primary hover:bg-primary hover:text-primary-foreground transition-all">
                     <Facebook size={24} />
                   </a>
-                  <a
-                    href="https://instagram.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-3 bg-primary/10 rounded-full text-primary hover:bg-primary hover:text-primary-foreground transition-all"
-                  >
+                  <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="p-3 bg-primary/10 rounded-full text-primary hover:bg-primary hover:text-primary-foreground transition-all">
                     <Instagram size={24} />
                   </a>
-                  <a
-                    href="https://youtube.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-3 bg-primary/10 rounded-full text-primary hover:bg-primary hover:text-primary-foreground transition-all"
-                  >
-                    <Youtube size={24} />
-                  </a>
+                  
                 </div>
               </div>
 
@@ -200,8 +158,6 @@ const Contato = () => {
           </div>
         </div>
       </section>
-    </div>
-  );
+    </div>;
 };
-
 export default Contato;
