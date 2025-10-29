@@ -1,9 +1,9 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
 import { BookOpen, Video, FileText, Trophy } from "lucide-react";
 import BeltGrades from "@/components/BeltGrades";
+import BeltBadge from "@/components/BeltBadge";
 
 const StudentDashboard = () => {
   const { user } = useAuth();
@@ -24,14 +24,6 @@ const StudentDashboard = () => {
     ],
   };
 
-  const getKyuColor = (kyu: number) => {
-    if (kyu >= 8) return "bg-yellow-500";
-    if (kyu >= 6) return "bg-orange-500";
-    if (kyu >= 4) return "bg-green-500";
-    if (kyu >= 2) return "bg-purple-500";
-    return "bg-blue-500";
-  };
-
   return (
     <div className="min-h-screen pt-20 bg-background">
       {/* Header */}
@@ -47,9 +39,7 @@ const StudentDashboard = () => {
               </p>
             </div>
             {user?.kyu !== undefined && (
-              <Badge className={`text-lg px-6 py-3 ${getKyuColor(user.kyu)}`}>
-                Faixa {user.kyu >= 0 ? user.kyu : `J${Math.abs(user.kyu)}`}
-              </Badge>
+              <BeltBadge kyu={user.kyu} className="text-lg px-6 py-3" />
             )}
           </div>
         </div>
