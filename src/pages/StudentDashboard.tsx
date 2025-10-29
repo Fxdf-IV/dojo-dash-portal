@@ -136,16 +136,6 @@ const StudentDashboard = () => {
           </TabsContent>
         </Tabs>
       </section>
-
-      {/* Belt Grades Section */}
-      <section className="container mx-auto px-4 py-12 bg-gradient-to-br from-background to-secondary/30">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-8 text-foreground">
-            Sistema de Graduação
-          </h2>
-          <BeltGrades />
-        </div>
-      </section>
     </div>
   );
 };

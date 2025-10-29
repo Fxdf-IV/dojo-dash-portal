@@ -53,7 +53,7 @@ const AdminDashboard = () => {
       {/* Main Content */}
       <section className="container mx-auto px-4 py-12">
         <Tabs defaultValue="students" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="students">
               <Users className="w-4 h-4 mr-2" />
               Alunos
@@ -65,9 +65,6 @@ const AdminDashboard = () => {
             <TabsTrigger value="locations">
               <MapPin className="w-4 h-4 mr-2" />
               Locais
-            </TabsTrigger>
-            <TabsTrigger value="grades">
-              Graduações
             </TabsTrigger>
           </TabsList>
 
@@ -279,21 +276,6 @@ const AdminDashboard = () => {
                     </Card>
                   ))}
                 </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Grades Tab */}
-          <TabsContent value="grades" className="mt-8">
-            <Card>
-              <CardHeader>
-                <CardTitle>Sistema de Graduação</CardTitle>
-                <CardDescription>
-                  Visualize todas as graduações do karatê
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <BeltGrades />
               </CardContent>
             </Card>
           </TabsContent>
