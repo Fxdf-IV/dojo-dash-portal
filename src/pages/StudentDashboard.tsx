@@ -25,7 +25,7 @@ const StudentDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen pt-20 bg-background">
+    <div className="min-h-screen pt-20 bg-gradient-to-br from-background to-secondary/30">
       {/* Header */}
       <section className="bg-gradient-hero py-12">
         <div className="container mx-auto px-4">

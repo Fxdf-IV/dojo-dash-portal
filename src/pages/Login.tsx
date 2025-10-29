@@ -81,13 +81,13 @@ const Login = () => {
       });
     }
   };
-  return <div className="min-h-screen pt-20 flex items-center justify-center bg-background">
+  return <div className="min-h-screen pt-20 flex items-center justify-center bg-gradient-to-br from-background to-secondary/30">
       <div className="absolute inset-0 bg-gradient-hero opacity-5" />
       
       <div className="container mx-auto px-4 py-12 relative z-10 bg-slate-50">
         <div className="max-w-md mx-auto">
           <div className="text-center mb-8">
-            <img src={logo} alt="Alessandro Karatê" className="h-20 w-20 mx-auto mb-4" />
+            <img src={logo} alt="Alessandro Karatê e Kobudo" className="h-20 w-20 mx-auto mb-4" />
             <h1 className="text-3xl font-bold text-foreground mb-2">Área do Aluno</h1>
             <p className="text-muted-foreground">Acesse sua conta ou cadastre-se</p>
           </div>

@@ -15,4 +15,10 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  optimizeDeps: {
+    esbuildOptions: {
+      // Avoid failing on broken third-party source maps in dev
+      sourcemap: false,
+    },
+  },
 }));

@@ -3,25 +3,31 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Shield, Heart, Users, Trophy, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import ctMaylsonImage from "@/assets/ct-maylson-campos-new.jpg";
 import bolaCidadaniaImage from "@/assets/bola-cidadania-new.jpg";
 import gotaVerdeImage from "@/assets/gota-verde-new.jpg";
 import colegioExpoenteImage from "@/assets/colegio-expoente-new.jpg";
 import logo from "@/assets/logo.png";
+type Sensei = { id?: number; name: string; rank: string; description: string; imageUrl?: string };
 const Home = () => {
-  const senseis = [{
-    name: "Sensei Alessandro",
-    rank: "4º Dan - Faixa Preta",
-    description: "Fundador do Alessandro Karatê Dojo, com mais de 25 anos de experiência no Shorin-Ryu. Dedicado à formação técnica e filosófica dos alunos, mantendo viva a tradição do karatê de Okinawa."
-  }, {
-    name: "Sensei Milena",
-    rank: "2º Dan - Faixa Preta",
-    description: "Especialista em kata e bunkai, responsável pelo desenvolvimento técnico dos alunos. Referência em competições regionais e instrutora do projeto Bola e Cidadania."
-  }, {
-    name: "Sensei Vinicius",
-    rank: "1º Dan - Faixa Preta",
-    description: "Instrutor focado no trabalho com crianças e adolescentes. Coordena as atividades no Colégio Expoente e no Projeto Gota Verde, unindo disciplina marcial e consciência ambiental."
-  }];
+  const [senseis, setSenseis] = useState<Sensei[]>([]);
+  useEffect(() => {
+    const stored = localStorage.getItem("senseis");
+    if (stored) {
+      try {
+        setSenseis(JSON.parse(stored));
+        return;
+      } catch {
+        // ignore and fall back
+      }
+    }
+    setSenseis([
+      { name: "Sensei Alessandro", rank: "4º Dan - Faixa Preta", description: "Fundador do Alessandro Karatê e Kobudo, com mais de 25 anos de experiência no Shorin-Ryu. Dedicado à formação técnica e filosófica dos alunos, mantendo viva a tradição do karatê de Okinawa." },
+      { name: "Sensei Milena", rank: "2º Dan - Faixa Preta", description: "Especialista em kata e bunkai, responsável pelo desenvolvimento técnico dos alunos. Referência em competições regionais e instrutora do projeto Bola e Cidadania." },
+      { name: "Sensei Vinicius", rank: "1º Dan - Faixa Preta", description: "Instrutor focado no trabalho com crianças e adolescentes. Coordena as atividades no Colégio Expoente e no Projeto Gota Verde, unindo disciplina marcial e consciência ambiental." },
+    ]);
+  }, []);
   const projects = [{
     name: "CT Maylson Campos",
     description: "Centro de Treinamento com infraestrutura completa para o desenvolvimento dos atletas.",
@@ -63,9 +69,9 @@ const Home = () => {
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1555597673-b21d5c935865?q=80&w=2070')] bg-cover bg-center opacity-20" />
         
         <div className="relative z-10 container mx-auto px-4 text-center">
-          <img src={logo} alt="Alessandro Karatê Dojo" className="w-32 h-32 md:w-40 md:h-40 mx-auto mb-6 animate-fade-in" />
+          <img src={logo} alt="Alessandro Karatê e Kobudo" className="w-32 h-32 md:w-40 md:h-40 mx-auto mb-6 animate-fade-in" />
           <h1 className="text-5xl md:text-7xl font-bold text-primary-foreground mb-6 animate-fade-in">
-            Alessandro Karatê Dojo
+            Alessandro Karatê e Kobudo
           </h1>
           <p className="text-xl md:text-2xl text-primary-foreground/90 mb-8 max-w-2xl mx-auto">Tradição Shorin-Ryu</p>
           <p className="text-lg text-primary-foreground/80 mb-12 max-w-3xl mx-auto">
@@ -102,7 +108,11 @@ const Home = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {senseis.map((sensei, index) => <Card key={index} className="border-primary/20 hover:border-primary transition-all hover:shadow-glow overflow-hidden group">
                 <div className="aspect-square overflow-hidden bg-muted/50 flex items-center justify-center">
-                  {/* Espaço reservado para foto do sensei */}
+                  {sensei.imageUrl ? (
+                    <img src={sensei.imageUrl} alt={sensei.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  ) : (
+                    <div className="text-muted-foreground">Foto do Sensei</div>
+                  )}
                 </div>
                 <CardContent className="p-6 text-center">
                   <h3 className="text-2xl font-bold mb-1 text-card-foreground group-hover:text-primary transition-colors">
@@ -119,7 +129,7 @@ const Home = () => {
       </section>
 
       {/* Values Section */}
-      <section className="py-20 bg-gradient-to-br from-background py-20 ">
+      <section className="py-20 bg-gradient-to-br from-background to-secondary/30 ">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
@@ -172,7 +182,7 @@ const Home = () => {
                     <MapPin className="w-5 h-5 text-primary" />
                     <h3 className="text-2xl font-bold text-card-foreground">CT Maylson Campos</h3>
                   </div>
-                  <p className="text-muted-foreground mb-4 leading-relaxed">Nosso centro de treinamento principal oferece infraestrutura completa para o desenvolvimento dos praticantes. Com tatames de alta qualidade, ambiente arejado e equipamentos modernos, o CT Maylson Campos é o coração do Alessandro Karatê Dojo. Aqui, mantemos viva a tradição do Shorin-Ryu com treinos regulares para todas as faixas e idades.</p>
+                  <p className="text-muted-foreground mb-4 leading-relaxed">Nosso centro de treinamento principal oferece infraestrutura completa para o desenvolvimento dos praticantes. Com tatames de alta qualidade, ambiente arejado e equipamentos modernos, o CT Maylson Campos é o coração do Alessandro Karatê e Kobudo. Aqui, mantemos viva a tradição do Shorin-Ryu com treinos regulares para todas as faixas e idades.</p>
                   
                 </CardContent>
               </Card>

@@ -70,7 +70,7 @@ const History = () => {
       </section>
 
       {/* History of Life and Dojo Section */}
-      <section className="py-20 bg-background">
+      <section className="py-20 bg-gradient-to-br from-background to-secondary/30">
         <div className="container mx-auto px-4 max-w-4xl">
           <h2 className="text-4xl font-bold text-center mb-12 text-foreground">
             História de Vida e do Dojo
@@ -129,7 +129,7 @@ const History = () => {
       </section>
 
       {/* Philosophy Section */}
-      <section className="py-20 bg-background">
+      <section className="py-20 bg-gradient-to-br from-background to-secondary/30">
         <div className="container mx-auto px-4 max-w-4xl">
           <h2 className="text-4xl font-bold text-center mb-12 text-foreground">
             Filosofia e Tradição
@@ -209,7 +209,7 @@ const History = () => {
       </section>
 
       {/* Style Section */}
-      <section className="py-20 bg-background">
+      <section className="py-20 bg-gradient-to-br from-background to-secondary/30">
         <div className="container mx-auto px-4 max-w-4xl">
           <h2 className="text-4xl font-bold text-center mb-12 text-foreground">
             Shorin-Ryu Shinshukan

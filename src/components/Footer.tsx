@@ -7,9 +7,9 @@ const Footer = () => {
           {/* Logo and Description */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <img src={logo} alt="Alessandro Karatê" className="h-12 w-12" />
+              <img src={logo} alt="Alessandro Karatê e Kobudo" className="h-12 w-12" />
               <div>
-                <h3 className="text-primary-foreground font-bold text-lg">Alessandro Karatê</h3>
+                <h3 className="text-primary-foreground font-bold text-lg">Alessandro Karatê e Kobudo</h3>
                 <p className="text-muted-foreground text-xs">Dojo Palmital - SP</p>
               </div>
             </div>
@@ -53,7 +53,7 @@ const Footer = () => {
         </div>
 
         <div className="mt-8 pt-8 border-t border-primary/20 text-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} Alessandro Karatê Dojo. Todos os direitos reservados.</p>
+          <p>&copy; {new Date().getFullYear()} Alessandro Karatê e Kobudo. Todos os direitos reservados.</p>
         </div>
       </div>
     </footer>;

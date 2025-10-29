@@ -33,9 +33,9 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           <Link to="/" className="flex items-center gap-3 group">
-            <img src={logo} alt="Alessandro Karatê Dojo" className="h-14 w-14 transition-transform group-hover:scale-110" />
+            <img src={logo} alt="Alessandro Karatê e Kobudo" className="h-14 w-14 transition-transform group-hover:scale-110" />
             <div className="hidden md:block">
-              <span className="text-primary-foreground font-bold text-xl">Alessandro Karatê</span>
+              <span className="text-primary-foreground font-bold text-xl">Alessandro Karatê e Kobudo</span>
               <p className="text-muted-foreground text-xs">Palmital - SP</p>
             </div>
           </Link>

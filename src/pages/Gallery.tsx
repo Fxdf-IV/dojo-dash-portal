@@ -26,7 +26,7 @@ const Gallery = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-background to-secondary/30">
       {/* Hero Section */}
       <section className="py-20 bg-gradient-hero relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1555597673-b21d5c935865?q=80&w=2070')] bg-cover bg-center opacity-10" />
@@ -44,7 +44,7 @@ const Gallery = () => {
       {locations.map((location, locationIndex) => (
         <section 
           key={locationIndex} 
-          className={`py-20 ${locationIndex % 2 === 0 ? 'bg-gradient-to-br from-background to-secondary/30' : 'bg-gradient-to-br from-background'}`}
+          className={`py-20 bg-gradient-to-br from-background to-secondary/30`}
         >
           <div className="container mx-auto px-4">
             <div className="mb-12">
