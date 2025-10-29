@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 interface BeltGrade {
   level: string;
   name: string;
-  color: string;
+  color?: string;
   gradient?: string;
 }
 

@@ -102,7 +102,25 @@ const AdminDashboard = () => {
                       <TableRow key={student.id}>
                         <TableCell className="font-medium">{student.name}</TableCell>
                         <TableCell>{student.email}</TableCell>
-                        <TableCell>Faixa {student.kyu}</TableCell>
+                        <TableCell>
+                          <Badge
+                            className="font-semibold"
+                            style={{
+                              backgroundColor: student.kyu === 9 ? "#FFFFFF" :
+                                student.kyu === 8 ? "#E53935" :
+                                student.kyu === 7 ? "#FDD835" :
+                                student.kyu === 6 ? "#FB8C00" :
+                                student.kyu === 5 ? "#1E88E5" :
+                                student.kyu === 4 ? "#9E9E9E" :
+                                student.kyu === 3 ? "#43A047" :
+                                student.kyu === 2 ? "#8E24AA" :
+                                student.kyu === 1 ? "#6D4C41" : "#000000",
+                              color: [9, 7, 3].includes(student.kyu) ? "#1F2937" : "#FFFFFF"
+                            }}
+                          >
+                            {student.kyu}º Kyu
+                          </Badge>
+                        </TableCell>
                         <TableCell>{student.location}</TableCell>
                         <TableCell>
                           <Badge variant={student.status === "active" ? "default" : "secondary"}>
