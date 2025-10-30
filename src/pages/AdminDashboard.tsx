@@ -9,9 +9,8 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/contexts/AuthContext";
 import { Users, BookOpen, MapPin, Image as ImageIcon, Plus, Edit, Images, Trash2, Pencil } from "lucide-react";
-import BeltGrades from "@/components/BeltGrades";
 import BeltBadge from "@/components/BeltBadge";
-import { BeltSelect } from "@/components/BeltSelect";
+import { BeltSelect, BELT_GRADES } from "@/components/BeltSelect";
 import {
   Table,
   TableBody,
@@ -21,17 +20,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-type Student = { id: number; name: string; email: string; kyu: number; location: string; status: "active" | "pending" };
+type Student = { id: number; name: string; birthDate: string; email?: string; celular?: string; kyu: number; location: string; status: "active" | "pending" };
 type LocationItem = { id: number; name: string; description: string; imageCount: number; images?: string[] };
-type Material = { id: number; title: string; type: "kihon" | "kata" | "theory"; description?: string; videoUrl?: string; imageUrl?: string; minGrade?: string };
+type Material = { id: number; title: string; type: "kihon" | "kata" | "theory" | "bunkai"; description?: string; videoUrl?: string; imageUrl?: string; minGrade?: string };
 type Sensei = { id: number; name: string; rank: string; description: string; imageUrl?: string };
 
 const AdminDashboard = () => {
   const { user } = useAuth();
   const [students, setStudents] = useState<Student[]>([
-    { id: 1, name: "João Silva", email: "joao@email.com", kyu: 6, location: "CT Maylson Campos", status: "active" },
-    { id: 2, name: "Maria Santos", email: "maria@email.com", kyu: 4, location: "Bola e Cidadania", status: "active" },
-    { id: 3, name: "Pedro Oliveira", email: "pedro@email.com", kyu: 8, location: "Projeto Gota Verde", status: "pending" },
+    { id: 1, name: "João Silva", birthDate: "1990-01-01", email: "joao@email.com", celular: "11999999999", kyu: 6, location: "CT Maylson Campos", status: "active" },
+    { id: 2, name: "Maria Santos", birthDate: "1990-01-01", email: "maria@email.com", celular: "11999999999", kyu: 4, location: "Bola e Cidadania", status: "active" },
+    { id: 3, name: "Pedro Oliveira", birthDate: "1990-01-01", email: "pedro@email.com", celular: "11999999999", kyu: 8, location: "Projeto Gota Verde", status: "pending" },
   ]);
 
   const [locations, setLocations] = useState<LocationItem[]>([
@@ -51,7 +50,7 @@ const AdminDashboard = () => {
   const [isAddStudentOpen, setIsAddStudentOpen] = useState(false);
   const [isEditStudentOpen, setIsEditStudentOpen] = useState(false);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
-  const [studentForm, setStudentForm] = useState<Omit<Student, "id">>({ name: "", email: "", kyu: 0, location: "", status: "active" });
+  const [studentForm, setStudentForm] = useState<Omit<Student, "id">>({ name: "", birthDate: "", email: "", celular: "", kyu: 0, location: "", status: "active" });
 
   // Materials state
   const [materials, setMaterials] = useState<Material[]>([]);
@@ -59,6 +58,7 @@ const AdminDashboard = () => {
     kihon: materials.filter(m => m.type === "kihon"),
     kata: materials.filter(m => m.type === "kata"),
     theory: materials.filter(m => m.type === "theory"),
+    bunkai: materials.filter(m => m.type === "bunkai"),
   }), [materials]);
   const [isAddMaterialOpen, setIsAddMaterialOpen] = useState(false);
   const [editingMaterial, setEditingMaterial] = useState<Material | null>(null);
@@ -168,16 +168,28 @@ const AdminDashboard = () => {
                           <Input id="student-name" value={studentForm.name} onChange={(e) => setStudentForm({ ...studentForm, name: e.target.value })} />
                         </div>
                         <div>
+                          <Label htmlFor="student-birth-date">Data de Nascimento</Label>
+                          <Input id="student-birth-date" type="date" value={studentForm.birthDate} onChange={(e) => setStudentForm({ ...studentForm, birthDate: e.target.value })} />
+                        </div>
+                        <div>
                           <Label htmlFor="student-email">Email</Label>
                           <Input id="student-email" type="email" value={studentForm.email} onChange={(e) => setStudentForm({ ...studentForm, email: e.target.value })} />
                         </div>
                         <div>
-                          <Label htmlFor="student-kyu">Faixa (kyu)</Label>
-                          <Input id="student-kyu" type="number" value={studentForm.kyu} onChange={(e) => setStudentForm({ ...studentForm, kyu: Number(e.target.value) })} />
+                          <Label htmlFor="student-phone">Celular</Label>
+                          <Input id="student-phone" type="tel" value={studentForm.celular} onChange={(e) => setStudentForm({ ...studentForm, celular: e.target.value })} />
+                        </div>
+                        <div>
+                          <Label htmlFor="student-kyu">Faixa</Label>
+                          <BeltSelect value={studentForm.kyu.toString()} onValueChange={(value) => setStudentForm({ ...studentForm, kyu: Number(value) })} placeholder="Escolha a faixa" onlyDan={false} />
                         </div>
                         <div>
                           <Label htmlFor="student-location">Local</Label>
-                          <Input id="student-location" value={studentForm.location} onChange={(e) => setStudentForm({ ...studentForm, location: e.target.value })} />
+                          <select id="student-location" className="w-full border rounded px-3 py-2" value={studentForm.location} onChange={(e) => setStudentForm({ ...studentForm, location: e.target.value })}>
+                            {locations.map((location) => (
+                              <option key={location.id} value={location.name}>{location.name}</option>
+                            ))}
+                          </select>
                         </div>
                         <div className="flex justify-end gap-2">
                           <Button variant="outline" onClick={() => setIsAddStudentOpen(false)}>Cancelar</Button>
@@ -185,7 +197,7 @@ const AdminDashboard = () => {
                             const nextId = Math.max(0, ...students.map(s => s.id)) + 1;
                             setStudents([...students, { id: nextId, ...studentForm }]);
                             setIsAddStudentOpen(false);
-                            setStudentForm({ name: "", email: "", kyu: 0, location: "", status: "active" });
+                            setStudentForm({ name: "", birthDate: "", email: "", celular: "", kyu: 0, location: "", status: "active" });
                           }}>Adicionar</Button>
                         </div>
                       </div>
@@ -225,7 +237,7 @@ const AdminDashboard = () => {
                           }}>
                             <Button variant="outline" size="sm" onClick={() => {
                               setEditingStudent(student);
-                              setStudentForm({ name: student.name, email: student.email, kyu: student.kyu, location: student.location, status: student.status });
+                              setStudentForm({ name: student.name, birthDate: student.birthDate, email: student.email, celular: student.celular, kyu: student.kyu, location: student.location, status: student.status });
                               setIsEditStudentOpen(true);
                             }}>
                               Editar
@@ -241,16 +253,28 @@ const AdminDashboard = () => {
                                   <Input id={`student-name-${student.id}`} value={studentForm.name} onChange={(e) => setStudentForm({ ...studentForm, name: e.target.value })} />
                                 </div>
                                 <div>
+                                  <Label htmlFor={`student-birth-date-${student.id}`}>Data de Nascimento</Label>
+                                  <Input id={`student-birth-date-${student.id}`} type="date" value={studentForm.birthDate} onChange={(e) => setStudentForm({ ...studentForm, birthDate: e.target.value })} />
+                                </div>
+                                <div>
                                   <Label htmlFor={`student-email-${student.id}`}>Email</Label>
                                   <Input id={`student-email-${student.id}`} type="email" value={studentForm.email} onChange={(e) => setStudentForm({ ...studentForm, email: e.target.value })} />
                                 </div>
                                 <div>
-                                  <Label htmlFor={`student-kyu-${student.id}`}>Faixa (kyu)</Label>
-                                  <Input id={`student-kyu-${student.id}`} type="number" value={studentForm.kyu} onChange={(e) => setStudentForm({ ...studentForm, kyu: Number(e.target.value) })} />
+                                  <Label htmlFor={`student-phone-${student.id}`}>Celular</Label>
+                                  <Input id={`student-phone-${student.id}`} type="tel" value={studentForm.celular} onChange={(e) => setStudentForm({ ...studentForm, celular: e.target.value })} />
                                 </div>
                                 <div>
                                   <Label htmlFor={`student-location-${student.id}`}>Local</Label>
-                                  <Input id={`student-location-${student.id}`} value={studentForm.location} onChange={(e) => setStudentForm({ ...studentForm, location: e.target.value })} />
+                                  <select id={`student-location-${student.id}`} className="w-full border rounded px-3 py-2" value={studentForm.location} onChange={(e) => setStudentForm({ ...studentForm, location: e.target.value })}>
+                                    {locations.map((location) => (
+                                      <option key={location.id} value={location.name}>{location.name}</option>
+                                    ))}
+                                  </select>
+                                </div>
+                                <div>
+                                  <Label htmlFor="student-kyu-edit">Faixa</Label>
+                                  <BeltSelect value={studentForm.kyu.toString()} onValueChange={(value) => setStudentForm({ ...studentForm, kyu: Number(value) })} placeholder="Escolha a faixa" onlyDan={false} />
                                 </div>
                                 <div className="flex justify-end gap-2">
                                   <Button variant="outline" onClick={() => { setIsEditStudentOpen(false); setEditingStudent(null); }}>Cancelar</Button>
@@ -759,4 +783,3 @@ function MaterialsManager({ title, items, onEdit, onDelete }: { title: string; i
     </div>
   );
 }
-

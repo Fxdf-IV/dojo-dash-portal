@@ -26,13 +26,13 @@ const BeltGrades = () => {
     { level: "3º Dan (Sandan)", name: "Faixa Preta", color: "#000000" },
     { level: "4º Dan (Yondan)", name: "Faixa Preta", color: "#000000" },
     { level: "5º Dan (Godan)", name: "Faixa Preta", color: "#000000" },
-    { level: "6º Dan (Rokudan)", name: "Faixa Preta/Coral", gradient: "linear-gradient(90deg, #E53935 50%, #FFFFFF 50%)" },
+    { level: "6º Dan (Rokudan)", name: "Faixa Preta/Coral", gradient: "linear-gradient(90deg, black 0%, black 65%, white 45%, white 68%, #E53935 65%, #E53935 98%, white 45%)"},
     { level: "7º Dan (Shichidan)", name: "Faixa Coral", gradient: "linear-gradient(90deg, #E53935 50%, #FFFFFF 50%)" },
     { level: "8º Dan (Hachidan)", name: "Faixa Coral", gradient: "linear-gradient(90deg, #E53935 50%, #FFFFFF 50%)" },
     { level: "9º Dan (Kyudan)", name: "Faixa Vermelha", color: "#B71C1C" },
     { level: "10º Dan (Judan)", name: "Faixa Vermelha", color: "#B71C1C" },
   ];
-
+  
   const getTextColor = (backgroundColor: string) => {
     // Para faixas claras, usar texto escuro
     if (backgroundColor === "#FFFFFF" || backgroundColor === "#FDD835" || backgroundColor === "#43A047") {
@@ -46,7 +46,7 @@ const BeltGrades = () => {
       {/* Kyu Grades */}
       <div>
         <h3 className="text-2xl font-bold mb-4 text-foreground">
-          🥋 Graduações de Kyu (Mudansha - Níveis Iniciais)
+          Graduações de Kyu (Mudansha - Níveis Iniciais)
         </h3>
         <div className="flex flex-wrap gap-3">
           {kyuGrades.map((grade, index) => (
@@ -59,6 +59,7 @@ const BeltGrades = () => {
             >
               <span className="font-bold">{grade.level}</span>
               <span className="ml-2 opacity-90">• {grade.name}</span>
+              
             </Badge>
           ))}
         </div>
@@ -67,7 +68,7 @@ const BeltGrades = () => {
       {/* Dan Grades */}
       <div>
         <h3 className="text-2xl font-bold mb-4 text-foreground">
-          🥋 Graduações de Dan (Yudansha - Níveis Avançados)
+          Graduações de Dan (Yudansha - Níveis Avançados)
         </h3>
         <div className="flex flex-wrap gap-3">
           {danGrades.map((grade, index) => (

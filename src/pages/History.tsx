@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Calendar } from "lucide-react";
+import { Calendar, Italic } from "lucide-react";
 import BeltGrades from "@/components/BeltGrades";
 const History = () => {
   const timeline = [
@@ -79,57 +79,55 @@ const History = () => {
           <div className="prose prose-lg max-w-none space-y-6 text-muted-foreground">
             <p>
               <strong className="text-primary">Alessandro Rogério Alves Prado Pires</strong>, conhecido como Sensei Alessandro, 
-              nasceu em 31 de julho de 1973, em São Paulo (SP). É <strong className="text-primary">4º dan em Karatê Shorin-ryu</strong> e 
-              2º dan em Kobudo pela International Shorin-Ryu Karate-Do e Kobudo Shinshukan, escola fundada pelo Grão-Mestre 
-              Yoshihide Shinzato — o responsável por trazer o estilo Shorin-Ryu ao Brasil em 1954, conforme a linha do tempo histórica da Shinshukan.
+              nasceu em 31 de julho de 1973, em São Paulo (SP). É <strong className="text-primary">4º dan em Karatê Shorin-Ryu</strong> e 
+              <strong className="text-primary"> 2º dan em Kobudo</strong> pela <strong className="text-primary">International Shorin-Ryu Karate-Do e Kobudo Shinshukan</strong>, 
+              escola fundada pelo Grão-Mestre <strong className="text-primary">Yoshihide Shinzato</strong>, responsável por trazer o estilo Shorin-Ryu ao Brasil em 1954.
             </p>
-            
+
             <p>
-              A trajetória de Sensei Alessandro nas artes marciais começou em 1998, inspirado por amigos. Após uma pausa por 
-              motivos profissionais e familiares, retornou com dedicação total em 2007, sob orientação dos senseis Gilson Nunes, 
-              Raimundo e Danilo. Recebeu ainda forte influência de grandes mestres da linhagem Shinshukan, como Yoshihide Shinzato, 
-              Masahiro Shinzato, Mitsuhide Shinzato, Hirokazu Shinzato, Clebert Eimori Kato, Kyochi Maurici Aragão Tavares, 
-              Marco Teixeira, Jorge Yoshimura e Rogério Eng Wong.
+              Sua trajetória nas artes marciais começou em 1998, incentivado por amigos. Após uma pausa por motivos profissionais e familiares, 
+              retornou em 2007 com dedicação total sob a orientação dos senseis Gilson Nunes, Raimundo e Danilo. 
+              Desde então, recebeu influência direta de grandes mestres da linhagem Shinshukan, como 
+              <em>Yoshihide, Masahiro, Mitsuhide e Hirokazu Shinzato, Clebert Eimori Kato, Kyochi Maurici Aragão Tavares, Marco Teixeira, 
+              Jorge Yoshimura e Rogério Eng Wong</em>.
             </p>
 
             <div className="bg-secondary/50 border-l-4 border-primary p-6 my-8 rounded-r">
               <p className="text-lg font-semibold text-foreground mb-2">
-                "O Karatê e o Kobudo se completam — 60% mãos vazias, 40% armas que se tornam extensões do corpo."
+                “O Karatê e o Kobudo se completam — 60% mãos vazias, 40% armas que se tornam extensões do corpo.”
               </p>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-muted-foreground text-white">
                 Princípio que define a escola Shinshukan
               </p>
             </div>
 
             <p>
-              Ao mudar-se para Palmital (SP), Sensei Alessandro iniciou uma nova fase. Inspirou sua esposa e filhos, que hoje 
-              também são faixas-pretas, e juntos fundaram o projeto <strong className="text-primary">"Karatê para Todos"</strong>, 
-              em parceria com a Prefeitura Municipal, APAE, Colégio Expoente, Projeto Gota Verde e o Complexo Esportivo Maylson Campos. 
-              Desde 2018, também levou o Kobudo Shinshukan para Marília e Pirapozinho, ajudando a expandir a tradição da escola no interior paulista.
+              Ao mudar-se para Palmital (SP), Sensei Alessandro iniciou uma nova fase: inspirou sua esposa e filhos — hoje também faixas-pretas — 
+              e juntos fundaram o projeto <strong className="text-primary">Karatê para Todos</strong>, em parceria com a Prefeitura Municipal, APAE, Colégio Expoente, 
+              Projeto Gota Verde e o Complexo Esportivo Maylson Campos. 
+              Desde 2018, também levou o Kobudo Shinshukan para Marília e Pirapozinho, expandindo a tradição da escola no interior paulista.
             </p>
 
             <p>
-              No campo competitivo, conquistou resultados expressivos em eventos nacionais, interestilos e mundiais. Em 2025, obteve 
-              <strong className="text-primary"> medalha de bronze no Campeonato Mundial de Karatê e Kobudo Shinshukan</strong>, realizado 
-              em Praia Grande, com delegações da Espanha, Argentina, Uruguai e Brasil.
+              Seu trabalho foi reconhecido oficialmente: em 2019, recebeu <strong className="text-primary">moção de parabenização da Câmara de Vereadores de Palmital </strong>
+              e, em 2022, a cidade instituiu o <strong className="text-primary">Dia Municipal do Karatê</strong>, celebrado em 31 de julho — sua data de nascimento.
             </p>
 
             <p>
-              Seu trabalho foi reconhecido oficialmente: em 2019, recebeu moção de parabenização da Câmara de Vereadores de Palmital, 
-              e em 2022, a cidade instituiu o <strong className="text-primary">Dia Municipal do Karatê</strong>, comemorado em 31 de julho, 
-              sua data de nascimento.
+              Sensei Alessandro tem como missão formar crianças e adolescentes por meio das artes marciais, promovendo inclusão e socialização. 
+              Defende que o Karatê e o Kobudo vão além da técnica — ensinam valores como respeito, autocontrole e trabalho em equipe, essenciais para a vida em sociedade.
             </p>
 
             <p>
-              Hoje, o objetivo de Sensei Alessandro é continuar formando crianças e adolescentes, expandindo o Kobudo para novas instituições 
-              e mantendo viva a tradição da Shinshukan, que atravessa gerações desde os mestres de Okinawa até o interior do Brasil.
+              Reconhecendo que trilhar esse caminho exige esforço e resiliência, expressa profunda gratidão à família, alunos e mestres que o acompanham. 
+              Para ele, viver é evoluir constantemente — fiel ao espírito da <strong className="text-primary">Shinshukan</strong> e aos ideais de seus mestres.
             </p>
           </div>
         </div>
       </section>
 
       {/* Philosophy Section */}
-      <section className="py-20 bg-gradient-to-br from-background to-secondary/30">
+      <section className="py-20 bg-gradient-to-br from-background to-secondary/30 text-white">
         <div className="container mx-auto px-4 max-w-4xl">
           <h2 className="text-4xl font-bold text-center mb-12 text-foreground">
             Filosofia e Tradição
@@ -138,31 +136,33 @@ const History = () => {
           <div className="prose prose-lg max-w-none space-y-6 text-muted-foreground">
             <div className="bg-secondary/50 border-l-4 border-primary p-6 my-8 rounded-r">
               <p className="text-lg font-semibold text-foreground mb-2">
-                "A chave para imortalidade é ter uma vida que mereça ser lembrada"
+                “A chave para a imortalidade é ter uma vida que mereça ser lembrada.”
               </p>
-              <p className="text-sm text-muted-foreground">
-                - Sensei Alessandro Pires
+              <p className="text-sm text-muted-foreground text-white">
+                — Sensei Alessandro Pires
               </p>
             </div>
 
             <p>
               Para Sensei Alessandro, lutar é trilhar um caminho de sacrifício, persistência e superação.
-              Ele acredita que vencer exige coragem para enfrentar, perseverar e resistir — valores que ecoam o espírito da Shinshukan, nascida do legado de Okinawa.
+              Vencer exige coragem para enfrentar, perseverar e resistir — valores que refletem o espírito da 
+              <strong className="text-primary"> Shinshukan</strong>, herdeira do legado de Okinawa.
             </p>
 
             <p>
-              O dogma central das artes marciais, segundo ele, é aprender a enfrentar as adversidades com equilíbrio, técnica e senso de justiça.
-              Treinar Karatê e Kobudo não é apenas dominar técnicas, mas construir caráter — transformar a energia do combate em harmonia interior.
+              O propósito das artes marciais, segundo ele, é aprender a enfrentar as adversidades com equilíbrio, técnica e justiça. 
+              Treinar Karatê e Kobudo não é apenas dominar técnicas, mas forjar caráter — transformar a energia do combate em harmonia interior.
             </p>
 
             <p>
-              Praticar Arte Marcial, para Sensei Alessandro, é sonhar com uma sociedade mais justa, humana e disciplinada, onde cada praticante reconhece suas limitações e busca a paz interior.
-              A filosofia do dojo é que o respeito, o autocontrole e o trabalho em equipe são armas tão poderosas quanto qualquer bo, tonfa ou katana.
+              A filosofia do dojo busca formar cidadãos éticos e conscientes, que reconhecem suas limitações e buscam a paz interior. 
+              Respeito, autocontrole e trabalho em equipe são, para a Shinshukan, armas tão poderosas quanto qualquer <em>bo</em>, <em>tonfa</em> ou <em>katana</em>.
             </p>
 
             <p>
-              Ele defende que o verdadeiro caminho do guerreiro moderno é educar, conscientizar e humanizar, formando cidadãos responsáveis e compassivos.
-              Por isso, expressa profunda gratidão à sua família, alunos e mestres — pilares que sustentam sua missão de viver em constante evolução, fiel ao espírito da Shinshukan.
+              Para Sensei Alessandro, o verdadeiro caminho do guerreiro moderno é educar e humanizar, 
+              unindo técnica, disciplina e compaixão. 
+              Por isso, expressa gratidão à família, alunos e mestres — pilares que sustentam sua missão de viver em constante evolução.
             </p>
           </div>
         </div>
