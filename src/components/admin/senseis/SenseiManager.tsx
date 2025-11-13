@@ -1,6 +1,24 @@
 import { useState } from "react";
 import { Plus, Pencil, Trash2, GripVertical } from "lucide-react";
 import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { BeltSelect, BELT_GRADES } from "@/components/BeltSelect";
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -120,6 +138,28 @@ export const SenseiManager = ({
     }
   };
 
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      const oldIndex = senseis.findIndex((s) => s.id === active.id);
+      const newIndex = senseis.findIndex((s) => s.id === over.id);
+      const reordered = arrayMove(senseis, oldIndex, newIndex).map((s, idx) => ({
+        ...s,
+        orderIndex: idx,
+      }));
+      onUpdate(reordered);
+      // TODO: Call API to update order on backend if needed
+    }
+  };
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
   return (
     <>
       <Card>
@@ -214,49 +254,28 @@ export const SenseiManager = ({
           </div>
         </CardHeader>
         <CardContent>
-          <div className="space-y-3">
-            {loading ? (
-              <p className="text-sm text-muted-foreground">Carregando...</p>
-            ) : senseis.length === 0 ? (
-              <p className="text-sm text-muted-foreground">Nenhum sensei cadastrado.</p>
-            ) : (
-              senseis
-                .sort((a, b) => (a.orderIndex || 0) - (b.orderIndex || 0))
-                .map((sensei) => (
-                  <div
-                    key={sensei.id}
-                    className="border rounded-lg p-4 flex items-start gap-4"
-                  >
-                    <div className="text-muted-foreground pt-1">
-                      <GripVertical className="w-5 h-5" />
-                    </div>
-
-                    {sensei.imageUrl && (
-                      <img
-                        src={sensei.imageUrl}
-                        alt={sensei.name}
-                        className="w-24 h-24 rounded-md object-cover flex-shrink-0"
-                      />
-                    )}
-
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold">{sensei.name}</h3>
-                      <p className="text-sm text-primary font-medium">{sensei.rank}</p>
-                      {sensei.description && (
-                        <p className="text-sm text-muted-foreground mt-1">
-                          {sensei.description}
-                        </p>
-                      )}
-                      <p className="text-xs text-muted-foreground mt-2">
-                        Ordem: {sensei.orderIndex || 0}
-                      </p>
-                    </div>
-
-                    <div className="flex gap-2 flex-shrink-0">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => {
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext
+              items={senseis.map((s) => s.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              <div className="space-y-3">
+                {loading ? (
+                  <p className="text-sm text-muted-foreground">Carregando...</p>
+                ) : senseis.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">Nenhum sensei cadastrado.</p>
+                ) : (
+                  senseis
+                    .sort((a, b) => (a.orderIndex || 0) - (b.orderIndex || 0))
+                    .map((sensei) => (
+                      <SortableSenseiCard
+                        key={sensei.id}
+                        sensei={sensei}
+                        onEdit={() => {
                           setEditingSensei(sensei);
                           setForm({
                             name: sensei.name,
@@ -266,23 +285,13 @@ export const SenseiManager = ({
                           });
                           setImageFile(null);
                         }}
-                      >
-                        <Pencil className="w-4 h-4 mr-1" />
-                        Editar
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleDelete(sensei.id)}
-                      >
-                        <Trash2 className="w-4 h-4 mr-1" />
-                        Remover
-                      </Button>
-                    </div>
-                  </div>
-                ))
-            )}
-          </div>
+                        onDelete={() => handleDelete(sensei.id)}
+                      />
+                    ))
+                )}
+              </div>
+            </SortableContext>
+          </DndContext>
         </CardContent>
       </Card>
 
@@ -370,5 +379,77 @@ export const SenseiManager = ({
     </>
   );
 };
+
+function SortableSenseiCard({
+  sensei,
+  onEdit,
+  onDelete,
+}: {
+  sensei: Sensei;
+  onEdit: () => void;
+  onDelete: () => void;
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: sensei.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className="border rounded-lg p-4 flex items-start gap-4 bg-card"
+    >
+      <button
+        className="cursor-grab active:cursor-grabbing text-muted-foreground pt-1"
+        {...attributes}
+        {...listeners}
+      >
+        <GripVertical className="w-5 h-5" />
+      </button>
+
+      {sensei.imageUrl && (
+        <img
+          src={sensei.imageUrl}
+          alt={sensei.name}
+          className="w-24 h-24 rounded-md object-cover flex-shrink-0"
+        />
+      )}
+
+      <div className="flex-1 min-w-0">
+        <h3 className="font-semibold">{sensei.name}</h3>
+        <p className="text-sm text-primary font-medium">
+          {BELT_GRADES.find((b) => b.id === sensei.rank)?.name || sensei.rank}
+        </p>
+        {sensei.description && (
+          <p className="text-sm text-muted-foreground mt-1">
+            {sensei.description}
+          </p>
+        )}
+      </div>
+
+      <div className="flex gap-2 flex-shrink-0">
+        <Button variant="outline" size="sm" onClick={onEdit}>
+          <Pencil className="w-4 h-4 mr-1" />
+          Editar
+        </Button>
+        <Button variant="outline" size="sm" onClick={onDelete}>
+          <Trash2 className="w-4 h-4 mr-1" />
+          Remover
+        </Button>
+      </div>
+    </div>
+  );
+}
 
 export default SenseiManager;

@@ -426,29 +426,35 @@ function MaterialsList({
         {items.map((m) => (
           <div
             key={m.id}
-            className="flex items-center justify-between border rounded px-3 py-2"
+            className="border rounded-lg p-3 bg-card hover:bg-accent/5 transition-colors"
           >
-            <div className="min-w-0">
-              <p className="text-sm font-medium truncate">{m.title}</p>
+            <div className="space-y-2">
+              <p className="text-sm font-medium break-words">{m.title}</p>
               {m.minBeltId && (
                 <p className="text-xs text-muted-foreground">
                   Mínimo: {BELT_GRADES.find((g) => g.id === m.minBeltId)?.name}
                 </p>
               )}
-            </div>
-            <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" onClick={() => onEdit(m)}>
-                <Pencil className="w-4 h-4 mr-1" />
-                Editar
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => onDelete(m.id)}
-              >
-                <Trash2 className="w-4 h-4 mr-1" />
-                Remover
-              </Button>
+              <div className="flex gap-2 pt-2">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => onEdit(m)}
+                  className="flex-1"
+                >
+                  <Pencil className="w-3 h-3 mr-1" />
+                  Editar
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => onDelete(m.id)}
+                  className="flex-1"
+                >
+                  <Trash2 className="w-3 h-3 mr-1" />
+                  Remover
+                </Button>
+              </div>
             </div>
           </div>
         ))}
