@@ -146,15 +146,21 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold">Painel Administrativo</h1>
-          <p className="text-muted-foreground mt-1">
+    <div className="min-h-screen pt-20 bg-gradient-to-br from-background to-secondary/30">
+      {/* Header */}
+      <section className="bg-gradient-hero py-12">
+        <div className="container mx-auto px-4">
+          <h1 className="text-4xl font-bold text-primary-foreground mb-2">
+            Painel Administrativo
+          </h1>
+          <p className="text-primary-foreground/90">
             Gerencie alunos, materiais, locais, senseis e eventos
           </p>
         </div>
+      </section>
 
+      {/* Main Content */}
+      <section className="container mx-auto px-4 py-12">
         <Tabs defaultValue="students" className="w-full">
           <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="students" className="flex items-center gap-2">
@@ -220,7 +226,7 @@ const AdminDashboard = () => {
             />
           </TabsContent>
         </Tabs>
-      </div>
+      </section>
     </div>
   );
 };
