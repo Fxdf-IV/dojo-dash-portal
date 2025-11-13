@@ -5,30 +5,55 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { MapPin, Phone, Mail, Facebook, Instagram, Youtube } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { contactsService } from "@/services";
+
 const Contact = () => {
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
     message: ""
   });
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Aqui seria integrado com backend/email
-    toast({
-      title: "Mensagem enviada!",
-      description: "Entraremos em contato em breve."
-    });
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      message: ""
-    });
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      // Incluir telefone no assunto se fornecido
+      const subject = formData.phone
+        ? `Contato via site - Tel: ${formData.phone}`
+        : "Contato via site";
+
+      await contactsService.create({
+        name: formData.name,
+        email: formData.email,
+        subject,
+        message: formData.message,
+      });
+
+      toast({
+        title: "Mensagem enviada!",
+        description: "Entraremos em contato em breve."
+      });
+
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        message: ""
+      });
+    } catch (error: any) {
+      toast({
+        title: "Erro ao enviar mensagem",
+        description: error.message || "Tente novamente mais tarde.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -76,8 +101,8 @@ const Contact = () => {
                       <label className="text-sm font-medium text-foreground mb-2 block">Mensagem</label>
                       <Textarea name="message" value={formData.message} onChange={handleChange} placeholder="Conte-nos como podemos ajudar..." rows={5} required />
                     </div>
-                    <Button type="submit" className="w-full shadow-glow">
-                      Enviar Mensagem
+                    <Button type="submit" className="w-full shadow-glow" disabled={isSubmitting}>
+                      {isSubmitting ? "Enviando..." : "Enviar Mensagem"}
                     </Button>
                   </form>
                 </CardContent>
@@ -140,7 +165,7 @@ const Contact = () => {
                   <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="p-3 bg-primary/10 rounded-full text-primary hover:bg-primary hover:text-primary-foreground transition-all">
                     <Instagram size={24} />
                   </a>
-                  
+
                 </div>
               </div>
 

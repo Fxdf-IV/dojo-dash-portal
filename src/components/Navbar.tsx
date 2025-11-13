@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import logo from "@/assets/logo.png";
 import { useAuth } from "@/contexts/AuthContext";
@@ -19,6 +19,9 @@ const Navbar = () => {
   }, {
     name: "Galeria",
     path: "/gallery"
+  }, {
+    name: "Eventos",
+    path: "/events"
   }, {
     name: "Contato",
     path: "/contact"
@@ -52,14 +55,16 @@ const Navbar = () => {
                     {user?.role === "admin" ? "Área da Administração" : "Área do Aluno"}
                   </Button>
                 </Link>
-                <Button 
-                  variant="ghost" 
+                <Button
+                  variant="outline"
                   size="sm"
+                  className="border-red-500/50 text-red-600 hover:bg-red-50 hover:text-red-700 hover:border-red-500 dark:text-red-400 dark:hover:bg-red-950 dark:hover:text-red-300"
                   onClick={() => {
                     logout();
                     navigate("/");
                   }}
                 >
+                  <LogOut className="w-4 h-4 mr-2" />
                   Sair
                 </Button>
               </>
@@ -88,16 +93,17 @@ const Navbar = () => {
                     {user?.role === "admin" ? "Área da Administração" : "Área do Aluno"}
                   </Button>
                 </Link>
-                <Button 
-                  variant="ghost" 
+                <Button
+                  variant="outline"
                   size="sm"
-                  className="w-full"
+                  className="w-full border-red-500/50 text-red-600 hover:bg-red-50 hover:text-red-700 hover:border-red-500 dark:text-red-400 dark:hover:bg-red-950 dark:hover:text-red-300"
                   onClick={() => {
                     logout();
                     navigate("/");
                     setIsOpen(false);
                   }}
                 >
+                  <LogOut className="w-4 h-4 mr-2" />
                   Sair
                 </Button>
               </>

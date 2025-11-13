@@ -1,8 +1,10 @@
 import { Badge } from "@/components/ui/badge";
+import { BELT_GRADES } from "./BeltSelect";
 
 interface BeltBadgeProps {
   kyu?: number;
   dan?: number;
+  beltId?: string;
   className?: string;
 }
 
@@ -13,7 +15,7 @@ export const getBeltColor = (kyu?: number, dan?: number) => {
     if (dan === 7 || dan === 8) return { gradient: "linear-gradient(90deg, #E53935 50%, #FFFFFF 50%)", textColor: "#1F2937" };
     if (dan === 9 || dan === 10) return { color: "#B71C1C", textColor: "#FFFFFF" };
   }
-  
+
   if (kyu) {
     const colors: { [key: number]: { color: string; textColor: string } } = {
       9: { color: "#FFFFFF", textColor: "#1F2937" },
@@ -28,19 +30,38 @@ export const getBeltColor = (kyu?: number, dan?: number) => {
     };
     return colors[kyu] || { color: "#000000", textColor: "#FFFFFF" };
   }
-  
+
   return { color: "#000000", textColor: "#FFFFFF" };
 };
 
-const BeltBadge = ({ kyu, dan, className = "" }: BeltBadgeProps) => {
+const BeltBadge = ({ kyu, dan, beltId, className = "" }: BeltBadgeProps) => {
+  // Se beltId for fornecido, usar o novo sistema
+  if (beltId) {
+    const belt = BELT_GRADES.find(b => b.id === beltId);
+    if (belt) {
+      return (
+        <Badge
+          className={`font-semibold ${className}`}
+          style={{
+            backgroundColor: belt.color,
+            color: belt.rank === 'kyu' && ['white', 'yellow', 'green'].includes(belt.id) ? '#1F2937' : '#FFFFFF'
+          }}
+        >
+          {belt.rank === 'dan' ? `${belt.level}º Dan` : `${belt.level}º Kyu`}
+        </Badge>
+      );
+    }
+  }
+
+  // Fallback para o sistema antigo (kyu/dan)
   const style = getBeltColor(kyu, dan);
-  
+
   return (
     <Badge
       className={`font-semibold ${className}`}
       style={{
-        ...(style.gradient 
-          ? { background: style.gradient } 
+        ...(style.gradient
+          ? { background: style.gradient }
           : { backgroundColor: style.color }),
         color: style.textColor
       }}

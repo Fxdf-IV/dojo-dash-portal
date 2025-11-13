@@ -1,15 +1,25 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
-import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
+export default defineConfig(() => ({
   server: {
     host: "::",
     port: 8080,
   },
-  plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
+  plugins: [
+    react(),
+    // Plugin para adicionar Express API
+    {
+      name: 'configure-server',
+      configureServer: async (server: any) => {
+        // Importa e configura o servidor API
+        const { setupApiServer } = await import('./server/index.js');
+        setupApiServer(server.middlewares as any);
+      }
+    }
+  ],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

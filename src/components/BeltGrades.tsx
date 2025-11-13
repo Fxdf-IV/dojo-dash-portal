@@ -26,19 +26,22 @@ const BeltGrades = () => {
     { level: "3º Dan (Sandan)", name: "Faixa Preta", color: "#000000" },
     { level: "4º Dan (Yondan)", name: "Faixa Preta", color: "#000000" },
     { level: "5º Dan (Godan)", name: "Faixa Preta", color: "#000000" },
-    { level: "6º Dan (Rokudan)", name: "Faixa Preta/Coral", gradient: "linear-gradient(90deg, black 0%, black 65%, white 45%, white 68%, #E53935 65%, #E53935 98%, white 45%)"},
-    { level: "7º Dan (Shichidan)", name: "Faixa Coral", gradient: "linear-gradient(90deg, #E53935 50%, #FFFFFF 50%)" },
-    { level: "8º Dan (Hachidan)", name: "Faixa Coral", gradient: "linear-gradient(90deg, #E53935 50%, #FFFFFF 50%)" },
+    { level: "6º Dan (Rokudan)", name: "Faixa Preta/Coral", gradient: "linear-gradient(90deg, black 0%, black 65%, white 65%, white 70%, red 70%, red 85%, white 85%, white 90%, black 90%, black 100%)" },
+    { level: "7º Dan (Shichidan)", name: "Faixa Coral", gradient: "linear-gradient(90deg, #E53935 25%, #FFFFFF 25%, #FFFFFF 50%, #E53935 50%, #E53935 75%, #FFFFFF 75%, #FFFFFF 100%)" },
+    { level: "8º Dan (Hachidan)", name: "Faixa Coral", gradient: "linear-gradient(90deg, #E53935 25%, #FFFFFF 25%, #FFFFFF 50%, #E53935 50%, #E53935 75%, #FFFFFF 75%, #FFFFFF 100%)" },
     { level: "9º Dan (Kyudan)", name: "Faixa Vermelha", color: "#B71C1C" },
     { level: "10º Dan (Judan)", name: "Faixa Vermelha", color: "#B71C1C" },
   ];
   
-  const getTextColor = (backgroundColor: string) => {
+  const getTextColor = (backgroundColor: string, level?: string | undefined) => {
     // Para faixas claras, usar texto escuro
-    if (backgroundColor === "#FFFFFF" || backgroundColor === "#FDD835" || backgroundColor === "#43A047") {
-      return "text-gray-900";
+    if (backgroundColor === "#000000" || level === "6º Dan (Rokudan)") {
+      return "text-yellow-400";
     }
-    return "text-white";
+    if (level === "8º Kyu" || level === "1º Kyu" || level === "2º Kyu" || level === "3º Kyu" || level === "5º Kyu") {
+      return "text-gray-100";
+    }
+    return "text-gray-900";
   };
 
   return (
@@ -52,8 +55,8 @@ const BeltGrades = () => {
           {kyuGrades.map((grade, index) => (
             <Badge
               key={index}
-              className={`px-4 py-2 text-sm font-semibold ${
-                getTextColor(grade.color)
+              className={`px-4 py-2 [text-shadow:_1px_1px_10px_black] text-sm font-semibold ${
+                getTextColor(grade.color, grade.level)
               }`}
               style={{ backgroundColor: grade.color }}
             >
@@ -74,8 +77,8 @@ const BeltGrades = () => {
           {danGrades.map((grade, index) => (
             <Badge
               key={index}
-              className={`px-4 py-2 text-sm font-semibold ${
-                grade.gradient ? "text-gray-900" : grade.color === "#000000" ? "text-white" : "text-white"
+              className={`px-4 py-2 [text-shadow:_1px_1px_10px_black] text-sm font-semibold ${
+                getTextColor(grade.color, grade.level)
               }`}
               style={
                 grade.gradient

@@ -9,25 +9,55 @@ import bolaCidadaniaImage from "@/assets/bola-cidadania-new.jpg";
 import gotaVerdeImage from "@/assets/gota-verde-new.jpg";
 import colegioExpoenteImage from "@/assets/colegio-expoente-new.jpg";
 import logo from "@/assets/logo.png";
-type Sensei = { id?: number; name: string; rank: string; description: string; imageUrl?: string };
+import { senseisService } from "@/services";
+import type { Sensei } from "@/types";
+import { BELT_GRADES } from "@/components/BeltSelect";
 const Home = () => {
   const [senseis, setSenseis] = useState<Sensei[]>([]);
+  const [loadingSenseis, setLoadingSenseis] = useState(true);
+
   useEffect(() => {
-    const stored = localStorage.getItem("senseis");
-    if (stored) {
-      try {
-        setSenseis(JSON.parse(stored));
-        return;
-      } catch {
-        // ignore and fall back
-      }
-    }
-    setSenseis([
-      { name: "Sensei Alessandro", rank: "4º Dan - Faixa Preta", description: "Fundador do Alessandro Karatê e Kobudo, com mais de 25 anos de experiência no Shorin-Ryu. Dedicado à formação técnica e filosófica dos alunos, mantendo viva a tradição do karatê de Okinawa." },
-      { name: "Sensei Milena", rank: "2º Dan - Faixa Preta", description: "Especialista em kata e bunkai, responsável pelo desenvolvimento técnico dos alunos. Referência em competições regionais e instrutora do projeto Bola e Cidadania." },
-      { name: "Sensei Vinicius", rank: "1º Dan - Faixa Preta", description: "Instrutor focado no trabalho com crianças e adolescentes. Coordena as atividades no Colégio Expoente e no Projeto Gota Verde, unindo disciplina marcial e consciência ambiental." },
-    ]);
+    loadSenseis();
   }, []);
+
+  const loadSenseis = async () => {
+    try {
+      setLoadingSenseis(true);
+      const data = await senseisService.getAll();
+      setSenseis(data);
+    } catch (error) {
+      console.error('Erro ao carregar senseis:', error);
+      // Fallback para dados hardcoded em caso de erro
+      setSenseis([
+        {
+          id: "fallback-1",
+          name: "Sensei Alessandro",
+          rank: "4º Dan - Faixa Preta",
+          description: "Fundador do Alessandro Karatê e Kobudo, com mais de 25 anos de experiência no Shorin-Ryu. Dedicado à formação técnica e filosófica dos alunos, mantendo viva a tradição do karatê de Okinawa.",
+          imageUrl: "",
+          orderIndex: 0
+        },
+        {
+          id: "fallback-2",
+          name: "Sensei Milena",
+          rank: "2º Dan - Faixa Preta",
+          description: "Especialista em kata e bunkai, responsável pelo desenvolvimento técnico dos alunos. Referência em competições regionais e instrutora do projeto Bola e Cidadania.",
+          imageUrl: "",
+          orderIndex: 1
+        },
+        {
+          id: "fallback-3",
+          name: "Sensei Vinicius",
+          rank: "1º Dan - Faixa Preta",
+          description: "Instrutor focado no trabalho com crianças e adolescentes. Coordena as atividades no Colégio Expoente e no Projeto Gota Verde, unindo disciplina marcial e consciência ambiental.",
+          imageUrl: "",
+          orderIndex: 2
+        },
+      ]);
+    } finally {
+      setLoadingSenseis(false);
+    }
+  };
   const projects = [{
     name: "CT Maylson Campos",
     description: "Centro de Treinamento com infraestrutura completa para o desenvolvimento dos atletas.",
@@ -67,7 +97,7 @@ const Home = () => {
       <section className="relative h-[90vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-gradient-hero" />
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1555597673-b21d5c935865?q=80&w=2070')] bg-cover bg-center opacity-20" />
-        
+
         <div className="relative z-10 container mx-auto px-4 text-center">
           <img src={logo} alt="Alessandro Karatê e Kobudo" className="w-32 h-32 md:w-40 md:h-40 mx-auto mb-6 animate-fade-in" />
           <h1 className="text-5xl md:text-7xl font-bold text-primary-foreground mb-6 animate-fade-in">
@@ -75,11 +105,11 @@ const Home = () => {
           </h1>
           <p className="text-xl md:text-2xl text-primary-foreground/90 mb-8 max-w-2xl mx-auto">Tradição Shorin-Ryu</p>
           <p className="text-lg text-primary-foreground/80 mb-12 max-w-3xl mx-auto">
-            Mais que um dojo, uma família dedicada à formação integral através do karatê tradicional. 
+            Mais que um dojo, uma família dedicada à formação integral através do karatê tradicional.
             Disciplina, respeito e excelência em cada treino.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/contato">
+            <Link to="/contact">
               <Button size="lg" className="shadow-glow text-lg px-8">
                 Quero Começar
               </Button>
@@ -105,26 +135,40 @@ const Home = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {senseis.map((sensei, index) => <Card key={index} className="border-primary/20 hover:border-primary transition-all hover:shadow-glow overflow-hidden group">
-                <div className="aspect-square overflow-hidden bg-muted/50 flex items-center justify-center">
-                  {sensei.imageUrl ? (
-                    <img src={sensei.imageUrl} alt={sensei.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                  ) : (
-                    <div className="text-muted-foreground">Foto do Sensei</div>
-                  )}
-                </div>
-                <CardContent className="p-6 text-center">
-                  <h3 className="text-2xl font-bold mb-1 text-card-foreground group-hover:text-primary transition-colors">
-                    {sensei.name}
-                  </h3>
-                  <p className="text-primary font-semibold mb-4 text-sm">
-                    {sensei.rank}
-                  </p>
-                  
-                </CardContent>
-              </Card>)}
-          </div>
+          {loadingSenseis ? (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">Carregando senseis...</p>
+            </div>
+          ) : senseis.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">Nenhum sensei encontrado.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+              {senseis.map((sensei) => (
+                <Card key={sensei.id} className="border-primary/20 hover:border-primary transition-all hover:shadow-glow overflow-hidden group">
+                  <div className="aspect-square overflow-hidden bg-muted/50 flex items-center justify-center">
+                    {sensei.imageUrl ? (
+                      <img src={sensei.imageUrl} alt={sensei.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    ) : (
+                      <div className="text-muted-foreground">Foto do Sensei</div>
+                    )}
+                  </div>
+                  <CardContent className="p-6 text-center">
+                    <h3 className="text-2xl font-bold mb-1 text-card-foreground group-hover:text-primary transition-colors">
+                      {sensei.name}
+                    </h3>
+                    <p className="text-primary font-semibold mb-4 text-sm">
+                      {BELT_GRADES.find(belt => belt.id === sensei.rank)?.name || sensei.rank}
+                    </p>
+                    <p className="text-muted-foreground text-sm leading-relaxed">
+                      {sensei.description}
+                    </p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -183,7 +227,7 @@ const Home = () => {
                     <h3 className="text-2xl font-bold text-card-foreground">CT Maylson Campos</h3>
                   </div>
                   <p className="text-muted-foreground mb-4 leading-relaxed">Nosso centro de treinamento principal oferece infraestrutura completa para o desenvolvimento dos praticantes. Com tatames de alta qualidade, ambiente arejado e equipamentos modernos, o CT Maylson Campos é o coração do Alessandro Karatê e Kobudo. Aqui, mantemos viva a tradição do Shorin-Ryu com treinos regulares para todas as faixas e idades.</p>
-                  
+
                 </CardContent>
               </Card>
             </TabsContent>
@@ -199,12 +243,12 @@ const Home = () => {
                     <h3 className="text-2xl font-bold text-card-foreground">Bola e Cidadania</h3>
                   </div>
                   <p className="text-muted-foreground mb-4 leading-relaxed">
-                    Um projeto social que transforma vidas através do esporte e da educação. O Bola e Cidadania leva os 
-                    ensinamentos do karatê tradicional para comunidades, promovendo inclusão social, disciplina e valores 
-                    morais. Mais do que técnicas de luta, ensinamos respeito, cidadania e trabalho em equipe. Um espaço 
+                    Um projeto social que transforma vidas através do esporte e da educação. O Bola e Cidadania leva os
+                    ensinamentos do karatê tradicional para comunidades, promovendo inclusão social, disciplina e valores
+                    morais. Mais do que técnicas de luta, ensinamos respeito, cidadania e trabalho em equipe. Um espaço
                     onde crianças e jovens encontram propósito e desenvolvem seu potencial.
                   </p>
-                  
+
                 </CardContent>
               </Card>
             </TabsContent>
@@ -220,12 +264,12 @@ const Home = () => {
                     <h3 className="text-2xl font-bold text-card-foreground">Projeto Gota Verde</h3>
                   </div>
                   <p className="text-muted-foreground mb-4 leading-relaxed">
-                    Uma iniciativa única que une o karatê tradicional à consciência ambiental e sustentabilidade. 
-                    No Projeto Gota Verde, praticamos em harmonia com a natureza, realizando treinos ao ar livre e 
-                    promovendo ações de preservação ambiental. Os alunos aprendem que o respeito ensinado no dojo 
+                    Uma iniciativa única que une o karatê tradicional à consciência ambiental e sustentabilidade.
+                    No Projeto Gota Verde, praticamos em harmonia com a natureza, realizando treinos ao ar livre e
+                    promovendo ações de preservação ambiental. Os alunos aprendem que o respeito ensinado no dojo
                     se estende ao planeta, desenvolvendo uma consciência ecológica aliada aos valores marciais.
                   </p>
-                  
+
                 </CardContent>
               </Card>
             </TabsContent>
@@ -241,12 +285,12 @@ const Home = () => {
                     <h3 className="text-2xl font-bold text-card-foreground">Colégio Expoente</h3>
                   </div>
                   <p className="text-muted-foreground mb-4 leading-relaxed">
-                    Parceria educacional que integra o karatê ao ambiente escolar, proporcionando aos alunos do Colégio 
-                    Expoente uma formação completa que une corpo e mente. Durante as aulas, os estudantes desenvolvem 
-                    disciplina, concentração e autocontrole - qualidades que se refletem no desempenho acadêmico. 
+                    Parceria educacional que integra o karatê ao ambiente escolar, proporcionando aos alunos do Colégio
+                    Expoente uma formação completa que une corpo e mente. Durante as aulas, os estudantes desenvolvem
+                    disciplina, concentração e autocontrole - qualidades que se refletem no desempenho acadêmico.
                     Uma oportunidade para vivenciar os valores do karatê tradicional dentro do contexto educacional.
                   </p>
-                  
+
                 </CardContent>
               </Card>
             </TabsContent>
@@ -255,7 +299,7 @@ const Home = () => {
       </section>
 
       {/* Projects Section */}
-      
+
 
       {/* CTA Section */}
       <section className="py-20 bg-gradient-hero relative overflow-hidden">
@@ -267,7 +311,7 @@ const Home = () => {
           <p className="text-xl text-primary-foreground/90 mb-8 max-w-2xl mx-auto">
             Junte-se a nós e descubra o verdadeiro espírito do karatê tradicional
           </p>
-          <Link to="/contato">
+          <Link to="/contact">
             <Button size="lg" variant="outline" className="shadow-glow text-lg px-8">
               Entre em Contato
             </Button>

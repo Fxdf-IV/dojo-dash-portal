@@ -198,16 +198,6 @@ const History = () => {
         </div>
       </section>
 
-      {/* Belt Grades Section */}
-      <section className="py-20 bg-gradient-to-br from-background to-secondary/30">
-        <div className="container mx-auto px-4 max-w-6xl">
-          <h2 className="text-4xl font-bold text-center mb-12 text-foreground">
-            Sistema de Graduação
-          </h2>
-          <BeltGrades />
-        </div>
-      </section>
-
       {/* Style Section */}
       <section className="py-20 bg-gradient-to-br from-background to-secondary/30">
         <div className="container mx-auto px-4 max-w-4xl">
@@ -264,6 +254,16 @@ const History = () => {
               </CardContent>
             </Card>
           </div>
+        </div>
+      </section>
+    
+      {/* Belt Grades Section */}
+      <section className="py-20 bg-gradient-to-br from-background to-secondary/30">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <h2 className="text-4xl font-bold text-center mb-12 text-foreground">
+            Sistema de Graduação
+          </h2>
+          <BeltGrades />
         </div>
       </section>
     </div>;

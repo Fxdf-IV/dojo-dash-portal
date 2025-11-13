@@ -1,16 +1,9 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { authService } from "@/services";
+import type { User, UserRole } from "@/types";
 
-// Types
-export type UserRole = "student" | "admin";
-
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: UserRole;
-  kyu?: number; // Belt level for students (rage from -8 to +8)
-  location?: string; // Where the student trains
-}
+// Re-export types for compatibility
+export type { User, UserRole };
 
 interface AuthContextType {
   user: User | null;
@@ -18,6 +11,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, password: string, location: string) => Promise<void>;
   logout: () => void;
+  refreshUser: () => Promise<void>;
   isLoading: boolean;
   isAuthenticated: boolean;
 }
@@ -50,70 +44,18 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setToken(storedToken);
       setUser(JSON.parse(storedUser));
     }
-    
+
     setIsLoading(false);
   }, []);
 
   const login = async (email: string, password: string) => {
     try {
-      // Hard-coded users for testing
-      const hardcodedUsers = {
-        "adm@email.com": {
-          password: "1234",
-          user: {
-            id: "1",
-            name: "Administrador",
-            email: "adm@email.com",
-            role: "admin" as UserRole,
-          },
-        },
-        "aluno@email.com": {
-          password: "1234",
-          user: {
-            id: "2",
-            name: "Aluno Teste",
-            email: "aluno@email.com",
-            role: "student" as UserRole,
-            kyu: 6,
-            location: "CT Maylson Campos",
-          },
-        },
-      };
+      const data = await authService.login({ email, password });
 
-      // Check hard-coded credentials
-      const hardcodedUser = hardcodedUsers[email as keyof typeof hardcodedUsers];
-      
-      if (hardcodedUser && hardcodedUser.password === password) {
-        // Simulate token generation
-        const mockToken = `mock-token-${email}-${Date.now()}`;
-        
-        setToken(mockToken);
-        setUser(hardcodedUser.user);
-        
-        localStorage.setItem("token", mockToken);
-        localStorage.setItem("user", JSON.stringify(hardcodedUser.user));
-        return;
-      }
-
-      // If not hard-coded, try API
-      const response = await fetch("http://localhost:3000/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Credenciais inválidas");
-      }
-
-      const data = await response.json();
-      
       setToken(data.token);
       setUser(data.user);
-      
-      localStorage.setItem("token", data.token);
+
+      localStorage.setItem("token", data.token); // Corrigido: salvar token
       localStorage.setItem("user", JSON.stringify(data.user));
     } catch (error) {
       console.error("Login error:", error);
@@ -123,62 +65,39 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const register = async (name: string, email: string, password: string, location: string) => {
     try {
-      // For now, just log the registration attempt
-      // In production, this would create a pending account for admin approval
-      console.log("Registration attempt:", { name, email, location });
-      
-      // Simulate successful registration for testing
-      // In real app, admin would need to approve
-      const mockUser: User = {
-        id: String(Date.now()),
-        name,
-        email,
-        role: "student",
-        kyu: 0,
-        location,
-      };
+      const data = await authService.register({ name, email, password, location });
 
-      const mockToken = `mock-token-${email}-${Date.now()}`;
-      
-      setToken(mockToken);
-      setUser(mockUser);
-      
-      localStorage.setItem("token", mockToken);
-      localStorage.setItem("user", JSON.stringify(mockUser));
-      
-      // Uncomment below for API integration
-      /*
-      const response = await fetch("http://localhost:3000/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name, email, password, location }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Registration failed");
-      }
-
-      const data = await response.json();
-      
       setToken(data.token);
       setUser(data.user);
-      
-      localStorage.setItem("token", data.token);
+
+      localStorage.setItem("token", data.token); // Corrigido: salvar token
       localStorage.setItem("user", JSON.stringify(data.user));
-      */
     } catch (error) {
       console.error("Registration error:", error);
       throw error;
     }
   };
 
-  const logout = () => {
-    setUser(null);
-    setToken(null);
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+  const logout = async () => {
+    try {
+      await authService.logout();
+    } finally {
+      setUser(null);
+      setToken(null);
+      localStorage.removeItem("user");
+    }
+  };
+
+  const refreshUser = async () => {
+    try {
+      const data = await authService.refreshUser();
+      setUser(data.user);
+      localStorage.setItem("user", JSON.stringify(data.user));
+    } catch (error) {
+      console.error("Refresh user error:", error);
+      // Se falhar, fazer logout
+      logout();
+    }
   };
 
   return (
@@ -189,6 +108,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         login,
         register,
         logout,
+        refreshUser,
         isLoading,
         isAuthenticated: !!user,
       }}
@@ -197,4 +117,3 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     </AuthContext.Provider>
   );
 };
-
