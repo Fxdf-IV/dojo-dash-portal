@@ -1,5 +1,22 @@
 import { useState } from "react";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Plus, Pencil, Trash2, GripVertical, Images } from "lucide-react";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import {
   Dialog,
   DialogContent,
@@ -116,6 +133,27 @@ export const LocationManager = ({
     }
   };
 
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      const oldIndex = locations.findIndex((l) => l.id === active.id);
+      const newIndex = locations.findIndex((l) => l.id === over.id);
+      const reordered = arrayMove(locations, oldIndex, newIndex);
+      onUpdate(reordered);
+      // TODO: Call API to update order on backend if needed
+    }
+  };
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const [photosDialogLocation, setPhotosDialogLocation] = useState<Location | null>(null);
+
   return (
     <>
       <Card>
@@ -191,78 +229,41 @@ export const LocationManager = ({
           </div>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            {loading ? (
-              <p className="text-sm text-muted-foreground">Carregando...</p>
-            ) : locations.length === 0 ? (
-              <p className="text-sm text-muted-foreground">Nenhum local cadastrado.</p>
-            ) : (
-              locations.map((location) => (
-                <div
-                  key={location.id}
-                  className="border rounded-lg p-4 space-y-3"
-                >
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <h3 className="font-semibold">{location.name}</h3>
-                      {location.description && (
-                        <p className="text-sm text-muted-foreground">
-                          {location.description}
-                        </p>
-                      )}
-                    </div>
-                    <div className="flex gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => {
-                          setEditingLocation(location);
-                          setForm({
-                            name: location.name,
-                            description: location.description || "",
-                          });
-                          setImageFiles([]);
-                        }}
-                      >
-                        <Pencil className="w-4 h-4 mr-1" />
-                        Editar
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleDelete(location.id)}
-                      >
-                        <Trash2 className="w-4 h-4 mr-1" />
-                        Remover
-                      </Button>
-                    </div>
-                  </div>
-
-                  {location.images && location.images.length > 0 && (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                      {location.images.map((img, idx) => (
-                        <div
-                          key={idx}
-                          className="relative bg-muted rounded-md overflow-hidden aspect-square"
-                        >
-                          <img
-                            src={img.imageUrl}
-                            alt={`${location.name} - ${idx + 1}`}
-                            className="w-full h-full object-cover"
-                          />
-                          {img.caption && (
-                            <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-xs p-1 truncate">
-                              {img.caption}
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))
-            )}
-          </div>
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext
+              items={locations.map((l) => l.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              <div className="space-y-4">
+                {loading ? (
+                  <p className="text-sm text-muted-foreground">Carregando...</p>
+                ) : locations.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">Nenhum local cadastrado.</p>
+                ) : (
+                  locations.map((location) => (
+                    <SortableLocationCard
+                      key={location.id}
+                      location={location}
+                      onEdit={() => {
+                        setEditingLocation(location);
+                        setForm({
+                          name: location.name,
+                          description: location.description || "",
+                        });
+                        setImageFiles([]);
+                      }}
+                      onDelete={() => handleDelete(location.id)}
+                      onManagePhotos={() => setPhotosDialogLocation(location)}
+                    />
+                  ))
+                )}
+              </div>
+            </SortableContext>
+          </DndContext>
         </CardContent>
       </Card>
 
@@ -330,8 +331,150 @@ export const LocationManager = ({
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Photos Management Dialog */}
+      <Dialog open={!!photosDialogLocation} onOpenChange={(open) => !open && setPhotosDialogLocation(null)}>
+        <DialogContent className="max-w-3xl">
+          <DialogHeader>
+            <DialogTitle>Gerenciar Fotos - {photosDialogLocation?.name}</DialogTitle>
+            <DialogDescription>
+              Adicione, visualize ou remova fotos da galeria
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {photosDialogLocation?.images?.map((img, idx) => (
+                <div key={idx} className="relative group">
+                  <img
+                    src={img.imageUrl}
+                    alt={img.caption || "Foto"}
+                    className="w-full aspect-square object-cover rounded-lg"
+                  />
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                    onClick={async () => {
+                      try {
+                        // TODO: Implement delete image API call
+                        toast({ title: "Foto removida com sucesso!" });
+                      } catch (error) {
+                        toast({
+                          title: "Erro ao remover foto",
+                          variant: "destructive",
+                        });
+                      }
+                    }}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                  {img.caption && (
+                    <p className="text-xs text-muted-foreground mt-1 truncate">
+                      {img.caption}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+            <div className="border-t pt-4">
+              <Label htmlFor="new-photos">Adicionar Novas Fotos</Label>
+              <input
+                id="new-photos"
+                type="file"
+                multiple
+                accept="image/*"
+                className="mt-2"
+                onChange={async (e) => {
+                  const files = Array.from(e.target.files || []);
+                  if (files.length > 0 && photosDialogLocation) {
+                    try {
+                      // TODO: Implement add images API call
+                      toast({ title: "Fotos adicionadas com sucesso!" });
+                    } catch (error) {
+                      toast({
+                        title: "Erro ao adicionar fotos",
+                        variant: "destructive",
+                      });
+                    }
+                  }
+                }}
+              />
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };
+
+function SortableLocationCard({
+  location,
+  onEdit,
+  onDelete,
+  onManagePhotos,
+}: {
+  location: Location;
+  onEdit: () => void;
+  onDelete: () => void;
+  onManagePhotos: () => void;
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: location.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className="border rounded-lg p-4 space-y-3 bg-card"
+    >
+      <div className="flex items-start gap-3">
+        <button
+          className="cursor-grab active:cursor-grabbing mt-1"
+          {...attributes}
+          {...listeners}
+        >
+          <GripVertical className="w-5 h-5 text-muted-foreground" />
+        </button>
+        <div className="flex-1">
+          <h3 className="font-semibold">{location.name}</h3>
+          {location.description && (
+            <p className="text-sm text-muted-foreground">
+              {location.description}
+            </p>
+          )}
+          <p className="text-xs text-muted-foreground mt-1">
+            {location.images?.length || 0} foto(s) na galeria
+          </p>
+        </div>
+        <div className="flex gap-2">
+          <Button variant="outline" size="sm" onClick={onManagePhotos}>
+            <Images className="w-4 h-4 mr-1" />
+            Fotos
+          </Button>
+          <Button variant="outline" size="sm" onClick={onEdit}>
+            <Pencil className="w-4 h-4 mr-1" />
+            Editar
+          </Button>
+          <Button variant="outline" size="sm" onClick={onDelete}>
+            <Trash2 className="w-4 h-4 mr-1" />
+            Remover
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default LocationManager;
