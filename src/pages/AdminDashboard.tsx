@@ -193,7 +193,6 @@ const AdminDashboard = () => {
             <StudentManager
               students={students}
               loading={loadingStudents}
-              userId={user.id}
               onUpdate={setStudents}
               locations={locations}
             />

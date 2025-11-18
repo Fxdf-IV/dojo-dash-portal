@@ -10,6 +10,8 @@ import type { Event } from "@/types";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { normalizeImageUrl } from "@/utils/imageUrl";
+import { SEO } from "@/components/SEO";
+import { LoadingSpinner } from "@/components/LoadingStates";
 
 const Events = () => {
   const { user } = useAuth();
@@ -108,8 +110,11 @@ const Events = () => {
       <div className="aspect-video overflow-hidden bg-muted/50">
         <img
           src={src}
-          alt={title || "Imagem do evento"}
+          alt={title ? `Imagem do evento ${title}` : "Imagem do evento"}
           className="w-full h-full object-cover"
+          loading="lazy"
+          width="640"
+          height="360"
         />
       </div>
     );
@@ -117,8 +122,13 @@ const Events = () => {
 
   return (
     <div className="min-h-screen pt-20">
+      <SEO
+        title="Eventos - Alessandro Karatê e Kobudo"
+        description="Acompanhe os próximos eventos, campeonatos e atividades do dojo. Faça sua inscrição e participe das competições de karatê e kobudo."
+        keywords="eventos karate, campeonato karate palmital, competições artes marciais, treinos especiais"
+      />
       {/* Hero Section */}
-      <section className="relative py-20 border-b border-primary bg-gradient-hero">
+      <section className="relative py-20 border-b border-primary bg-gradient-hero" aria-labelledby="events-hero">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1555597673-b21d5c935865?q=80&w=2070')] bg-cover bg-center opacity-10" />
         <div className="container mx-auto px-4 relative z-10">
           <h1 className="text-5xl md:text-6xl font-bold text-primary-foreground text-center mb-6">
@@ -136,7 +146,9 @@ const Events = () => {
           <h2 className="text-4xl font-bold text-center mb-12 text-foreground">
             Próximos Eventos
           </h2>
-          {loading && (
+          {loading ? (
+            <LoadingSpinner />
+          ) : upcomingEvents.length === 0 ? (
             <div className="text-center text-muted-foreground py-12">
               <p>Carregando eventos...</p>
             </div>

@@ -8,6 +8,8 @@ import logo from "@/assets/logo.png";
 import { senseisService, locationsService } from "@/services";
 import type { Sensei, Location } from "@/types";
 import { BELT_GRADES } from "@/components/BeltSelect";
+import { SEO } from "@/components/SEO";
+import { LoadingGrid, LoadingSpinner } from "@/components/LoadingStates";
 const Home = () => {
   const [senseis, setSenseis] = useState<Sensei[]>([]);
   const [loadingSenseis, setLoadingSenseis] = useState(true);
@@ -82,13 +84,25 @@ const Home = () => {
   };
 
   return <div className="min-h-screen">
+      <SEO
+        title="Alessandro Karatê e Kobudo - Dojo Palmital SP"
+        description="Escola de Karatê Shorin-Ryu e Kobudo em Palmital SP. Tradição, disciplina e respeito. Formando não apenas karatecas, mas cidadãos de caráter."
+        keywords="karate palmital, kobudo palmital, shorin-ryu, artes marciais palmital, dojo alessandro, karatê tradicional"
+      />
       {/* Hero Section */}
-      <section className="relative h-[90vh] flex items-center justify-center overflow-hidden">
+      <section className="relative h-[90vh] flex items-center justify-center overflow-hidden" aria-label="Seção principal">
         <div className="absolute inset-0 bg-gradient-hero" />
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1555597673-b21d5c935865?q=80&w=2070')] bg-cover bg-center opacity-20" />
 
         <div className="relative z-10 container mx-auto px-4 text-center">
-          <img src={logo} alt="Alessandro Karatê e Kobudo" className="w-32 h-32 md:w-40 md:h-40 mx-auto mb-6 animate-fade-in" />
+          <img 
+            src={logo} 
+            alt="Logo Alessandro Karatê e Kobudo - Dojo Palmital SP" 
+            className="w-32 h-32 md:w-40 md:h-40 mx-auto mb-6 animate-fade-in"
+            loading="eager"
+            width="160"
+            height="160"
+          />
           <h1 className="text-5xl md:text-7xl font-bold text-primary-foreground mb-6 animate-fade-in">
             Alessandro Karatê e Kobudo
           </h1>
@@ -113,7 +127,7 @@ const Home = () => {
       </section>
 
       {/* Senseis Section */}
-      <section className="py-20 border-t border-primary bg-gradient-to-br from-background to-secondary/30">
+      <section className="py-20 border-t border-primary bg-gradient-to-br from-background to-secondary/30" aria-labelledby="senseis-heading">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
@@ -125,9 +139,7 @@ const Home = () => {
           </div>
 
           {loadingSenseis ? (
-            <div className="text-center py-12">
-              <p className="text-muted-foreground">Carregando senseis...</p>
-            </div>
+            <LoadingGrid count={3} />
           ) : senseis.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-muted-foreground">Nenhum sensei encontrado.</p>
@@ -138,7 +150,7 @@ const Home = () => {
                 <Card key={sensei.id} className="border-primary/20 hover:border-primary transition-all hover:shadow-glow overflow-hidden group">
                   <div className="aspect-square overflow-hidden bg-muted/50 flex items-center justify-center">
                     {sensei.imageUrl ? (
-                      <img src={sensei.imageUrl} alt={sensei.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <img src={sensei.imageUrl} alt={`Foto de ${sensei.name} - ${sensei.rank}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
                     ) : (
                       <div className="text-muted-foreground">Foto do Sensei</div>
                     )}

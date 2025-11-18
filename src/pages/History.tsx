@@ -1,6 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, Italic } from "lucide-react";
 import BeltGrades from "@/components/BeltGrades";
+import { SEO } from "@/components/SEO";
 const History = () => {
   const timeline = [
     {
@@ -56,8 +57,13 @@ const History = () => {
   ];
   
   return <div className="min-h-screen pt-20">
+      <SEO
+        title="História - Alessandro Karatê e Kobudo"
+        description="Conheça a história do Sensei Alessandro e do dojo. Uma jornada dedicada à tradição Shorin-Ryu, desde as origens em Okinawa até Palmital SP."
+        keywords="história karate, shorin-ryu história, alessandro sensei, yoshihide shinzato, karate palmital história"
+      />
       {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-hero">
+      <section className="relative py-20 bg-gradient-hero" aria-labelledby="history-hero">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1559827260-dc66d52bef19?q=80&w=2070')] bg-cover bg-center opacity-10" />
         <div className="container mx-auto px-4 relative z-10">
           <h1 className="text-5xl md:text-6xl font-bold text-primary-foreground text-center mb-6">
