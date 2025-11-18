@@ -150,11 +150,6 @@ const Events = () => {
             <LoadingSpinner />
           ) : upcomingEvents.length === 0 ? (
             <div className="text-center text-muted-foreground py-12">
-              <p>Carregando eventos...</p>
-            </div>
-          )}
-          {!loading && upcomingEvents.length === 0 ? (
-            <div className="text-center text-muted-foreground py-12">
               <p>Não há eventos programados no momento.</p>
             </div>
           ) : (
