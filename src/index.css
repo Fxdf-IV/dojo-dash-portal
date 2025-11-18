@@ -125,4 +125,12 @@ All colors MUST be HSL.
       transform: translateX(100%);
     }
   }
+
+  .animate-fade-in {
+    animation: fade-in 0.3s ease-out;
+  }
+
+  .animate-scale-in {
+    animation: scale-in 0.3s ease-out;
+  }
 }
