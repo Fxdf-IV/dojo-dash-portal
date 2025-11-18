@@ -6,5 +6,6 @@ export { materialsService } from './materials';
 export { locationsService } from './locations';
 export { senseisService } from './senseis';
 export { contactsService } from './contacts';
+export { contactSettingsService } from './contactSettings';
 export { eventsService } from './events';
 export { apiRequest, ApiError, getAuthToken, setAuthToken, clearAuthToken } from './api';

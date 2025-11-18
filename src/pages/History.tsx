@@ -70,7 +70,7 @@ const History = () => {
       </section>
 
       {/* History of Life and Dojo Section */}
-      <section className="py-20 bg-gradient-to-br from-background to-secondary/30">
+      <section className="py-20 border-t border-primary bg-gradient-to-br from-background to-secondary/30">
         <div className="container mx-auto px-4 max-w-4xl">
           <h2 className="text-4xl font-bold text-center mb-12 text-foreground">
             História de Vida e do Dojo
@@ -122,13 +122,11 @@ const History = () => {
               Reconhecendo que trilhar esse caminho exige esforço e resiliência, expressa profunda gratidão à família, alunos e mestres que o acompanham. 
               Para ele, viver é evoluir constantemente — fiel ao espírito da <strong className="text-primary">Shinshukan</strong> e aos ideais de seus mestres.
             </p>
-          </div>
         </div>
-      </section>
+        <br></br>
 
-      {/* Philosophy Section */}
-      <section className="py-20 bg-gradient-to-br from-background to-secondary/30 text-white">
-        <div className="container mx-auto px-4 max-w-4xl">
+        {/* Philosophy Section */}
+        
           <h2 className="text-4xl font-bold text-center mb-12 text-foreground">
             Filosofia e Tradição
           </h2>
@@ -169,7 +167,7 @@ const History = () => {
       </section>
 
       {/* Timeline Section */}
-      <section className="py-20 bg-gradient-to-br from-background to-secondary/30">
+      <section className="py-20 border-t border-primary bg-gradient-to-br from-background to-secondary/30">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-16 text-foreground">
             Linha do Tempo
@@ -195,70 +193,68 @@ const History = () => {
                 </CardContent>
               </Card>)}
           </div>
-        </div>
-      </section>
 
       {/* Style Section */}
-      <section className="py-20 bg-gradient-to-br from-background to-secondary/30">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <h2 className="text-4xl font-bold text-center mb-12 text-foreground">
-            Shorin-Ryu Shinshukan
-          </h2>
-          
-          <div className="grid md:grid-cols-2 gap-8">
-            <Card className="border-primary/20">
-              <CardContent className="p-6">
-                <h3 className="text-xl font-bold mb-4 text-card-foreground">Características do Estilo</h3>
-                <ul className="space-y-2 text-muted-foreground">
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-1">●</span>
-                    <span>Movimentos rápidos e precisos</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-1">●</span>
-                    <span>Posições naturais e eficientes</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-1">●</span>
-                    <span>Ênfase em técnicas diretas</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-1">●</span>
-                    <span>Katas tradicionais de Okinawa</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
+        <div className="container mx-auto px-4 max-w-4xl mt-12">
+            <h2 className="text-4xl font-bold text-center mb-12 text-foreground">
+              Shorin-Ryu Shinshukan
+            </h2>
+            
+            <div className="grid md:grid-cols-2 gap-8">
+              <Card className="border-primary/20">
+                <CardContent className="p-6">
+                  <h3 className="text-xl font-bold mb-4 text-card-foreground">Características do Estilo</h3>
+                  <ul className="space-y-2 text-muted-foreground">
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary mt-1">●</span>
+                      <span>Movimentos rápidos e precisos</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary mt-1">●</span>
+                      <span>Posições naturais e eficientes</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary mt-1">●</span>
+                      <span>Ênfase em técnicas diretas</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary mt-1">●</span>
+                      <span>Katas tradicionais de Okinawa</span>
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
 
-            <Card className="border-primary/20">
-              <CardContent className="p-6">
-                <h3 className="text-xl font-bold mb-4 text-card-foreground">Valores Cultivados</h3>
-                <ul className="space-y-2 text-muted-foreground">
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-1">●</span>
-                    <span>Respeito e humildade</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-1">●</span>
-                    <span>Disciplina e perseverança</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-1">●</span>
-                    <span>Autocontrole emocional</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-1">●</span>
-                    <span>Espírito de superação</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
+              <Card className="border-primary/20">
+                <CardContent className="p-6">
+                  <h3 className="text-xl font-bold mb-4 text-card-foreground">Valores Cultivados</h3>
+                  <ul className="space-y-2 text-muted-foreground">
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary mt-1">●</span>
+                      <span>Respeito e humildade</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary mt-1">●</span>
+                      <span>Disciplina e perseverança</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary mt-1">●</span>
+                      <span>Autocontrole emocional</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary mt-1">●</span>
+                      <span>Espírito de superação</span>
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
       </section>
     
       {/* Belt Grades Section */}
-      <section className="py-20 bg-gradient-to-br from-background to-secondary/30">
+      <section className="py-20 border-t border-primary bg-gradient-to-br from-background to-secondary/30">
         <div className="container mx-auto px-4 max-w-6xl">
           <h2 className="text-4xl font-bold text-center mb-12 text-foreground">
             Sistema de Graduação

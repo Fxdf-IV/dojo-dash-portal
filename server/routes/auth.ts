@@ -31,6 +31,7 @@ router.post('/login', async (req, res) => {
         userData.name = student.name;
         userData.beltId = student.beltId;
         userData.location = student.location;
+        userData.status = student.status;
       }
     } else {
       // Admin tem nome fixo
@@ -74,7 +75,7 @@ router.post('/register', async (req, res) => {
 
     const token = generateToken((user._id as any).toString());
 
-    res.json({
+    res.status(201).json({
       message: 'Cadastro realizado! Aguarde aprovação do administrador.',
       user: {
         id: user._id as any,
@@ -83,6 +84,7 @@ router.post('/register', async (req, res) => {
         role: user.role,
         beltId: student.beltId,
         location: student.location,
+        status: student.status,
       },
       token,
     });
@@ -127,6 +129,7 @@ router.get('/me', async (req, res) => {
         userData.name = student.name;
         userData.beltId = student.beltId;
         userData.location = student.location;
+        userData.status = student.status;
       }
     } else {
       userData.name = 'Administrador';

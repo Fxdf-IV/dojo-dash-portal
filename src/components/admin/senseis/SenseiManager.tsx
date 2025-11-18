@@ -17,7 +17,9 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { BeltSelect, BELT_GRADES } from "@/components/BeltSelect";
+import { BELT_GRADES, BeltSelect } from "@/components/BeltSelect";
+import { ImageUpload } from "@/components/ui/image-upload";
+
 import {
   Dialog,
   DialogContent,
@@ -77,8 +79,7 @@ export const SenseiManager = ({
         fd.append("description", form.description || "");
         fd.append("orderIndex", form.orderIndex.toString());
         fd.append("image", imageFile);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        newSensei = await senseisService.create(fd as any);
+        newSensei = await senseisService.create(fd);
       } else {
         newSensei = await senseisService.create(form);
       }
@@ -98,19 +99,17 @@ export const SenseiManager = ({
   const handleEdit = async () => {
     if (!editingSensei) return;
     try {
-      let updated;
+      const fd = new FormData();
+      fd.append("name", form.name);
+      fd.append("rank", form.rank);
+      fd.append("description", form.description || "");
+      fd.append("orderIndex", form.orderIndex.toString());
+      
       if (imageFile) {
-        const fd = new FormData();
-        fd.append("name", form.name);
-        fd.append("rank", form.rank);
-        fd.append("description", form.description || "");
-        fd.append("orderIndex", form.orderIndex.toString());
         fd.append("image", imageFile);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        updated = await senseisService.update(editingSensei.id, fd as any);
-      } else {
-        updated = await senseisService.update(editingSensei.id, form);
       }
+      
+      const updated = await senseisService.update(editingSensei.id, fd);
       onUpdate(senseis.map((s) => (s.id === updated.id ? updated : s)));
       setEditingSensei(null);
       resetForm();
@@ -149,7 +148,15 @@ export const SenseiManager = ({
         orderIndex: idx,
       }));
       onUpdate(reordered);
-      // TODO: Call API to update order on backend if needed
+
+      // Chamar API para atualizar ordem no backend
+      senseisService.reorderSenseis(reordered).catch((error) => {
+        toast({
+          title: 'Erro ao atualizar ordem',
+          description: error.message,
+          variant: 'destructive',
+        });
+      });
     }
   };
 
@@ -196,11 +203,10 @@ export const SenseiManager = ({
                   </div>
                   <div>
                     <Label htmlFor="sensei-rank">Faixa/Grau</Label>
-                    <Input
-                      id="sensei-rank"
+                    <BeltSelect
+                      onlyDan={true}
                       value={form.rank}
-                      onChange={(e) => setForm({ ...form, rank: e.target.value })}
-                      placeholder="Ex: 3º Dan"
+                      onValueChange={(value) => setForm({ ...form, rank: value })}
                     />
                   </div>
                   <div>
@@ -214,28 +220,13 @@ export const SenseiManager = ({
                       rows={3}
                     />
                   </div>
-                  <div>
-                    <Label htmlFor="sensei-order">Ordem de Exibição</Label>
-                    <Input
-                      id="sensei-order"
-                      type="number"
-                      value={form.orderIndex}
-                      onChange={(e) =>
-                        setForm({ ...form, orderIndex: parseInt(e.target.value) || 0 })
-                      }
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="sensei-image">Foto</Label>
-                    <input
-                      id="sensei-image"
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) =>
-                        setImageFile(e.target.files?.[0] || null)
-                      }
-                    />
-                  </div>
+                  <ImageUpload
+                    label="Foto do Sensei"
+                    onChange={(file) => setImageFile(file)}
+                    onRemove={() => setImageFile(null)}
+                    accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                    maxSize={5}
+                  />
                   <div className="flex justify-end gap-2">
                     <Button
                       variant="outline"
@@ -320,12 +311,11 @@ export const SenseiManager = ({
               />
             </div>
             <div>
-              <Label htmlFor="edit-sensei-rank">Faixa/Grau</Label>
-              <Input
-                id="edit-sensei-rank"
+              <Label htmlFor="sensei-rank">Faixa/Grau</Label>
+              <BeltSelect
+                onlyDan={true}
                 value={form.rank}
-                onChange={(e) => setForm({ ...form, rank: e.target.value })}
-                placeholder="Ex: 3º Dan"
+                onValueChange={(value) => setForm({ ...form, rank: value })}
               />
             </div>
             <div>
@@ -339,28 +329,37 @@ export const SenseiManager = ({
                 rows={3}
               />
             </div>
-            <div>
-              <Label htmlFor="edit-sensei-order">Ordem de Exibição</Label>
-              <Input
-                id="edit-sensei-order"
-                type="number"
-                value={form.orderIndex}
-                onChange={(e) =>
-                  setForm({ ...form, orderIndex: parseInt(e.target.value) || 0 })
+            <ImageUpload
+              label="Foto do Sensei"
+              value={editingSensei?.imageUrl}
+              onChange={(file) => setImageFile(file)}
+              onRemove={async () => {
+                setImageFile(null);
+                if (editingSensei) {
+                  try {
+                    const updated = await senseisService.removeSenseiImage(
+                      editingSensei.id
+                    );
+
+                    // Atualizar lista local
+                    onUpdate(senseis.map(s => s.id === editingSensei.id ? updated : s));
+
+                    // Atualizar local sendo editado
+                    setEditingSensei(updated);
+
+                    toast({ title: "Foto do Sensei removida com sucesso!" });
+                  } catch (error) {
+                    toast({
+                      title: "Erro ao remover foto do Sensei",
+                      description: (error as Error).message,
+                      variant: "destructive",
+                    });
+                  }
                 }
-              />
-            </div>
-            <div>
-              <Label htmlFor="edit-sensei-image">Foto</Label>
-              <input
-                id="edit-sensei-image"
-                type="file"
-                accept="image/*"
-                onChange={(e) =>
-                  setImageFile(e.target.files?.[0] || null)
-                }
-              />
-            </div>
+              }}
+              accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+              maxSize={5}
+            />
             <div className="flex justify-end gap-2">
               <Button
                 variant="outline"

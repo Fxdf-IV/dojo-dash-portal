@@ -30,6 +30,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { ImageUpload } from "@/components/ui/image-upload";
+import { MultipleImageUpload } from "@/components/ui/multiple-image-upload";
 import { useToast } from "@/hooks/use-toast";
 import { Location } from "@/types";
 import { locationsService } from "@/services";
@@ -49,6 +51,7 @@ export const LocationManager = ({
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [editingLocation, setEditingLocation] = useState<Location | null>(null);
   const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
   const [form, setForm] = useState({
     name: "",
     description: "",
@@ -60,24 +63,38 @@ export const LocationManager = ({
       description: "",
     });
     setImageFiles([]);
+    setCoverImageFile(null);
   };
 
   const handleAdd = async () => {
     try {
-      let newLocation;
-      if (imageFiles.length > 0) {
-        const fd = new FormData();
-        fd.append("name", form.name);
-        fd.append("description", form.description || "");
-        imageFiles.forEach((file) => {
-          fd.append("images", file);
-        });
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        newLocation = await locationsService.create(fd as any);
-      } else {
-        newLocation = await locationsService.create(form);
+      const fd = new FormData();
+      fd.append("name", form.name);
+      fd.append("description", form.description || "");
+
+      // Adicionar imagem de capa se existir
+      if (coverImageFile) {
+        fd.append("image", coverImageFile);
       }
-      onUpdate([...locations, newLocation]);
+
+      const newLocation = await locationsService.create(fd);
+      
+      // Adicionar imagens da galeria se existirem
+      if (imageFiles.length > 0) {
+        const galleryFd = new FormData();
+        imageFiles.forEach((file) => {
+          galleryFd.append("images", file);
+        });
+
+        await locationsService.addImage(newLocation.id, galleryFd);
+        
+        // Recarregar o local para obter as imagens atualizadas
+        const updatedLocation = await locationsService.getById(newLocation.id);
+        onUpdate([...locations, updatedLocation]);
+      } else {
+        onUpdate([...locations, newLocation]);
+      }
+
       setIsAddOpen(false);
       resetForm();
       toast({ title: "Local adicionado com sucesso!" });
@@ -93,23 +110,42 @@ export const LocationManager = ({
   const handleEdit = async () => {
     if (!editingLocation) return;
     try {
-      let updated;
-      if (imageFiles.length > 0) {
-        const fd = new FormData();
-        fd.append("name", form.name);
-        fd.append("description", form.description || "");
-        imageFiles.forEach((file) => {
-          fd.append("images", file);
-        });
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        updated = await locationsService.update(editingLocation.id, fd as any);
-      } else {
-        updated = await locationsService.update(editingLocation.id, form);
+      const fd = new FormData();
+      fd.append("name", form.name);
+      fd.append("description", form.description || "");
+
+      // Adicionar imagem de capa se houver nova
+      if (coverImageFile) {
+        fd.append("image", coverImageFile);
       }
-      onUpdate(locations.map((l) => (l.id === updated.id ? updated : l)));
+
+      const updated = await locationsService.update(editingLocation.id, fd);
+
+      // Adicionar novas imagens à galeria se existirem
+      if (imageFiles.length > 0) {
+        const galleryFd = new FormData();
+        imageFiles.forEach((file) => {
+          galleryFd.append("images", file);
+        });
+
+        await locationsService.addImage(updated.id, galleryFd);
+        
+        // Recarregar o local para obter as imagens atualizadas
+        const updatedWithImages = await locationsService.getById(updated.id);
+        onUpdate(locations.map((l) => (l.id === updatedWithImages.id ? updatedWithImages : l)));
+      } else {
+        onUpdate(locations.map((l) => (l.id === updated.id ? updated : l)));
+      }
+
       setEditingLocation(null);
       resetForm();
-      toast({ title: "Local atualizado com sucesso!" });
+
+      const imageCount = imageFiles.length;
+      const message = imageCount > 0
+        ? `Local atualizado com sucesso! ${imageCount} foto(s) adicionada(s) à galeria.`
+        : "Local atualizado com sucesso!";
+
+      toast({ title: message });
     } catch (error: unknown) {
       toast({
         title: "Erro ao atualizar local",
@@ -133,15 +169,30 @@ export const LocationManager = ({
     }
   };
 
-  const handleDragEnd = (event: DragEndEvent) => {
+  const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
 
     if (over && active.id !== over.id) {
       const oldIndex = locations.findIndex((l) => l.id === active.id);
       const newIndex = locations.findIndex((l) => l.id === over.id);
       const reordered = arrayMove(locations, oldIndex, newIndex);
+      
+      // Atualizar estado local imediatamente
       onUpdate(reordered);
-      // TODO: Call API to update order on backend if needed
+
+      // Atualizar ordem no backend
+      try {
+        await locationsService.reorderLocations(reordered);
+        toast({ title: "Ordem dos locais atualizada com sucesso!" });
+      } catch (error) {
+        toast({
+          title: "Erro ao atualizar ordem",
+          description: (error as Error).message,
+          variant: "destructive",
+        });
+        // Voltar para ordem anterior em caso de erro
+        onUpdate(locations);
+      }
     }
   };
 
@@ -153,6 +204,8 @@ export const LocationManager = ({
   );
 
   const [photosDialogLocation, setPhotosDialogLocation] = useState<Location | null>(null);
+  const [isPhotosDialogOpen, setIsPhotosDialogOpen] = useState(false);
+  const [newGalleryImageFiles, setNewGalleryImageFiles] = useState<File[]>([]);
 
   return (
     <>
@@ -199,18 +252,22 @@ export const LocationManager = ({
                       rows={3}
                     />
                   </div>
-                  <div>
-                    <Label htmlFor="location-images">Fotos (múltiplas)</Label>
-                    <input
-                      id="location-images"
-                      type="file"
-                      multiple
-                      accept="image/*"
-                      onChange={(e) =>
-                        setImageFiles(Array.from(e.target.files || []))
-                      }
-                    />
-                  </div>
+                  <ImageUpload
+                    label="Imagem de Capa"
+                    onChange={(file) => setCoverImageFile(file)}
+                    onRemove={() => setCoverImageFile(null)}
+                    accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                    maxSize={5}
+                  />
+                  <MultipleImageUpload
+                    label="Fotos da Galeria"
+                    value={imageFiles}
+                    onChange={setImageFiles}
+                    accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                    maxSize={5}
+                    maxFiles={20}
+                    placeholder="Selecione múltiplas imagens para a galeria do local"
+                  />
                   <div className="flex justify-end gap-2">
                     <Button
                       variant="outline"
@@ -302,20 +359,48 @@ export const LocationManager = ({
                 rows={3}
               />
             </div>
-            <div>
-              <Label htmlFor="edit-location-images">
-                Adicionar Fotos (múltiplas)
-              </Label>
-              <input
-                id="edit-location-images"
-                type="file"
-                multiple
-                accept="image/*"
-                onChange={(e) =>
-                  setImageFiles(Array.from(e.target.files || []))
+            <ImageUpload
+              label="Imagem de Capa"
+              value={editingLocation?.imageUrl}
+              onChange={(file) => setCoverImageFile(file)}
+              onRemove={async () => {
+                setCoverImageFile(null);
+                if (editingLocation) {
+                  try {
+                    const updated = await locationsService.removeCoverImage(
+                      editingLocation.id,
+                      form.name,
+                      form.description || ""
+                    );
+
+                    // Atualizar lista local
+                    onUpdate(locations.map(l => l.id === editingLocation.id ? updated : l));
+
+                    // Atualizar local sendo editado
+                    setEditingLocation(updated);
+
+                    toast({ title: "Imagem de capa removida com sucesso!" });
+                  } catch (error) {
+                    toast({
+                      title: "Erro ao remover imagem de capa",
+                      description: (error as Error).message,
+                      variant: "destructive",
+                    });
+                  }
                 }
-              />
-            </div>
+              }}
+              accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+              maxSize={5}
+            />
+            <MultipleImageUpload
+              label="Adicionar Fotos à Galeria"
+              value={imageFiles}
+              onChange={setImageFiles}
+              accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+              maxSize={5}
+              maxFiles={10}
+              placeholder="Selecione múltiplas imagens para adicionar à galeria durante a edição"
+            />
             <div className="flex justify-end gap-2">
               <Button
                 variant="outline"
@@ -356,11 +441,27 @@ export const LocationManager = ({
                     className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
                     onClick={async () => {
                       try {
-                        // TODO: Implement delete image API call
+                        if (!photosDialogLocation) return;
+
+                        // Remover imagem do backend
+                        await locationsService.deleteImage(photosDialogLocation.id, idx);
+
+                        // Atualizar estado local
+                        const updatedImages = photosDialogLocation.images?.filter((_, i) => i !== idx) || [];
+                        const updatedLocation = {
+                          ...photosDialogLocation,
+                          images: updatedImages,
+                        };
+
+                        // Atualizar lista de locais
+                        onUpdate(locations.map(l => l.id === photosDialogLocation.id ? updatedLocation : l));
+                        setPhotosDialogLocation(updatedLocation);
+
                         toast({ title: "Foto removida com sucesso!" });
                       } catch (error) {
                         toast({
                           title: "Erro ao remover foto",
+                          description: (error as Error).message,
                           variant: "destructive",
                         });
                       }
@@ -376,29 +477,52 @@ export const LocationManager = ({
                 </div>
               ))}
             </div>
-            <div className="border-t pt-4">
-              <Label htmlFor="new-photos">Adicionar Novas Fotos</Label>
-              <input
-                id="new-photos"
-                type="file"
-                multiple
-                accept="image/*"
-                className="mt-2"
-                onChange={async (e) => {
-                  const files = Array.from(e.target.files || []);
-                  if (files.length > 0 && photosDialogLocation) {
+            <div className="border-t pt-4 space-y-4">
+              <h4 className="font-medium">Adicionar Novas Fotos à Galeria</h4>
+              <MultipleImageUpload
+                label="Novas Fotos"
+                value={newGalleryImageFiles}
+                onChange={setNewGalleryImageFiles}
+                accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                maxSize={5}
+                maxFiles={10}
+                placeholder="Selecione múltiplas imagens para adicionar à galeria"
+              />
+              <Button
+                onClick={async () => {
+                  if (newGalleryImageFiles.length > 0 && photosDialogLocation) {
                     try {
-                      // TODO: Implement add images API call
-                      toast({ title: "Fotos adicionadas com sucesso!" });
+                      const galleryFd = new FormData();
+                      newGalleryImageFiles.forEach((file) => {
+                        galleryFd.append("images", file);
+                      });
+
+                      await locationsService.addImage(photosDialogLocation.id, galleryFd);
+
+                      // Recarregar o local para obter as imagens atualizadas
+                      const updatedLocation = await locationsService.getById(photosDialogLocation.id);
+                      
+                      onUpdate(locations.map(l => l.id === photosDialogLocation.id ? updatedLocation : l));
+                      setPhotosDialogLocation(updatedLocation);
+                      setNewGalleryImageFiles([]);
+
+                      toast({
+                        title: `${newGalleryImageFiles.length} foto(s) adicionada(s) com sucesso!`
+                      });
                     } catch (error) {
                       toast({
                         title: "Erro ao adicionar fotos",
+                        description: (error as Error).message,
                         variant: "destructive",
                       });
                     }
                   }
                 }}
-              />
+                disabled={newGalleryImageFiles.length === 0}
+                className="w-full"
+              >
+                Adicionar {newGalleryImageFiles.length > 0 ? `${newGalleryImageFiles.length} ` : ""}Foto(s) à Galeria
+              </Button>
             </div>
           </div>
         </DialogContent>

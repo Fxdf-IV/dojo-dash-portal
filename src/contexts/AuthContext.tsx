@@ -8,8 +8,8 @@ export type { User, UserRole };
 interface AuthContextType {
   user: User | null;
   token: string | null;
-  login: (email: string, password: string) => Promise<void>;
-  register: (name: string, email: string, password: string, location: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<{ user: User; token: string }>;
+  register: (name: string, email: string, password: string, location: string) => Promise<{ user: User; token: string }>;
   logout: () => void;
   refreshUser: () => Promise<void>;
   isLoading: boolean;
@@ -57,6 +57,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
       localStorage.setItem("token", data.token); // Corrigido: salvar token
       localStorage.setItem("user", JSON.stringify(data.user));
+
+      return { user: data.user, token: data.token };
     } catch (error) {
       console.error("Login error:", error);
       throw error;
@@ -72,6 +74,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
       localStorage.setItem("token", data.token); // Corrigido: salvar token
       localStorage.setItem("user", JSON.stringify(data.user));
+
+      return { user: data.user, token: data.token };
     } catch (error) {
       console.error("Registration error:", error);
       throw error;

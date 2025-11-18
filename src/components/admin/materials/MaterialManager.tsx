@@ -14,9 +14,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { BeltSelect, BELT_GRADES } from "@/components/BeltSelect";
+import { ImageUpload } from "@/components/ui/image-upload";
 import { useToast } from "@/hooks/use-toast";
 import { Material } from "@/types";
 import { materialsService } from "@/services";
+import { uploadService } from "@/services/upload";
 
 interface MaterialManagerProps {
   materials: Material[];
@@ -80,8 +82,7 @@ export const MaterialManager = ({
         fd.append("minBeltId", form.minBeltId);
         if (imageFile) fd.append("image", imageFile);
         if (videoFile) fd.append("video", videoFile);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        newMaterial = await materialsService.create(fd as any);
+        newMaterial = await materialsService.create(fd);
       } else {
         newMaterial = await materialsService.create(form);
       }
@@ -111,8 +112,7 @@ export const MaterialManager = ({
         fd.append("minBeltId", form.minBeltId);
         if (imageFile) fd.append("image", imageFile);
         if (videoFile) fd.append("video", videoFile);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        updated = await materialsService.update(editingMaterial.id, fd as any);
+        updated = await materialsService.update(editingMaterial.id, fd);
       } else {
         updated = await materialsService.update(editingMaterial.id, form);
       }
@@ -233,17 +233,13 @@ export const MaterialManager = ({
                       }
                     />
                   </div>
-                  <div>
-                    <Label htmlFor="material-image">Upload Imagem</Label>
-                    <input
-                      id="material-image"
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) =>
-                        setImageFile(e.target.files?.[0] || null)
-                      }
-                    />
-                  </div>
+                  <ImageUpload
+                    label="Imagem do Material"
+                    onChange={(file) => setImageFile(file)}
+                    onRemove={() => setImageFile(null)}
+                    accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                    maxSize={5}
+                  />
                   <div>
                     <Label htmlFor="material-min-belt">Faixa Mínima</Label>
                     <BeltSelect
@@ -369,15 +365,43 @@ export const MaterialManager = ({
                 onChange={(e) => setVideoFile(e.target.files?.[0] || null)}
               />
             </div>
-            <div>
-              <Label htmlFor="edit-material-image">Imagem</Label>
-              <input
-                id="edit-material-image"
-                type="file"
-                accept="image/*"
-                onChange={(e) => setImageFile(e.target.files?.[0] || null)}
-              />
-            </div>
+            <ImageUpload
+              label="Imagem do Material"
+              value={editingMaterial?.imageUrl}
+              onChange={(file) => setImageFile(file)}
+              onRemove={async () => {
+                setImageFile(null);
+                if (editingMaterial && editingMaterial.imageUrl) {
+                  try {
+                    // Remover imagem do MongoDB
+                    await uploadService.deleteImage(editingMaterial.imageUrl);
+
+                    // Atualizar material no backend para remover URL da imagem
+                    const updated = await materialsService.update(editingMaterial.id, {
+                      ...form,
+                      imageUrl: "",
+                    });
+
+                    // Atualizar lista local
+                    onUpdate(materials.map(m => m.id === editingMaterial.id ? updated : m));
+
+                    // Atualizar formulário e material sendo editado
+                    setForm({ ...form, imageUrl: "" });
+                    setEditingMaterial({ ...editingMaterial, imageUrl: "" });
+
+                    toast({ title: "Imagem removida com sucesso!" });
+                  } catch (error) {
+                    toast({
+                      title: "Erro ao remover imagem",
+                      description: (error as Error).message,
+                      variant: "destructive",
+                    });
+                  }
+                }
+              }}
+              accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+              maxSize={5}
+            />
             <div>
               <Label htmlFor="edit-material-min-belt">Faixa Mínima</Label>
               <BeltSelect
@@ -436,9 +460,9 @@ function MaterialsList({
                 </p>
               )}
               <div className="flex gap-2 pt-2">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
+                <Button
+                  variant="outline"
+                  size="sm"
                   onClick={() => onEdit(m)}
                   className="flex-1"
                 >

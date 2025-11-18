@@ -1,0 +1,424 @@
+# 🥋 Dojo Dash Portal - Cursor Rules
+
+## 📋 Visão Geral do Projeto
+Este é um portal completo para gerenciamento de dojo de karatê com backend API integrado usando React + TypeScript + Express + MongoDB.
+
+## 🏗️ Arquitetura
+- **Frontend**: React 18 + TypeScript + Vite + TailwindCSS + shadcn/ui
+- **Backend**: Express + TypeScript + MongoDB + Mongoose
+- **Autenticação**: JWT + bcryptjs
+- **Estado**: React Context API + React Query
+- **Roteamento**: React Router DOM v6
+- **Validação**: Zod + React Hook Form
+
+## 📁 Estrutura de Pastas
+```
+src/
+├── components/          # Componentes reutilizáveis
+│   ├── admin/          # Componentes específicos do admin
+│   └── ui/             # Componentes base do shadcn/ui
+├── contexts/           # Contextos React (Auth, etc)
+├── hooks/              # Custom hooks
+├── pages/              # Páginas/rotas principais
+├── services/           # Chamadas API e lógica de negócio
+├── types/              # Definições TypeScript
+└── lib/                # Utilitários e configurações
+
+server/
+├── config/             # Configurações (database, etc)
+├── middleware/         # Middlewares Express
+├── models/             # Modelos Mongoose
+├── routes/             # Rotas da API
+├── scripts/            # Scripts utilitários
+└── utils/              # Funções utilitárias
+```
+
+## 🎯 Padrões de Código
+
+### TypeScript
+- Use tipos explícitos sempre que possível
+- Evite `any` - prefira `unknown` quando necessário
+- Use interfaces para objetos e types para unions/primitivos
+- Defina tipos em `src/types/index.ts` para reutilização
+- Use optional chaining (`?.`) e nullish coalescing (`??`)
+
+### React
+- Use functional components com hooks
+- Prefira `const` para componentes: `const Component = () => {}`
+- Use TypeScript para props: `interface ComponentProps {}`
+- Implemente error boundaries para componentes críticos
+- Use React.memo() para otimização quando necessário
+
+### Estado e Dados
+- Use React Context para estado global (auth, theme)
+- Use React Query para cache e sincronização de dados
+- Mantenha estado local com useState/useReducer
+- Evite prop drilling - use contextos quando apropriado
+
+### Estilização
+- Use TailwindCSS para estilização
+- Componentes shadcn/ui para interface consistente
+- Use `cn()` utility para combinar classes condicionalmente
+- Mantenha responsividade mobile-first
+
+### API e Backend
+- Rotas RESTful seguindo padrão `/api/resource`
+- Use middleware de autenticação para rotas protegidas
+- Validação de dados com Zod no frontend e backend
+- Tratamento de erros consistente com status codes apropriados
+- Use Mongoose para interação com MongoDB
+
+## 🔧 Convenções de Nomenclatura
+
+### Arquivos e Pastas
+- Componentes: `PascalCase.tsx` (ex: `StudentManager.tsx`)
+- Hooks: `camelCase.ts` com prefixo `use` (ex: `useAuth.ts`)
+- Utilitários: `camelCase.ts` (ex: `formatDate.ts`)
+- Tipos: `camelCase.ts` ou `index.ts`
+- Páginas: `PascalCase.tsx` (ex: `AdminDashboard.tsx`)
+
+### Variáveis e Funções
+- Variáveis: `camelCase`
+- Constantes: `UPPER_SNAKE_CASE`
+- Funções: `camelCase`
+- Componentes: `PascalCase`
+- Interfaces/Types: `PascalCase`
+
+### Git e Commits
+- Branches: `feature/nome-da-feature`, `fix/nome-do-bug`, `refactor/nome`
+- Commits: Conventional Commits format
+  - `feat: adicionar nova funcionalidade`
+  - `fix: corrigir bug específico`
+  - `refactor: melhorar código existente`
+  - `docs: atualizar documentação`
+
+## 🚀 Melhores Práticas
+
+### Performance
+- Use React.lazy() para code splitting em rotas
+- Otimize imagens e assets
+- Use React Query para cache inteligente
+- Implemente paginação para listas grandes
+
+### Segurança
+- Valide dados no frontend E backend
+- Use HTTPS em produção
+- Sanitize inputs do usuário
+- Implemente rate limiting na API
+- Use JWT com expiração apropriada
+
+### Acessibilidade
+- Use semantic HTML
+- Implemente navegação por teclado
+- Adicione labels apropriados
+- Mantenha contraste adequado
+- Use ARIA attributes quando necessário
+
+## 💡 Boas Práticas de Programação
+
+### Estruturas de Controle
+- **Early Return**: Evite aninhamento desnecessário, retorne cedo em condições de erro
+```typescript
+// ❌ Evite
+function processUser(user: User) {
+  if (user) {
+    if (user.isActive) {
+      if (user.hasPermission) {
+        // lógica principal
+      }
+    }
+  }
+}
+
+// ✅ Prefira
+function processUser(user: User) {
+  if (!user) return;
+  if (!user.isActive) return;
+  if (!user.hasPermission) return;
+
+  // lógica principal
+}
+```
+
+- **Guard Clauses**: Use validações no início das funções
+- **Evite else desnecessário**: Após return, continue não precisa de else
+
+### Estruturas de Dados
+- **Dicionários/Maps**: Use para lookups O(1) ao invés de arrays com find()
+```typescript
+// ❌ Evite
+const getUserRole = (userId: string) => {
+  return users.find(user => user.id === userId)?.role;
+}
+
+// ✅ Prefira
+const userRoleMap = new Map(users.map(user => [user.id, user.role]));
+const getUserRole = (userId: string) => userRoleMap.get(userId);
+```
+
+- **Set para unicidade**: Use Set ao invés de array.includes() para verificações
+- **Destructuring**: Use para extrair propriedades de objetos/arrays
+
+### Funções Puras e Imutabilidade
+- Prefira funções puras (sem efeitos colaterais)
+- Use métodos imutáveis: `map`, `filter`, `reduce` ao invés de `push`, `splice`
+- Evite mutação de parâmetros de entrada
+
+### Tratamento de Erros
+- Use try/catch para operações que podem falhar
+- Crie classes de erro customizadas
+- Sempre trate erros assíncronos
+```typescript
+// ✅ Bom tratamento de erro
+async function fetchUserData(id: string): Promise<User | null> {
+  try {
+    const response = await api.get(`/users/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Failed to fetch user ${id}:`, error);
+    return null;
+  }
+}
+```
+
+## 🏛️ Padrões de Design (Design Patterns)
+
+### Strategy Pattern
+Use para algoritmos intercambiáveis:
+```typescript
+interface PaymentStrategy {
+  process(amount: number): Promise<boolean>;
+}
+
+class CreditCardPayment implements PaymentStrategy {
+  async process(amount: number): Promise<boolean> {
+    // lógica do cartão de crédito
+    return true;
+  }
+}
+
+class PayPalPayment implements PaymentStrategy {
+  async process(amount: number): Promise<boolean> {
+    // lógica do PayPal
+    return true;
+  }
+}
+
+class PaymentProcessor {
+  constructor(private strategy: PaymentStrategy) {}
+
+  async processPayment(amount: number) {
+    return this.strategy.process(amount);
+  }
+}
+```
+
+### Factory Pattern
+Para criação de objetos complexos:
+```typescript
+interface Notification {
+  send(message: string): void;
+}
+
+class NotificationFactory {
+  static create(type: 'email' | 'sms' | 'push'): Notification {
+    switch (type) {
+      case 'email': return new EmailNotification();
+      case 'sms': return new SMSNotification();
+      case 'push': return new PushNotification();
+      default: throw new Error(`Unknown notification type: ${type}`);
+    }
+  }
+}
+```
+
+### Observer Pattern
+Para comunicação entre componentes:
+```typescript
+class EventEmitter {
+  private listeners: Map<string, Function[]> = new Map();
+
+  on(event: string, callback: Function) {
+    if (!this.listeners.has(event)) {
+      this.listeners.set(event, []);
+    }
+    this.listeners.get(event)!.push(callback);
+  }
+
+  emit(event: string, data?: any) {
+    const callbacks = this.listeners.get(event) || [];
+    callbacks.forEach(callback => callback(data));
+  }
+}
+```
+
+### Repository Pattern
+Para abstração de acesso a dados:
+```typescript
+interface UserRepository {
+  findById(id: string): Promise<User | null>;
+  save(user: User): Promise<User>;
+  delete(id: string): Promise<void>;
+}
+
+class MongoUserRepository implements UserRepository {
+  async findById(id: string): Promise<User | null> {
+    return UserModel.findById(id);
+  }
+
+  async save(user: User): Promise<User> {
+    return UserModel.create(user);
+  }
+
+  async delete(id: string): Promise<void> {
+    await UserModel.findByIdAndDelete(id);
+  }
+}
+```
+
+### Adapter Pattern
+Para integração com APIs externas:
+```typescript
+interface PaymentGateway {
+  charge(amount: number, token: string): Promise<PaymentResult>;
+}
+
+class StripeAdapter implements PaymentGateway {
+  constructor(private stripeClient: any) {}
+
+  async charge(amount: number, token: string): Promise<PaymentResult> {
+    const stripeResult = await this.stripeClient.charges.create({
+      amount: amount * 100, // Stripe usa centavos
+      currency: 'brl',
+      source: token,
+    });
+
+    return {
+      success: stripeResult.status === 'succeeded',
+      transactionId: stripeResult.id,
+    };
+  }
+}
+```
+
+## 🔧 Técnicas Avançadas
+
+### Memoization
+Cache resultados de funções custosas:
+```typescript
+const memoize = <T extends (...args: any[]) => any>(fn: T): T => {
+  const cache = new Map();
+  return ((...args: any[]) => {
+    const key = JSON.stringify(args);
+    if (cache.has(key)) {
+      return cache.get(key);
+    }
+    const result = fn(...args);
+    cache.set(key, result);
+    return result;
+  }) as T;
+};
+
+const expensiveCalculation = memoize((n: number) => {
+  // cálculo custoso
+  return n * n;
+});
+```
+
+### Debounce e Throttle
+Para otimização de performance:
+```typescript
+const debounce = <T extends (...args: any[]) => any>(
+  func: T,
+  delay: number
+): T => {
+  let timeoutId: NodeJS.Timeout;
+  return ((...args: any[]) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => func(...args), delay);
+  }) as T;
+};
+
+const throttle = <T extends (...args: any[]) => any>(
+  func: T,
+  limit: number
+): T => {
+  let inThrottle: boolean;
+  return ((...args: any[]) => {
+    if (!inThrottle) {
+      func(...args);
+      inThrottle = true;
+      setTimeout(() => inThrottle = false, limit);
+    }
+  }) as T;
+};
+```
+
+### Pipe e Compose
+Para composição de funções:
+```typescript
+const pipe = <T>(...fns: Array<(arg: T) => T>) => (value: T): T =>
+  fns.reduce((acc, fn) => fn(acc), value);
+
+const compose = <T>(...fns: Array<(arg: T) => T>) => (value: T): T =>
+  fns.reduceRight((acc, fn) => fn(acc), value);
+
+// Uso
+const processData = pipe(
+  (data: string) => data.trim(),
+  (data: string) => data.toLowerCase(),
+  (data: string) => data.replace(/\s+/g, '-')
+);
+```
+
+### Currying
+Para reutilização de funções:
+```typescript
+const curry = <T extends (...args: any[]) => any>(fn: T) => {
+  return function curried(...args: any[]): any {
+    if (args.length >= fn.length) {
+      return fn(...args);
+    }
+    return (...nextArgs: any[]) => curried(...args, ...nextArgs);
+  };
+};
+
+const add = curry((a: number, b: number, c: number) => a + b + c);
+const addFive = add(5);
+const addFiveAndThree = addFive(3);
+const result = addFiveAndThree(2); // 10
+```
+
+## 📦 Dependências Principais
+- React 18 + TypeScript
+- Vite (build tool)
+- TailwindCSS + shadcn/ui
+- React Router DOM v6
+- React Query (TanStack Query)
+- React Hook Form + Zod
+- Express + Mongoose
+- JWT + bcryptjs
+
+## 🎨 UI/UX Guidelines
+- Design system baseado em shadcn/ui
+- Cores consistentes com tema do dojo
+- Feedback visual para ações do usuário
+- Loading states e error handling
+- Interface responsiva e acessível
+
+## 🔍 Debugging
+- Use React DevTools
+- Console.log apenas em desenvolvimento
+- Implemente error boundaries
+- Use try/catch em operações assíncronas
+- Log erros no backend para monitoramento
+
+## 📚 Recursos Úteis
+- [shadcn/ui Components](https://ui.shadcn.com/)
+- [TailwindCSS Docs](https://tailwindcss.com/docs)
+- [React Query Docs](https://tanstack.com/query/latest)
+- [Zod Validation](https://zod.dev/)
+
+---
+
+**Lembre-se**: Sempre priorize código limpo, legível e manutenível. Quando em dúvida, prefira simplicidade e clareza sobre complexidade desnecessária.

@@ -1,48 +1,7 @@
 import { Badge } from "@/components/ui/badge";
-
-interface BeltGrade {
-  level: string;
-  name: string;
-  color?: string;
-  gradient?: string;
-}
+import { danGrades, getTextColor, kyuGrades } from "@/constants/beltDisplay";
 
 const BeltGrades = () => {
-  const kyuGrades: BeltGrade[] = [
-    { level: "9º Kyu", name: "Faixa Branca", color: "#FFFFFF" },
-    { level: "8º Kyu", name: "Faixa Vermelha", color: "#E53935" },
-    { level: "7º Kyu", name: "Faixa Amarela", color: "#FDD835" },
-    { level: "6º Kyu", name: "Faixa Laranja", color: "#FB8C00" },
-    { level: "5º Kyu", name: "Faixa Azul", color: "#1E88E5" },
-    { level: "4º Kyu", name: "Faixa Cinza", color: "#9E9E9E" },
-    { level: "3º Kyu", name: "Faixa Verde", color: "#43A047" },
-    { level: "2º Kyu", name: "Faixa Roxa", color: "#8E24AA" },
-    { level: "1º Kyu", name: "Faixa Marrom", color: "#6D4C41" },
-  ];
-
-  const danGrades: BeltGrade[] = [
-    { level: "1º Dan (Shodan)", name: "Faixa Preta", color: "#000000" },
-    { level: "2º Dan (Nidan)", name: "Faixa Preta", color: "#000000" },
-    { level: "3º Dan (Sandan)", name: "Faixa Preta", color: "#000000" },
-    { level: "4º Dan (Yondan)", name: "Faixa Preta", color: "#000000" },
-    { level: "5º Dan (Godan)", name: "Faixa Preta", color: "#000000" },
-    { level: "6º Dan (Rokudan)", name: "Faixa Preta/Coral", gradient: "linear-gradient(90deg, black 0%, black 65%, white 65%, white 70%, red 70%, red 85%, white 85%, white 90%, black 90%, black 100%)" },
-    { level: "7º Dan (Shichidan)", name: "Faixa Coral", gradient: "linear-gradient(90deg, #E53935 25%, #FFFFFF 25%, #FFFFFF 50%, #E53935 50%, #E53935 75%, #FFFFFF 75%, #FFFFFF 100%)" },
-    { level: "8º Dan (Hachidan)", name: "Faixa Coral", gradient: "linear-gradient(90deg, #E53935 25%, #FFFFFF 25%, #FFFFFF 50%, #E53935 50%, #E53935 75%, #FFFFFF 75%, #FFFFFF 100%)" },
-    { level: "9º Dan (Kyudan)", name: "Faixa Vermelha", color: "#B71C1C" },
-    { level: "10º Dan (Judan)", name: "Faixa Vermelha", color: "#B71C1C" },
-  ];
-  
-  const getTextColor = (backgroundColor: string, level?: string | undefined) => {
-    // Para faixas claras, usar texto escuro
-    if (backgroundColor === "#000000" || level === "6º Dan (Rokudan)") {
-      return "text-yellow-400";
-    }
-    if (level === "8º Kyu" || level === "1º Kyu" || level === "2º Kyu" || level === "3º Kyu" || level === "5º Kyu") {
-      return "text-gray-100";
-    }
-    return "text-gray-900";
-  };
 
   return (
     <div className="space-y-8">

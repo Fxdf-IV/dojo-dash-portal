@@ -10,6 +10,7 @@ export interface ILocation extends Document {
   description?: string;
   imageUrl?: string;
   images: ILocationImage[];
+  orderIndex?: number;
 }
 
 const LocationImageSchema = new Schema({
@@ -22,6 +23,7 @@ const LocationSchema = new Schema<ILocation>({
   description: { type: String },
   imageUrl: { type: String },
   images: [LocationImageSchema],
+  orderIndex: { type: Number, default: 0 },
 }, { timestamps: true });
 
 export default mongoose.model<ILocation>('Location', LocationSchema);

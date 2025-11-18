@@ -1,18 +1,21 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
 import { BookOpen, Video, FileText, Trophy, Swords } from "lucide-react";
 import BeltGrades from "@/components/BeltGrades";
-import BeltBadge from "@/components/BeltBadge";
 import { BELT_GRADES } from "@/components/BeltSelect";
 import { materialsService } from "@/services";
 import type { Material } from "@/types";
 import { useToast } from "@/hooks/use-toast";
+import { getBeltDisplay } from "@/constants/beltDisplay";
+import YouTubeEmbed, { useIsYouTubeUrl } from "@/components/ui/youtube-embed";
 
 const StudentDashboard = () => {
   const { user, refreshUser } = useAuth();
   const { toast } = useToast();
+  const beltDisplay = getBeltDisplay(user?.beltId);
 
   // Materials state
   const [materials, setMaterials] = useState<Material[]>([]);
@@ -105,8 +108,19 @@ const StudentDashboard = () => {
                 Acesse seus materiais de treinamento
               </p>
             </div>
-            {user?.beltId && (
-              <BeltBadge beltId={user.beltId} className="text-lg px-6 py-3" />
+            {beltDisplay && (
+              <Badge
+                // Rael, muda isso aqui por favor
+                className={`text-lg px-6 py-3 font-semibold shadow-[0_0_10px_0_rgba(0,0,0,0.7)] [text-shadow:_1px_1px_10px_black] ${beltDisplay.textClass}`}
+                style={
+                  beltDisplay.background.startsWith("linear-gradient")
+                    ? { background: beltDisplay.background }
+                    : { backgroundColor: beltDisplay.background }
+                }
+              >
+                <span className="font-bold">{beltDisplay.label}</span>
+                <span className="ml-2 opacity-90">• {beltDisplay.description}</span>
+              </Badge>
             )}
           </div>
         </div>
@@ -165,10 +179,18 @@ const StudentDashboard = () => {
                           <p className="text-sm text-muted-foreground">{kihon.content}</p>
                         )}
                         {kihon.videoUrl ? (
-                          <a href={kihon.videoUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-primary hover:underline">
-                            <Video className="w-4 h-4" />
-                            Assistir vídeo
-                          </a>
+                          useIsYouTubeUrl(kihon.videoUrl) ? (
+                            <YouTubeEmbed
+                              url={kihon.videoUrl}
+                              title={kihon.title}
+                              className="mb-2"
+                            />
+                          ) : (
+                              <a href={kihon.videoUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-primary hover:underline">
+                                <Video className="w-4 h-4" />
+                                Assistir vídeo
+                              </a>
+                            )
                         ) : (
                           <div className="aspect-video bg-muted/50 rounded flex items-center justify-center">
                             <Video className="w-12 h-12 text-muted-foreground" />
@@ -212,22 +234,32 @@ const StudentDashboard = () => {
                       {kata.content && (
                         <p className="text-sm text-muted-foreground">{kata.content}</p>
                       )}
-                      <div className="flex gap-4">
+                        <div className="space-y-3">
                         {kata.videoUrl ? (
-                          <a href={kata.videoUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-primary hover:underline">
-                            <Video className="w-4 h-4" />
-                            Assistir vídeo
-                          </a>
+                            useIsYouTubeUrl(kata.videoUrl) ? (
+                              <YouTubeEmbed
+                                url={kata.videoUrl}
+                                title={kata.title}
+                                className="mb-2"
+                              />
+                            ) : (
+                                <a href={kata.videoUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-primary hover:underline">
+                                  <Video className="w-4 h-4" />
+                                  Assistir vídeo
+                                </a>
+                              )
                         ) : (
                           <div className="aspect-video bg-muted/50 rounded flex items-center justify-center">
                             <Video className="w-12 h-12 text-muted-foreground" />
                           </div>
                         )}
                         {kata.imageUrl && (
-                          <a href={kata.imageUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-primary hover:underline">
-                            <FileText className="w-4 h-4" />
-                            Ver diagrama
-                          </a>
+                            <div className="flex gap-4">
+                              <a href={kata.imageUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-primary hover:underline">
+                                <FileText className="w-4 h-4" />
+                                Ver diagrama
+                              </a>
+                            </div>
                         )}
                       </div>
                     </div>
@@ -277,14 +309,22 @@ const StudentDashboard = () => {
                             />
                           </div>
                         )}
-                        <div className="flex gap-2">
-                          {item.videoUrl && (
-                            <a href={item.videoUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-primary hover:underline">
-                              <Video className="w-4 h-4" />
-                              Assistir Vídeo
-                            </a>
-                          )}
-                        </div>
+                        {item.videoUrl && (
+                          useIsYouTubeUrl(item.videoUrl) ? (
+                            <YouTubeEmbed
+                              url={item.videoUrl}
+                              title={item.title}
+                              className="mb-2"
+                            />
+                          ) : (
+                              <div className="flex gap-2">
+                                <a href={item.videoUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-primary hover:underline">
+                                  <Video className="w-4 h-4" />
+                                  Assistir Vídeo
+                                </a>
+                              </div>
+                          )
+                        )}
                       </div>
                     </CardContent>
                 </Card>
@@ -332,14 +372,22 @@ const StudentDashboard = () => {
                             />
                           </div>
                         )}
-                        <div className="flex gap-2">
-                          {bunkai.videoUrl && (
-                            <a href={bunkai.videoUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-primary hover:underline">
-                              <Video className="w-4 h-4" />
-                              Assistir Vídeo
-                            </a>
-                          )}
-                        </div>
+                        {bunkai.videoUrl && (
+                          useIsYouTubeUrl(bunkai.videoUrl) ? (
+                            <YouTubeEmbed
+                              url={bunkai.videoUrl}
+                              title={bunkai.title}
+                              className="mb-2"
+                            />
+                          ) : (
+                              <div className="flex gap-2">
+                                <a href={bunkai.videoUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-primary hover:underline">
+                                  <Video className="w-4 h-4" />
+                                  Assistir Vídeo
+                                </a>
+                              </div>
+                          )
+                        )}
                       </div>
                     </CardContent>
                   </Card>

@@ -1,69 +1,68 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { MapPin, Phone, Mail, Facebook, Instagram, Youtube } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import { contactsService } from "@/services";
+import { MapPin, Phone, Mail, Facebook, Instagram, MessageCircle } from "lucide-react";
+import { contactSettingsService, locationsService } from "@/services";
+import type { Location } from "@/types";
+
+const DEFAULT_WHATSAPP_NUMBER = "18997558617";
+const DEFAULT_WHATSAPP_MESSAGE =
+  "Olá, gostaria de conhecer o karatê do Alessandro Dojo. Como eu posso começar?";
 
 const Contact = () => {
-  const { toast } = useToast();
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    message: ""
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [whatsappNumber, setWhatsappNumber] = useState(DEFAULT_WHATSAPP_NUMBER);
+  const [whatsappMessage, setWhatsappMessage] = useState(DEFAULT_WHATSAPP_MESSAGE);
+  const [locations, setLocations] = useState<Location[]>([]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+  useEffect(() => {
+    const loadSettings = async () => {
+      try {
+        const settings = await contactSettingsService.getSettings();
+        const fetchedNumber = settings?.whatsappNumber?.trim();
+        const fetchedMessage = settings?.whatsappMessage?.trim();
 
-    try {
-      // Incluir telefone no assunto se fornecido
-      const subject = formData.phone
-        ? `Contato via site - Tel: ${formData.phone}`
-        : "Contato via site";
+        setWhatsappNumber(fetchedNumber || DEFAULT_WHATSAPP_NUMBER);
+        setWhatsappMessage(fetchedMessage || DEFAULT_WHATSAPP_MESSAGE);
+      } catch (error) {
+        console.error("Erro ao carregar configurações:", error);
+        // Usar valores padrão em caso de erro
+      }
+    };
 
-      await contactsService.create({
-        name: formData.name,
-        email: formData.email,
-        subject,
-        message: formData.message,
-      });
+    loadSettings();
+  }, []);
 
-      toast({
-        title: "Mensagem enviada!",
-        description: "Entraremos em contato em breve."
-      });
+  useEffect(() => {
+    const loadLocations = async () => {
+      try {
+        const data = await locationsService.getAll();
+        setLocations(data);
+      } catch (error) {
+        console.error("Erro ao carregar locais:", error);
+        setLocations([]);
+      }
+    };
 
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        message: ""
-      });
-    } catch (error: any) {
-      toast({
-        title: "Erro ao enviar mensagem",
-        description: error.message || "Tente novamente mais tarde.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    loadLocations();
+  }, []);
+
+  const handleWhatsAppClick = () => {
+    const number = whatsappNumber?.trim() || DEFAULT_WHATSAPP_NUMBER;
+    const message = whatsappMessage?.trim() || DEFAULT_WHATSAPP_MESSAGE;
+
+    // Remover caracteres especiais e apenas manter números
+    const cleanNumber = number.replace(/\D/g, "");
+    if (!cleanNumber) return;
+
+    // Codificar a mensagem para URL
+    const encodedMessage = encodeURIComponent(message);
+    // Criar link do WhatsApp
+    const whatsappUrl = `https://wa.me/${cleanNumber}?text=${encodedMessage}`;
+    window.open(whatsappUrl, "_blank");
   };
   return <div className="min-h-screen pt-20">
       {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-hero">
+      <section className="relative py-20 border-b border-primary bg-gradient-hero">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1571902943202-507ec2618e8f?q=80&w=2075')] bg-cover bg-center opacity-10" />
         <div className="container mx-auto px-4 relative z-10">
           <h1 className="text-5xl md:text-6xl font-bold text-primary-foreground text-center mb-6">
@@ -79,32 +78,26 @@ const Contact = () => {
       <section className="py-20 bg-gradient-to-br from-background to-secondary/30">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="grid md:grid-cols-2 gap-12">
-            {/* Contact Form */}
+            {/* WhatsApp Contact */}
             <div>
-              <h2 className="text-3xl font-bold mb-6 text-foreground">Envie uma Mensagem</h2>
+              <h2 className="text-3xl font-bold mb-6 text-foreground">Entre em Contato</h2>
               <Card className="border-primary/20">
                 <CardContent className="p-6">
-                  <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                      <label className="text-sm font-medium text-foreground mb-2 block">Nome</label>
-                      <Input name="name" value={formData.name} onChange={handleChange} placeholder="Seu nome completo" required />
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium text-foreground mb-2 block">Email</label>
-                      <Input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="seu@email.com" required />
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium text-foreground mb-2 block">Telefone</label>
-                      <Input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="(18) 99999-9999" />
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium text-foreground mb-2 block">Mensagem</label>
-                      <Textarea name="message" value={formData.message} onChange={handleChange} placeholder="Conte-nos como podemos ajudar..." rows={5} required />
-                    </div>
-                    <Button type="submit" className="w-full shadow-glow" disabled={isSubmitting}>
-                      {isSubmitting ? "Enviando..." : "Enviar Mensagem"}
+                  <div className="space-y-4">
+                    <p className="text-muted-foreground mb-6">
+                      Clique no botão abaixo para conversar conosco via WhatsApp. Estamos prontos para responder suas dúvidas!
+                    </p>
+                    <Button
+                      onClick={handleWhatsAppClick}
+                      className="w-full bg-green-600 hover:bg-green-700 text-white shadow-glow flex items-center justify-center gap-2 py-6"
+                    >
+                      <MessageCircle className="w-5 h-5" />
+                      Entre em Contato pelo WhatsApp
                     </Button>
-                  </form>
+                    <p className="text-xs text-muted-foreground text-center">
+                      Você será redirecionado para o WhatsApp
+                    </p>
+                  </div>
                 </CardContent>
               </Card>
             </div>
@@ -121,7 +114,7 @@ const Contact = () => {
                       </div>
                       <div>
                         <p className="font-semibold text-card-foreground">Telefone</p>
-                        <p className="text-sm text-muted-foreground">(18) 99999-9999</p>
+                        <p className="text-sm text-muted-foreground">(18) 99755-8617</p>
                       </div>
                     </CardContent>
                   </Card>
@@ -133,7 +126,7 @@ const Contact = () => {
                       </div>
                       <div>
                         <p className="font-semibold text-card-foreground">Email</p>
-                        <p className="text-sm text-muted-foreground">contato@alessandrokarate.com.br</p>
+                        <p className="text-sm text-muted-foreground">alekaratepalmital1@gmail.com</p>
                       </div>
                     </CardContent>
                   </Card>
@@ -159,25 +152,29 @@ const Contact = () => {
                   Acompanhe nossas atividades, eventos e conquistas
                 </p>
                 <div className="flex gap-4">
-                  <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="p-3 bg-primary/10 rounded-full text-primary hover:bg-primary hover:text-primary-foreground transition-all">
+                  <a href="https://www.facebook.com/alessandrodokarate" target="_blank" rel="noopener noreferrer" className="p-3 bg-primary/10 rounded-full text-primary hover:bg-primary hover:text-primary-foreground transition-all">
                     <Facebook size={24} />
                   </a>
-                  <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="p-3 bg-primary/10 rounded-full text-primary hover:bg-primary hover:text-primary-foreground transition-all">
+                  <a href="https://www.instagram.com/alessandrodokarate/" target="_blank" rel="noopener noreferrer" className="p-3 bg-primary/10 rounded-full text-primary hover:bg-primary hover:text-primary-foreground transition-all">
                     <Instagram size={24} />
                   </a>
-
                 </div>
               </div>
 
               {/* Locations */}
               <div>
                 <h3 className="text-2xl font-bold mb-4 text-foreground">Nossos Locais</h3>
-                <div className="space-y-2 text-sm text-muted-foreground">
-                  <p>● CT Maylson Campos</p>
-                  <p>● Bola e Cidadania</p>
-                  <p>● Projeto Gota Verde</p>
-                  <p>● Colégio Expoente</p>
-                </div>
+                {locations.length > 0 ? (
+                  <div className="space-y-2 text-sm text-muted-foreground">
+                    {locations.map((location) => (
+                      <p key={location.id}>● {location.name}</p>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-muted-foreground">
+                    Nenhum local cadastrado no momento.
+                  </p>
+                )}
               </div>
             </div>
           </div>

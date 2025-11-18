@@ -24,13 +24,13 @@ const Footer = () => {
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
                 <Phone size={16} />
-                <span>(18) 99999-9999</span>
+                <span>(18) 99755-8617</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
                 <Mail size={16} />
-                <span>contato@alessandrokarate.com.br</span>
+                <span>alekaratepalmital1@gmail.com</span>
               </div>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
                 <MapPin size={16} />
                 <span>Palmital - SP</span>
               </div>
@@ -41,10 +41,10 @@ const Footer = () => {
           <div className="space-y-4">
             <h4 className="text-primary-foreground font-semibold text-lg">Redes Sociais</h4>
             <div className="flex gap-4">
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="p-2 bg-primary/10 rounded-full text-primary hover:bg-primary hover:text-primary-foreground transition-all">
+              <a href="https://www.facebook.com/alessandrodokarate" target="_blank" rel="noopener noreferrer" className="p-2 bg-primary/10 rounded-full text-primary hover:bg-primary hover:text-primary-foreground transition-all">
                 <Facebook size={20} />
               </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="p-2 bg-primary/10 rounded-full text-primary hover:bg-primary hover:text-primary-foreground transition-all">
+              <a href="https://www.instagram.com/alessandrodokarate/" target="_blank" rel="noopener noreferrer" className="p-2 bg-primary/10 rounded-full text-primary hover:bg-primary hover:text-primary-foreground transition-all">
                 <Instagram size={20} />
               </a>
               

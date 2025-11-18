@@ -1,7 +1,34 @@
 import { Router } from 'express';
+import express from 'express';
+import multer from 'multer';
 import Location from '../models/Location.js';
+import Image from '../models/Image.js';
+import { authenticate, requireAdmin } from '../middleware/auth.js';
 
 const router = Router();
+
+// Configurar multer para armazenar em memória (não em disco)
+const storage = multer.memoryStorage();
+
+const fileFilter = (req: express.Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
+  const allowedTypes = /jpeg|jpg|png|gif|webp/;
+  const extname = allowedTypes.test(file.originalname.toLowerCase());
+  const mimetype = allowedTypes.test(file.mimetype);
+
+  if (mimetype && extname) {
+    return cb(null, true);
+  } else {
+    cb(new Error('Apenas arquivos de imagem são permitidos (jpeg, jpg, png, gif, webp)'));
+  }
+};
+
+const upload = multer({
+  storage,
+  fileFilter,
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5MB
+  },
+});
 
 // Helper para transformar _id em id
 const transformLocation = (location: any) => {
@@ -15,6 +42,7 @@ const transformLocation = (location: any) => {
       imageUrl: img.imageUrl,
       caption: img.caption,
     })) || [],
+    orderIndex: obj.orderIndex ?? 0,
     createdAt: obj.createdAt,
     updatedAt: obj.updatedAt,
   };
@@ -23,9 +51,34 @@ const transformLocation = (location: any) => {
 // GET /api/locations
 router.get('/', async (req, res) => {
   try {
-    const locations = await Location.find().sort({ createdAt: -1 });
+    const locations = await Location.find().sort({ orderIndex: 1, createdAt: -1 });
     res.json({ locations: locations.map(transformLocation) });
   } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// PUT /api/locations/reorder - Atualizar ordem dos locais
+router.put('/reorder', authenticate, async (req: any, res) => {
+  try {
+    const { locations: locationsOrder } = req.body;
+
+    if (!Array.isArray(locationsOrder)) {
+      return res.status(400).json({ error: 'Formato de reorder inválido' });
+    }
+
+    // Atualizar orderIndex para cada local
+    for (let i = 0; i < locationsOrder.length; i++) {
+      await Location.findByIdAndUpdate(
+        locationsOrder[i].id,
+        { orderIndex: i },
+        { new: true }
+      );
+    }
+
+    res.json({ success: true, message: 'Ordem atualizada com sucesso' });
+  } catch (error: any) {
+    console.error('[Locations] Erro ao reordenar:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -45,87 +98,214 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// POST /api/locations
-router.post('/', async (req, res) => {
+// POST /api/locations - Criar novo local
+router.post('/', authenticate, upload.single('image'), async (req: any, res) => {
   try {
-    const { name, description, imageUrl } = req.body;
+    const { name, description } = req.body;
 
+    if (!name) {
+      return res.status(400).json({ error: 'Nome do local é obrigatório' });
+    }
+
+    let imageUrl = undefined;
+    if (req.file && req.file.buffer) {
+      // Gerar nome único para o arquivo
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+      const ext = req.file.originalname.split('.').pop() || '';
+      const filename = `location-${uniqueSuffix}.${ext}`;
+
+      // Salvar imagem no MongoDB
+      const image = await Image.create({
+        filename: filename,
+        mimetype: req.file.mimetype,
+        size: req.file.size,
+        data: req.file.buffer,
+      });
+
+      const imageId = (image as any)._id.toString();
+      imageUrl = `/api/upload/image/${imageId}`;
+    }
+
+    // Criar novo local
     const location = await Location.create({
       name,
-      description,
+      description: description || '',
       imageUrl,
       images: [],
     });
 
     res.json({ location: transformLocation(location) });
   } catch (error: any) {
+    console.error('[Locations] Erro ao criar local:', error);
     res.status(500).json({ error: error.message });
   }
 });
 
-// PUT /api/locations/:id
-router.put('/:id', async (req, res) => {
+// PUT /api/locations/:id - Atualizar local
+router.put('/:id', authenticate, upload.single('image'), async (req: any, res) => {
   try {
-    const { name, description, imageUrl } = req.body;
+    const { name, description, removeImage } = req.body;
 
-    const location = await Location.findByIdAndUpdate(
-      req.params.id,
-      { name, description, imageUrl },
-      { new: true, runValidators: true }
-    );
+    const location = await Location.findById(req.params.id);
 
     if (!location) {
       return res.status(404).json({ error: 'Local não encontrado' });
     }
 
+    location.name = name || location.name;
+    location.description = description !== undefined ? description : location.description;
+
+    if (req.file && req.file.buffer) {
+      // Remover imagem anterior do banco se existir
+      if (location.imageUrl && location.imageUrl.startsWith('/api/upload/image/')) {
+        const oldImageId = location.imageUrl.split('/').pop();
+        if (oldImageId) {
+          try {
+            await Image.findByIdAndDelete(oldImageId);
+          } catch (error) {
+            console.warn('[Locations] Erro ao remover imagem anterior:', error);
+          }
+        }
+      }
+
+      // Gerar nome único para o arquivo
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+      const ext = req.file.originalname.split('.').pop() || '';
+      const filename = `location-${uniqueSuffix}.${ext}`;
+
+      // Salvar nova imagem no MongoDB
+      const image = await Image.create({
+        filename: filename,
+        mimetype: req.file.mimetype,
+        size: req.file.size,
+        data: req.file.buffer,
+      });
+
+      const imageId = (image as any)._id.toString();
+      location.imageUrl = `/api/upload/image/${imageId}`;
+    } else if (removeImage === 'true' || removeImage === true) {
+      // Remover imagem do banco se existir
+      if (location.imageUrl && location.imageUrl.startsWith('/api/upload/image/')) {
+        const oldImageId = location.imageUrl.split('/').pop();
+        if (oldImageId) {
+          try {
+            await Image.findByIdAndDelete(oldImageId);
+          } catch (error) {
+            console.warn('[Locations] Erro ao remover imagem:', error);
+          }
+        }
+      }
+      location.imageUrl = undefined;
+    }
+
+    await location.save();
+
     res.json({ location: transformLocation(location) });
   } catch (error: any) {
+    console.error('[Locations] Erro ao atualizar local:', error);
     res.status(500).json({ error: error.message });
   }
 });
 
 // DELETE /api/locations/:id
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authenticate, async (req: any, res) => {
   try {
-    const location = await Location.findByIdAndDelete(req.params.id);
+    const location = await Location.findById(req.params.id);
 
     if (!location) {
       return res.status(404).json({ error: 'Local não encontrado' });
     }
 
+    // Remover imagem de capa do banco se existir
+    if (location.imageUrl && location.imageUrl.startsWith('/api/upload/image/')) {
+      const imageId = location.imageUrl.split('/').pop();
+      if (imageId) {
+        try {
+          await Image.findByIdAndDelete(imageId);
+        } catch (error) {
+          console.warn('[Locations] Erro ao remover imagem de capa:', error);
+        }
+      }
+    }
+
+    // Remover todas as imagens da galeria do banco
+    for (const img of location.images) {
+      if (img.imageUrl && img.imageUrl.startsWith('/api/upload/image/')) {
+        const imageId = img.imageUrl.split('/').pop();
+        if (imageId) {
+          try {
+            await Image.findByIdAndDelete(imageId);
+          } catch (error) {
+            console.warn('[Locations] Erro ao remover imagem da galeria:', error);
+          }
+        }
+      }
+    }
+
+    await Location.findByIdAndDelete(req.params.id);
+
     res.json({ success: true });
   } catch (error: any) {
+    console.error('[Locations] Erro ao deletar local:', error);
     res.status(500).json({ error: error.message });
   }
 });
 
-// POST /api/locations/:id/images
-router.post('/:id/images', async (req, res) => {
+// POST /api/locations/:id/images - Adicionar imagens à galeria
+router.post('/:id/images', authenticate, upload.array('images', 20), async (req: any, res) => {
   try {
-    const { imageUrl, caption } = req.body;
+    const locationId = req.params.id;
+    const location = await Location.findById(locationId);
 
-    const location = await Location.findById(req.params.id);
     if (!location) {
       return res.status(404).json({ error: 'Local não encontrado' });
     }
 
-    location.images.push({ imageUrl, caption });
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ error: 'Nenhum arquivo enviado' });
+    }
+
+    const newImages: any[] = [];
+
+    for (const file of req.files) {
+      if (file.buffer) {
+        // Gerar nome único para o arquivo
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        const ext = file.originalname.split('.').pop() || '';
+        const filename = `location-gallery-${uniqueSuffix}.${ext}`;
+
+        // Salvar imagem no MongoDB
+        const image = await Image.create({
+          filename: filename,
+          mimetype: file.mimetype,
+          size: file.size,
+          data: file.buffer,
+        });
+
+        const imageId = (image as any)._id.toString();
+        const imageUrl = `/api/upload/image/${imageId}`;
+        
+        newImages.push({
+          imageUrl,
+          caption: '',
+        });
+      }
+    }
+
+    location.images.push(...newImages);
     await location.save();
 
-    const newImage = location.images[location.images.length - 1];
     res.json({
-      image: {
-        imageUrl: newImage.imageUrl,
-        caption: newImage.caption,
-      }
+      image: newImages[0] || { imageUrl: '', caption: '' }
     });
   } catch (error: any) {
-    res.status(500).json({ error: error.message });
+    console.error('[Locations] Erro ao adicionar imagens:', error);
+    res.status(500).json({ error: error.message || 'Erro ao adicionar imagens' });
   }
 });
 
 // DELETE /api/locations/:id/images/:imageIndex
-router.delete('/:id/images/:imageIndex', async (req, res) => {
+router.delete('/:id/images/:imageIndex', authenticate, async (req: any, res) => {
   try {
     const location = await Location.findById(req.params.id);
 
@@ -138,11 +318,26 @@ router.delete('/:id/images/:imageIndex', async (req, res) => {
       return res.status(404).json({ error: 'Imagem não encontrada' });
     }
 
+    const imageToDelete = location.images[imageIndex];
+
+    // Remover imagem do banco se existir
+    if (imageToDelete.imageUrl && imageToDelete.imageUrl.startsWith('/api/upload/image/')) {
+      const imageId = imageToDelete.imageUrl.split('/').pop();
+      if (imageId) {
+        try {
+          await Image.findByIdAndDelete(imageId);
+        } catch (error) {
+          console.warn('[Locations] Erro ao remover imagem do banco:', error);
+        }
+      }
+    }
+
     location.images.splice(imageIndex, 1);
     await location.save();
 
     res.json({ success: true });
   } catch (error: any) {
+    console.error('[Locations] Erro ao deletar imagem:', error);
     res.status(500).json({ error: error.message });
   }
 });

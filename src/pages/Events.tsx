@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import type { Event } from "@/types";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { normalizeImageUrl } from "@/utils/imageUrl";
 
 const Events = () => {
   const { user } = useAuth();
@@ -100,20 +101,24 @@ const Events = () => {
   const upcomingEvents = events.filter(e => !isPastEvent(e));
   const pastEvents = events.filter(e => isPastEvent(e));
 
-  if (loading) {
+  const renderEventImage = (imageUrl?: string, title?: string) => {
+    const normalized = normalizeImageUrl(imageUrl);
+    const src = normalized || "/placeholder.svg";
     return (
-      <div className="min-h-screen pt-20">
-        <div className="container mx-auto px-4 py-12">
-          <div className="text-center">Carregando eventos...</div>
-        </div>
+      <div className="aspect-video overflow-hidden bg-muted/50">
+        <img
+          src={src}
+          alt={title || "Imagem do evento"}
+          className="w-full h-full object-cover"
+        />
       </div>
     );
-  }
+  };
 
   return (
     <div className="min-h-screen pt-20">
       {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-hero">
+      <section className="relative py-20 border-b border-primary bg-gradient-hero">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1555597673-b21d5c935865?q=80&w=2070')] bg-cover bg-center opacity-10" />
         <div className="container mx-auto px-4 relative z-10">
           <h1 className="text-5xl md:text-6xl font-bold text-primary-foreground text-center mb-6">
@@ -131,8 +136,12 @@ const Events = () => {
           <h2 className="text-4xl font-bold text-center mb-12 text-foreground">
             Próximos Eventos
           </h2>
-
-          {upcomingEvents.length === 0 ? (
+          {loading && (
+            <div className="text-center text-muted-foreground py-12">
+              <p>Carregando eventos...</p>
+            </div>
+          )}
+          {!loading && upcomingEvents.length === 0 ? (
             <div className="text-center text-muted-foreground py-12">
               <p>Não há eventos programados no momento.</p>
             </div>
@@ -140,15 +149,7 @@ const Events = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {upcomingEvents.map((event) => (
                 <Card key={event.id} className="border-primary/20 hover:border-primary transition-all hover:shadow-glow overflow-hidden">
-                  {event.imageUrl && (
-                    <div className="aspect-video overflow-hidden bg-muted/50">
-                      <img
-                        src={event.imageUrl}
-                        alt={event.title}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  )}
+                  {renderEventImage(event.imageUrl, event.title)}
                   <CardHeader>
                     <CardTitle className="text-2xl">{event.title}</CardTitle>
                     <CardDescription className="flex flex-wrap items-center gap-4 mt-2">
@@ -232,15 +233,7 @@ const Events = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {pastEvents.map((event) => (
                 <Card key={event.id} className="border-primary/20 opacity-75">
-                  {event.imageUrl && (
-                    <div className="aspect-video overflow-hidden bg-muted/50">
-                      <img
-                        src={event.imageUrl}
-                        alt={event.title}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  )}
+                  {renderEventImage(event.imageUrl, event.title)}
                   <CardHeader>
                     <CardTitle className="text-2xl">{event.title}</CardTitle>
                     <CardDescription className="flex flex-wrap items-center gap-4 mt-2">

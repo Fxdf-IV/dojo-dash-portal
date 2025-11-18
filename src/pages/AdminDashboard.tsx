@@ -16,6 +16,7 @@ import { MaterialManager } from "@/components/admin/materials/MaterialManager";
 import { LocationManager } from "@/components/admin/locations/LocationManager";
 import { SenseiManager } from "@/components/admin/senseis/SenseiManager";
 import { EventManager } from "@/components/admin/events/EventManager";
+import { ContactConfigModal } from "@/components/admin/ContactConfigModal";
 
 const AdminDashboard = () => {
   const { user } = useAuth();
@@ -148,14 +149,17 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen pt-20 bg-gradient-to-br from-background to-secondary/30">
       {/* Header */}
-      <section className="bg-gradient-hero py-12">
-        <div className="container mx-auto px-4">
-          <h1 className="text-4xl font-bold text-primary-foreground mb-2">
-            Painel Administrativo
-          </h1>
-          <p className="text-primary-foreground/90">
-            Gerencie alunos, materiais, locais, senseis e eventos
-          </p>
+      <section className="bg-gradient-hero border-b border-primary py-12">
+        <div className="container mx-auto px-4 flex justify-between items-start">
+          <div>
+            <h1 className="text-4xl font-bold text-primary-foreground mb-2">
+              Painel Administrativo
+            </h1>
+            <p className="text-primary-foreground/90">
+              Gerencie alunos, materiais, locais, senseis e eventos
+            </p>
+          </div>
+          <ContactConfigModal />
         </div>
       </section>
 
@@ -191,6 +195,7 @@ const AdminDashboard = () => {
               loading={loadingStudents}
               userId={user.id}
               onUpdate={setStudents}
+              locations={locations}
             />
           </TabsContent>
 

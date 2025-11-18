@@ -25,8 +25,12 @@ const ProtectedRoute = ({ children, requiredRole }: ProtectedRouteProps) => {
     return <Navigate to="/" replace />;
   }
 
+  // Check if student is pending approval and trying to access student dashboard
+  if (requiredRole === 'student' && user?.role === 'student' && user?.status === 'pending') {
+    return <Navigate to="/pending-approval" replace />;
+  }
+
   return <>{children}</>;
 };
 
 export default ProtectedRoute;
-

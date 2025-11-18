@@ -4,20 +4,33 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Shield, Heart, Users, Trophy, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import ctMaylsonImage from "@/assets/ct-maylson-campos-new.jpg";
-import bolaCidadaniaImage from "@/assets/bola-cidadania-new.jpg";
-import gotaVerdeImage from "@/assets/gota-verde-new.jpg";
-import colegioExpoenteImage from "@/assets/colegio-expoente-new.jpg";
 import logo from "@/assets/logo.png";
-import { senseisService } from "@/services";
-import type { Sensei } from "@/types";
+import { senseisService, locationsService } from "@/services";
+import type { Sensei, Location } from "@/types";
 import { BELT_GRADES } from "@/components/BeltSelect";
 const Home = () => {
   const [senseis, setSenseis] = useState<Sensei[]>([]);
   const [loadingSenseis, setLoadingSenseis] = useState(true);
+  const [locations, setLocations] = useState<Location[]>([]);
+  const [loadingLocations, setLoadingLocations] = useState(true);
 
   useEffect(() => {
     loadSenseis();
+    loadLocations();
+
+    window.scrollTo({ top: 0, behavior: "auto" });
+    if (window.location.hash === "#locations") {
+      history.replaceState(null, "", window.location.pathname + window.location.search);
+    }
+
+    // Recarregar dados quando a página recebe foco (volta do admin)
+    const handleFocus = () => {
+      loadSenseis();
+      loadLocations();
+    };
+
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
   }, []);
 
   const loadSenseis = async () => {
@@ -27,54 +40,24 @@ const Home = () => {
       setSenseis(data);
     } catch (error) {
       console.error('Erro ao carregar senseis:', error);
-      // Fallback para dados hardcoded em caso de erro
-      setSenseis([
-        {
-          id: "fallback-1",
-          name: "Sensei Alessandro",
-          rank: "4º Dan - Faixa Preta",
-          description: "Fundador do Alessandro Karatê e Kobudo, com mais de 25 anos de experiência no Shorin-Ryu. Dedicado à formação técnica e filosófica dos alunos, mantendo viva a tradição do karatê de Okinawa.",
-          imageUrl: "",
-          orderIndex: 0
-        },
-        {
-          id: "fallback-2",
-          name: "Sensei Milena",
-          rank: "2º Dan - Faixa Preta",
-          description: "Especialista em kata e bunkai, responsável pelo desenvolvimento técnico dos alunos. Referência em competições regionais e instrutora do projeto Bola e Cidadania.",
-          imageUrl: "",
-          orderIndex: 1
-        },
-        {
-          id: "fallback-3",
-          name: "Sensei Vinicius",
-          rank: "1º Dan - Faixa Preta",
-          description: "Instrutor focado no trabalho com crianças e adolescentes. Coordena as atividades no Colégio Expoente e no Projeto Gota Verde, unindo disciplina marcial e consciência ambiental.",
-          imageUrl: "",
-          orderIndex: 2
-        },
-      ]);
+      setSenseis([]);
     } finally {
       setLoadingSenseis(false);
     }
   };
-  const projects = [{
-    name: "CT Maylson Campos",
-    description: "Centro de Treinamento com infraestrutura completa para o desenvolvimento dos atletas.",
-    students: "45+ alunos"
-  }, {
-    name: "Bola e Cidadania",
-    description: "Projeto social que une esporte e educação para transformar vidas.",
-    students: "60+ alunos"
-  }, {
-    name: "Projeto Gota Verde",
-    description: "Iniciativa de sustentabilidade aliada ao karatê tradicional.",
-    students: "30+ alunos"
-  }, {
-    name: "Colégio Expoente",
-    description: "Parceria educacional levando o karatê para o ambiente escolar.",
-    students: "50+ alunos"
-  }];
+
+  const loadLocations = async () => {
+    try {
+      setLoadingLocations(true);
+      const data = await locationsService.getAll();
+      setLocations(data);
+    } catch (error) {
+      console.error('Erro ao carregar locais:', error);
+      setLocations([]);
+    } finally {
+      setLoadingLocations(false);
+    }
+  };
   const values = [{
     icon: Shield,
     title: "Disciplina",
@@ -92,6 +75,12 @@ const Home = () => {
     title: "Excelência",
     description: "Busca contínua pela perfeição técnica e pessoal"
   }];
+
+  const scrollToLocations = () => {
+    const section = document.getElementById("locations");
+    section?.scrollIntoView({ behavior: "smooth", block: "start"});
+  };
+
   return <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative h-[90vh] flex items-center justify-center overflow-hidden">
@@ -113,18 +102,18 @@ const Home = () => {
               <Button size="lg" className="shadow-glow text-lg px-8">
                 Quero Começar
               </Button>
-            </Link>
-            <a href="#projetos">
-              <Button size="lg" variant="outline" className="shadow-glow text-lg px-8">
+          </Link>
+            {/* TODO: Add smooth scroll transition to locations */}
+            <Button size="lg" variant="outline" className="shadow-glow text-lg px-8"
+              onClick={scrollToLocations}>
                 Conheça Nossos Projetos
               </Button>
-            </a>
           </div>
         </div>
       </section>
 
       {/* Senseis Section */}
-      <section className="py-20 bg-gradient-to-br from-background to-secondary/30">
+      <section className="py-20 border-t border-primary bg-gradient-to-br from-background to-secondary/30">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
@@ -169,11 +158,11 @@ const Home = () => {
               ))}
             </div>
           )}
-        </div>
-      </section>
+      </div>
+    </section>
 
-      {/* Values Section */}
-      <section className="py-20 bg-gradient-to-br from-background to-secondary/30 ">
+    {/* Values Section */}
+      <section className="py-20 border-t border-primary bg-gradient-to-br from-background to-secondary/30 ">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
@@ -196,8 +185,8 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Gallery Section */}
-      <section className="py-20 bg-gradient-to-br from-background to-secondary/30">
+    {/* Locations Section */}
+      <section id="locations" className="py-20 border-t border-primary bg-gradient-to-br from-background to-secondary/30 scroll-mt-18">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
@@ -208,101 +197,55 @@ const Home = () => {
             </p>
           </div>
 
-          <Tabs defaultValue="ct-maylson" className="max-w-6xl mx-auto">
-            <TabsList className="grid w-full grid-cols-2 lg:grid-cols-4 mb-8">
-              <TabsTrigger value="ct-maylson">CT Maylson Campos</TabsTrigger>
-              <TabsTrigger value="bola-cidadania">Bola e Cidadania</TabsTrigger>
-              <TabsTrigger value="gota-verde">Projeto Gota Verde</TabsTrigger>
-              <TabsTrigger value="colegio">Colégio Expoente</TabsTrigger>
-            </TabsList>
+          {loadingLocations ? (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">Carregando locais...</p>
+            </div>
+          ) : locations.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">Nenhum local cadastrado.</p>
+            </div>
+          ) : (
+            <Tabs defaultValue={locations[0]?.id} className="max-w-6xl mx-auto">
+              <TabsList className="grid w-full mb-8" style={{ gridTemplateColumns: `repeat(${Math.min(locations.length, 4)}, minmax(0, 1fr))` }}>
+                {locations.map((location) => (
+                  <TabsTrigger key={location.id} value={location.id}>
+                    {location.name}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
 
-            <TabsContent value="ct-maylson" className="animate-fade-in">
-              <Card className="border-primary/20 overflow-hidden">
-                <div className="aspect-video overflow-hidden">
-                  <img src={ctMaylsonImage} alt="CT Maylson Campos - Interior do dojo" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
-                </div>
-                <CardContent className="p-8">
-                  <div className="flex items-center gap-2 mb-4">
-                    <MapPin className="w-5 h-5 text-primary" />
-                    <h3 className="text-2xl font-bold text-card-foreground">CT Maylson Campos</h3>
-                  </div>
-                  <p className="text-muted-foreground mb-4 leading-relaxed">Nosso centro de treinamento principal oferece infraestrutura completa para o desenvolvimento dos praticantes. Com tatames de alta qualidade, ambiente arejado e equipamentos modernos, o CT Maylson Campos é o coração do Alessandro Karatê e Kobudo. Aqui, mantemos viva a tradição do Shorin-Ryu com treinos regulares para todas as faixas e idades.</p>
-
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="bola-cidadania" className="animate-fade-in">
-              <Card className="border-primary/20 overflow-hidden">
-                <div className="aspect-video overflow-hidden">
-                  <img src={bolaCidadaniaImage} alt="Projeto Bola e Cidadania" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
-                </div>
-                <CardContent className="p-8">
-                  <div className="flex items-center gap-2 mb-4">
-                    <MapPin className="w-5 h-5 text-primary" />
-                    <h3 className="text-2xl font-bold text-card-foreground">Bola e Cidadania</h3>
-                  </div>
-                  <p className="text-muted-foreground mb-4 leading-relaxed">
-                    Um projeto social que transforma vidas através do esporte e da educação. O Bola e Cidadania leva os
-                    ensinamentos do karatê tradicional para comunidades, promovendo inclusão social, disciplina e valores
-                    morais. Mais do que técnicas de luta, ensinamos respeito, cidadania e trabalho em equipe. Um espaço
-                    onde crianças e jovens encontram propósito e desenvolvem seu potencial.
-                  </p>
-
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="gota-verde" className="animate-fade-in">
-              <Card className="border-primary/20 overflow-hidden">
-                <div className="aspect-video overflow-hidden">
-                  <img src={gotaVerdeImage} alt="Projeto Gota Verde" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
-                </div>
-                <CardContent className="p-8">
-                  <div className="flex items-center gap-2 mb-4">
-                    <MapPin className="w-5 h-5 text-primary" />
-                    <h3 className="text-2xl font-bold text-card-foreground">Projeto Gota Verde</h3>
-                  </div>
-                  <p className="text-muted-foreground mb-4 leading-relaxed">
-                    Uma iniciativa única que une o karatê tradicional à consciência ambiental e sustentabilidade.
-                    No Projeto Gota Verde, praticamos em harmonia com a natureza, realizando treinos ao ar livre e
-                    promovendo ações de preservação ambiental. Os alunos aprendem que o respeito ensinado no dojo
-                    se estende ao planeta, desenvolvendo uma consciência ecológica aliada aos valores marciais.
-                  </p>
-
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="colegio" className="animate-fade-in">
-              <Card className="border-primary/20 overflow-hidden">
-                <div className="aspect-video overflow-hidden">
-                  <img src={colegioExpoenteImage} alt="Colégio Expoente" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
-                </div>
-                <CardContent className="p-8">
-                  <div className="flex items-center gap-2 mb-4">
-                    <MapPin className="w-5 h-5 text-primary" />
-                    <h3 className="text-2xl font-bold text-card-foreground">Colégio Expoente</h3>
-                  </div>
-                  <p className="text-muted-foreground mb-4 leading-relaxed">
-                    Parceria educacional que integra o karatê ao ambiente escolar, proporcionando aos alunos do Colégio
-                    Expoente uma formação completa que une corpo e mente. Durante as aulas, os estudantes desenvolvem
-                    disciplina, concentração e autocontrole - qualidades que se refletem no desempenho acadêmico.
-                    Uma oportunidade para vivenciar os valores do karatê tradicional dentro do contexto educacional.
-                  </p>
-
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
+              {locations.map((location) => (
+                <TabsContent key={location.id} value={location.id} className="animate-fade-in">
+                  <Card className="border-primary/20 overflow-hidden">
+                    <div className="aspect-video overflow-hidden">
+                      {location.imageUrl ? (
+                        <img src={location.imageUrl} alt={location.name} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                      ) : (
+                        <div className="w-full h-full bg-muted flex items-center justify-center">
+                          <p className="text-muted-foreground">Imagem do local</p>
+                        </div>
+                      )}
+                    </div>
+                    <CardContent className="p-8">
+                      <div className="flex items-center gap-2 mb-4">
+                        <MapPin className="w-5 h-5 text-primary" />
+                        <h3 className="text-2xl font-bold text-card-foreground">{location.name}</h3>
+                      </div>
+                      <p className="text-muted-foreground mb-4 leading-relaxed">
+                        {location.description || "Espaço dedicado ao treinamento de karatê tradicional."}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+              ))}
+            </Tabs>
+          )}
         </div>
       </section>
 
-      {/* Projects Section */}
-
-
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-hero relative overflow-hidden">
+      <section className="py-20 border-t border-primary bg-gradient-hero relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1555597408-26bc8e548a46?q=80&w=2070')] bg-cover bg-center opacity-10" />
         <div className="container mx-auto px-4 text-center relative z-10">
           <h2 className="text-4xl md:text-5xl font-bold text-primary-foreground mb-6">

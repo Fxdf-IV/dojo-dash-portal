@@ -13,9 +13,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { ImageUpload } from "@/components/ui/image-upload";
 import { useToast } from "@/hooks/use-toast";
 import { Event } from "@/types";
 import { eventsService } from "@/services";
+import { uploadService } from "@/services/upload";
 
 interface EventManagerProps {
   events: Event[];
@@ -67,8 +69,7 @@ export const EventManager = ({
         fd.append("date", form.date);
         fd.append("registrationPrice", form.registrationPrice.toString());
         fd.append("image", imageFile);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        newEvent = await eventsService.create(fd as any);
+        newEvent = await eventsService.create(fd);
       } else {
         newEvent = await eventsService.create(form);
       }
@@ -96,8 +97,7 @@ export const EventManager = ({
         fd.append("date", form.date);
         fd.append("registrationPrice", form.registrationPrice.toString());
         fd.append("image", imageFile);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        updated = await eventsService.update(editingEvent.id, fd as any);
+        updated = await eventsService.update(editingEvent.id, fd);
       } else {
         updated = await eventsService.update(editingEvent.id, form);
       }
@@ -198,17 +198,13 @@ export const EventManager = ({
                       />
                     </div>
                   </div>
-                  <div>
-                    <Label htmlFor="event-image">Imagem</Label>
-                    <input
-                      id="event-image"
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) =>
-                        setImageFile(e.target.files?.[0] || null)
-                      }
-                    />
-                  </div>
+                  <ImageUpload
+                    label="Imagem do Evento"
+                    onChange={(file) => setImageFile(file)}
+                    onRemove={() => setImageFile(null)}
+                    accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                    maxSize={5}
+                  />
                   <div className="flex justify-end gap-2">
                     <Button
                       variant="outline"
@@ -369,17 +365,42 @@ export const EventManager = ({
                 />
               </div>
             </div>
-            <div>
-              <Label htmlFor="edit-event-image">Imagem</Label>
-              <input
-                id="edit-event-image"
-                type="file"
-                accept="image/*"
-                onChange={(e) =>
-                  setImageFile(e.target.files?.[0] || null)
+            <ImageUpload
+              label="Imagem do Evento"
+              value={editingEvent?.imageUrl}
+              onChange={(file) => setImageFile(file)}
+              onRemove={async () => {
+                setImageFile(null);
+                if (editingEvent && editingEvent.imageUrl) {
+                  try {
+                    // Remover imagem do MongoDB
+                    await uploadService.deleteImage(editingEvent.imageUrl);
+
+                    // Atualizar evento no backend para remover URL da imagem
+                    const updated = await eventsService.update(editingEvent.id, {
+                      ...form,
+                      imageUrl: "",
+                    });
+
+                    // Atualizar lista local
+                    onUpdate(events.map(e => e.id === editingEvent.id ? updated : e));
+
+                    // Atualizar formulário e evento sendo editado
+                    setEditingEvent({ ...editingEvent, imageUrl: "" });
+
+                    toast({ title: "Imagem removida com sucesso!" });
+                  } catch (error) {
+                    toast({
+                      title: "Erro ao remover imagem",
+                      description: (error as Error).message,
+                      variant: "destructive",
+                    });
+                  }
                 }
-              />
-            </div>
+              }}
+              accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+              maxSize={5}
+            />
             <div className="flex justify-end gap-2">
               <Button
                 variant="outline"

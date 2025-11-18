@@ -9,6 +9,7 @@ export interface User {
   role: UserRole;
   beltId?: string;
   location?: string;
+  status?: 'active' | 'pending' | 'inactive';
   createdAt?: string;
   updatedAt?: string;
 }
@@ -20,6 +21,7 @@ export interface Student {
   email: string;
   birthDate?: string;
   phone?: string;
+  startDate?: string;
   beltId: string;
   location: string;
   status: 'active' | 'pending' | 'inactive';
@@ -51,6 +53,7 @@ export interface Location {
   description?: string;
   imageUrl?: string;
   images: LocationImage[];
+  orderIndex?: number;
   createdAt?: string;
   updatedAt?: string;
 }

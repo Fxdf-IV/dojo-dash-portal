@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,6 +9,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import logo from "@/assets/logo.png";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import { locationsService } from "@/services";
+import type { Location } from "@/types";
 
 const Login = () => {
   const { toast } = useToast();
@@ -25,17 +27,46 @@ const Login = () => {
     confirmPassword: "",
     location: ""
   });
-  const locations = ["CT Maylson Campos", "Bola e Cidadania", "Projeto Gota Verde", "Colégio Expoente"];
+  const [locations, setLocations] = useState<Location[]>([]);
+  const [loadingLocations, setLoadingLocations] = useState(true);
+
+  useEffect(() => {
+    const loadLocations = async () => {
+      try {
+        setLoadingLocations(true);
+        const data = await locationsService.getAll();
+        setLocations(data);
+      } catch (error) {
+        console.error("Erro ao carregar locais:", error);
+        setLocations([]);
+      } finally {
+        setLoadingLocations(false);
+      }
+    };
+
+    loadLocations();
+  }, []);
+
+  const locationNames = locations.map((location) => location.name).filter(Boolean);
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await login(loginData.email, loginData.password);
+      const { user } = await login(loginData.email, loginData.password);
       toast({
         title: "Login realizado com sucesso!",
         description: "Redirecionando para sua área..."
       });
       setTimeout(() => {
-        navigate("/student");
+        // Check if student is pending approval
+        if (user?.role === 'student' && user?.status === 'pending') {
+          navigate("/pending-approval");
+        } else if (user?.role === 'student') {
+          navigate("/student");
+        } else if (user?.role === 'admin') {
+          navigate("/admin");
+        } else {
+          navigate("/");
+        }
       }, 1000);
     } catch (error) {
       toast({
@@ -68,10 +99,10 @@ const Login = () => {
       await register(signupData.name, signupData.email, signupData.password, signupData.location);
       toast({
         title: "Cadastro realizado com sucesso!",
-        description: "Redirecionando para sua área..."
+        description: "Aguarde aprovação do administrador."
       });
       setTimeout(() => {
-        navigate("/student");
+        navigate("/pending-approval");
       }, 1000);
     } catch (error) {
       toast({
@@ -83,7 +114,7 @@ const Login = () => {
   };
   return <div className="min-h-screen pt-20 flex items-center justify-center bg-gradient-to-br from-background to-secondary/30">
       <div className="absolute inset-0 bg-gradient-hero opacity-5" />
-      
+
       <div className="container mx-auto px-4 py-12 relative z-10 bg-slate-50">
         <div className="max-w-md mx-auto">
           <div className="text-center mb-8">
@@ -160,17 +191,36 @@ const Login = () => {
                     </div>
                     <div>
                       <Label htmlFor="signup-location">Onde você treina?</Label>
-                      <Select value={signupData.location} onValueChange={value => setSignupData({
-                      ...signupData,
-                      location: value
-                    })}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecione o local" />
+                      <Select
+                        value={signupData.location}
+                        onValueChange={value => setSignupData({
+                          ...signupData,
+                          location: value
+                        })}
+                        disabled={loadingLocations || locationNames.length === 0}
+                      >
+                        <SelectTrigger id="signup-location">
+                          <SelectValue
+                            placeholder={
+                              loadingLocations
+                                ? "Carregando locais..."
+                                : locationNames.length === 0
+                                  ? "Nenhum local disponível"
+                                  : "Selecione o local"
+                            }
+                          />
                         </SelectTrigger>
                         <SelectContent>
-                          {locations.map(location => <SelectItem key={location} value={location}>
+                          {locationNames.map(location => (
+                            <SelectItem key={location} value={location}>
                               {location}
-                            </SelectItem>)}
+                            </SelectItem>
+                          ))}
+                          {signupData.location && !locationNames.includes(signupData.location) && (
+                            <SelectItem value={signupData.location}>
+                              {signupData.location}
+                            </SelectItem>
+                          )}
                         </SelectContent>
                       </Select>
                     </div>

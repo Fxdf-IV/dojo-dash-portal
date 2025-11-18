@@ -32,7 +32,7 @@ const Navbar = () => {
     }
     return location.pathname === path;
   };
-  return <nav className="fixed top-0 w-full z-50 bg-secondary/95 backdrop-blur-sm border-b border-primary/20">
+  return <nav className="fixed top-0 w-full z-50 bg-secondary border-b border-primary/20">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           <Link to="/" className="flex items-center gap-3 group">

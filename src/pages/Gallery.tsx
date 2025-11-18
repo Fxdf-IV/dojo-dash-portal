@@ -27,7 +27,7 @@ const Gallery = () => {
   return (
     <div className="min-h-screen pt-20">
       {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-hero">
+      <section className="relative py-20 border-b border-primary bg-gradient-hero">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1555597673-b21d5c935865?q=80&w=2070')] bg-cover bg-center opacity-10" />
         <div className="container mx-auto px-4 relative z-10">
           <h1 className="text-5xl md:text-6xl font-bold text-primary-foreground text-center mb-6">
@@ -41,7 +41,7 @@ const Gallery = () => {
 
       {/* Gallery Sections */}
       {loading ? (
-        <section className="py-20 bg-gradient-to-br from-background to-secondary/30">
+        <section className="py-20  bg-gradient-to-br from-background to-secondary/30">
           <div className="container mx-auto px-4 text-center">
             <p className="text-muted-foreground">Carregando locais...</p>
           </div>

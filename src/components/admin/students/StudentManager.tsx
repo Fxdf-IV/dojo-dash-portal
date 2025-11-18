@@ -24,6 +24,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 import BeltBadge from "@/components/BeltBadge";
 import { BeltSelect } from "@/components/BeltSelect";
 import {
@@ -35,21 +37,22 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
-import { Student } from "@/types";
+import type { Student, Location } from "@/types";
 import { studentsService } from "@/services";
+import { getBeltDisplay } from "@/constants/beltDisplay";
 
 interface StudentManagerProps {
   students: Student[];
   loading: boolean;
-  userId?: string;
   onUpdate: (students: Student[]) => void;
+  locations: Location[];
 }
 
 export const StudentManager = ({
   students,
   loading,
-  userId,
   onUpdate,
+  locations,
 }: StudentManagerProps) => {
   const { toast } = useToast();
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -59,28 +62,108 @@ export const StudentManager = ({
   const [form, setForm] = useState({
     name: "",
     birthDate: "",
+    startDate: "",
     email: "",
     phone: "",
     beltId: "white",
     location: "",
     status: "active" as "active" | "pending" | "inactive",
+    password: "",
+    confirmPassword: "",
   });
+
+  const locationNames = locations.map((location) => location.name).filter(Boolean);
+
+  const renderBeltBadge = (beltId?: string) => {
+    const display = getBeltDisplay(beltId);
+    if (!display) {
+      return (
+        <Badge variant="outline" className="text-xs font-semibold">
+          Sem faixa
+        </Badge>
+      );
+    }
+
+    const style = display.background.startsWith("linear-gradient")
+      ? { background: display.background }
+      : { backgroundColor: display.background };
+
+    return (
+      <Badge
+        className={`text-xs font-semibold border-none [text-shadow:_1px_1px_6px_rgba(0,0,0,0.6)] ${display.textClass}`}
+        style={style}
+      >
+        {display.label}
+      </Badge>
+    );
+  };
+
+  const renderStatusBadge = (status: Student["status"]) => {
+    if (status === "active") {
+      return (
+        <Badge className="bg-blue-100 text-blue-800 border-blue-200 hover:bg-blue-100 hover:text-blue-800 dark:bg-blue-900/50 dark:text-blue-100 dark:border-blue-800 dark:hover:bg-blue-900/50 dark:hover:text-blue-100">
+          Ativo
+        </Badge>
+      );
+    }
+
+    if (status === "pending") {
+      return (
+        <Badge className="bg-red-100 text-red-800 border-red-200 hover:bg-red-100 hover:text-red-800 dark:bg-red-900/50 dark:text-red-100 dark:border-red-800 dark:hover:bg-red-900/50 dark:hover:text-red-100">
+          Pendente
+        </Badge>
+      );
+    }
+
+    return (
+      <Badge className="bg-red-100 text-red-800 border-red-200 hover:bg-red-100 hover:text-red-800 dark:bg-red-900/60 dark:text-red-100 dark:border-red-800 dark:hover:bg-red-900/60 dark:hover:text-red-100">
+        Inativo
+      </Badge>
+    );
+  };
 
   const resetForm = () => {
     setForm({
       name: "",
       birthDate: "",
+      startDate: "",
       email: "",
       phone: "",
       beltId: "white",
       location: "",
       status: "active",
+      password: "",
+      confirmPassword: "",
     });
   };
 
   const handleAdd = async () => {
+    if (!form.password || !form.confirmPassword) {
+      toast({
+        title: "Senha obrigatória",
+        description: "Informe e confirme a senha do aluno",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (form.password !== form.confirmPassword) {
+      toast({
+        title: "Senhas não conferem",
+        description: "A senha e a confirmação devem ser iguais",
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
-      const newStudent = await studentsService.create(form);
+      const { confirmPassword, ...payload } = form;
+      const newStudent = await studentsService.create({
+        ...payload,
+        birthDate: form.birthDate || undefined,
+        startDate: form.startDate || undefined,
+        phone: form.phone || undefined,
+      });
       onUpdate([...students, newStudent]);
       setIsAddOpen(false);
       resetForm();
@@ -96,8 +179,32 @@ export const StudentManager = ({
 
   const handleEdit = async () => {
     if (!editingStudent) return;
+
+    if (form.password || form.confirmPassword) {
+      if (!form.password || !form.confirmPassword || form.password !== form.confirmPassword) {
+        toast({
+          title: "Senhas não conferem",
+          description: "Preencha ambos os campos de senha com o mesmo valor",
+          variant: "destructive",
+        });
+        return;
+      }
+    }
+
     try {
-      const updated = await studentsService.update(editingStudent.id, form);
+      const { confirmPassword, ...payload } = form;
+      const dataToSend: typeof payload & { password?: string } = {
+        ...payload,
+        birthDate: form.birthDate || undefined,
+        startDate: form.startDate || undefined,
+        phone: form.phone || undefined,
+      };
+
+      if (!form.password) {
+        delete dataToSend.password;
+      }
+
+      const updated = await studentsService.update(editingStudent.id, dataToSend);
       onUpdate(students.map((s) => (s.id === updated.id ? updated : s)));
       setIsEditOpen(false);
       setEditingStudent(null);
@@ -205,6 +312,15 @@ export const StudentManager = ({
                     />
                   </div>
                   <div>
+                    <Label htmlFor="student-startdate">Data de Início</Label>
+                    <Input
+                      id="student-startdate"
+                      type="date"
+                      value={form.startDate}
+                      onChange={(e) => setForm({ ...form, startDate: e.target.value })}
+                    />
+                  </div>
+                  <div>
                     <Label htmlFor="student-belt">Faixa</Label>
                     <BeltSelect
                       value={form.beltId}
@@ -212,13 +328,71 @@ export const StudentManager = ({
                     />
                   </div>
                   <div>
-                    <Label htmlFor="student-location">Local</Label>
+                    <Label htmlFor="student-password">Senha</Label>
                     <Input
-                      id="student-location"
-                      value={form.location}
-                      onChange={(e) => setForm({ ...form, location: e.target.value })}
-                      placeholder="Local de treinamento"
+                      id="student-password"
+                      type="password"
+                      value={form.password}
+                      onChange={(e) => setForm({ ...form, password: e.target.value })}
                     />
+                  </div>
+                  <div>
+                    <Label htmlFor="student-confirm-password">Confirmar Senha</Label>
+                    <Input
+                      id="student-confirm-password"
+                      type="password"
+                      value={form.confirmPassword}
+                      onChange={(e) =>
+                        setForm({ ...form, confirmPassword: e.target.value })
+                      }
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="student-location">Local</Label>
+                    <Select
+                      value={form.location}
+                      onValueChange={(value) => setForm({ ...form, location: value })}
+                      disabled={locationNames.length === 0}
+                    >
+                      <SelectTrigger id="student-location">
+                        <SelectValue
+                          placeholder={
+                            locationNames.length === 0
+                              ? "Cadastre um local antes de adicionar alunos"
+                              : "Selecione o local"
+                          }
+                        />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {locationNames.map((name) => (
+                          <SelectItem key={name} value={name}>
+                            {name}
+                          </SelectItem>
+                        ))}
+                        {form.location && !locationNames.includes(form.location) && (
+                          <SelectItem value={form.location}>
+                            {form.location}
+                          </SelectItem>
+                        )}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="student-active"
+                      checked={form.status === "active"}
+                      onCheckedChange={(checked) =>
+                        setForm({ ...form, status: checked ? "active" : "pending" })
+                      }
+                    />
+                    <div>
+                      <Label htmlFor="student-active" className="!mt-0">
+                        Ativo
+                      </Label>
+                      <p className="text-xs text-muted-foreground">
+                        Desmarque para deixar o aluno como pendente
+                      </p>
+                    </div>
                   </div>
                   <div className="flex justify-end gap-2">
                     <Button
@@ -253,6 +427,7 @@ export const StudentManager = ({
                   <TableRow>
                     <TableHead>Nome</TableHead>
                     <TableHead>Email</TableHead>
+                    <TableHead>Local</TableHead>
                     <TableHead>Faixa</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead className="text-right">Ações</TableHead>
@@ -263,35 +438,20 @@ export const StudentManager = ({
                     <TableRow key={student.id}>
                       <TableCell className="font-medium">{student.name}</TableCell>
                       <TableCell>{student.email}</TableCell>
+                      <TableCell>{student.location}</TableCell>
                       <TableCell>
-                        <BeltBadge beltId={student.beltId} />
+                        {renderBeltBadge(student.beltId)}
                       </TableCell>
-                      <TableCell>
-                        <Badge
-                          variant={
-                            student.status === "active"
-                              ? "default"
-                              : student.status === "pending"
-                              ? "secondary"
-                              : "destructive"
-                          }
-                        >
-                          {student.status === "active"
-                            ? "Ativo"
-                            : student.status === "pending"
-                            ? "Pendente"
-                            : "Inativo"}
-                        </Badge>
-                      </TableCell>
+                      <TableCell>{renderStatusBadge(student.status)}</TableCell>
                       <TableCell className="text-right space-x-2">
                         {student.status === "pending" && (
                           <Button
                             size="sm"
-                            variant="outline"
                             onClick={() => handleApprove(student.id)}
+                            className="bg-gradient-to-r from-green-400 via-green-500 to-emerald-600 hover:from-green-500 hover:via-green-600 hover:to-emerald-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-500 transform hover:scale-105 font-semibold relative overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:translate-x-[-100%] before:animate-[shimmer_2s_ease-in-out_infinite] hover:before:animate-none"
                           >
                             <CheckCircle className="w-4 h-4 mr-1" />
-                            Aprovar
+                            Ativar
                           </Button>
                         )}
                         <Button
@@ -304,9 +464,12 @@ export const StudentManager = ({
                               email: student.email,
                               phone: student.phone || "",
                               birthDate: student.birthDate || "",
+                              startDate: student.startDate?.slice(0, 10) || "",
                               beltId: student.beltId,
                               location: student.location,
                               status: student.status,
+                              password: "",
+                              confirmPassword: "",
                             });
                             setIsEditOpen(true);
                           }}
@@ -396,6 +559,15 @@ export const StudentManager = ({
               />
             </div>
             <div>
+              <Label htmlFor="edit-student-startdate">Data de Início</Label>
+              <Input
+                id="edit-student-startdate"
+                type="date"
+                value={form.startDate}
+                onChange={(e) => setForm({ ...form, startDate: e.target.value })}
+              />
+            </div>
+            <div>
               <Label htmlFor="edit-student-belt">Faixa</Label>
               <BeltSelect
                 value={form.beltId}
@@ -403,13 +575,73 @@ export const StudentManager = ({
               />
             </div>
             <div>
-              <Label htmlFor="edit-student-location">Local</Label>
+              <Label htmlFor="edit-student-password">Senha</Label>
               <Input
-                id="edit-student-location"
-                value={form.location}
-                onChange={(e) => setForm({ ...form, location: e.target.value })}
-                placeholder="Local de treinamento"
+                id="edit-student-password"
+                type="password"
+                value={form.password}
+                onChange={(e) => setForm({ ...form, password: e.target.value })}
+                placeholder="Deixe em branco para manter"
               />
+            </div>
+            <div>
+              <Label htmlFor="edit-student-confirm-password">Confirmar Senha</Label>
+              <Input
+                id="edit-student-confirm-password"
+                type="password"
+                value={form.confirmPassword}
+                onChange={(e) =>
+                  setForm({ ...form, confirmPassword: e.target.value })
+                }
+                placeholder="Deixe em branco para manter"
+              />
+            </div>
+            <div>
+              <Label htmlFor="edit-student-location">Local</Label>
+              <Select
+                value={form.location}
+                onValueChange={(value) => setForm({ ...form, location: value })}
+                disabled={locationNames.length === 0}
+              >
+                <SelectTrigger id="edit-student-location">
+                  <SelectValue
+                    placeholder={
+                      locationNames.length === 0
+                        ? "Cadastre um local antes de editar alunos"
+                        : "Selecione o local"
+                    }
+                  />
+                </SelectTrigger>
+                <SelectContent>
+                  {locationNames.map((name) => (
+                    <SelectItem key={name} value={name}>
+                      {name}
+                    </SelectItem>
+                  ))}
+                  {form.location && !locationNames.includes(form.location) && (
+                    <SelectItem value={form.location}>
+                      {form.location}
+                    </SelectItem>
+                  )}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="edit-student-active"
+                checked={form.status === "active"}
+                onCheckedChange={(checked) =>
+                  setForm({ ...form, status: checked ? "active" : "pending" })
+                }
+              />
+              <div>
+                <Label htmlFor="edit-student-active" className="!mt-0">
+                  Ativo
+                </Label>
+                <p className="text-xs text-muted-foreground">
+                  Desmarque para manter o aluno como pendente
+                </p>
+              </div>
             </div>
             <div className="flex justify-end gap-2">
               <Button

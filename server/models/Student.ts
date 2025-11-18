@@ -6,6 +6,7 @@ export interface IStudent extends Document {
   email: string;
   birthDate?: Date;
   phone?: string;
+  startDate?: Date;
   beltId: string;
   location: string;
   status: 'active' | 'pending' | 'inactive';
@@ -17,6 +18,7 @@ const StudentSchema = new Schema<IStudent>({
   email: { type: String, required: true },
   birthDate: { type: Date },
   phone: { type: String },
+  startDate: { type: Date },
   beltId: { type: String, required: true, default: 'white' },
   location: { type: String, required: true },
   status: { type: String, enum: ['active', 'pending', 'inactive'], default: 'pending' },

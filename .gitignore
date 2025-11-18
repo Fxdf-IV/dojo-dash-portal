@@ -27,3 +27,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Imagens
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.svg
