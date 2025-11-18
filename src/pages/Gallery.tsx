@@ -3,6 +3,8 @@ import { MapPin } from "lucide-react";
 import { useState, useEffect } from "react";
 import { locationsService } from "@/services";
 import type { Location } from "@/types";
+import { SEO } from "@/components/SEO";
+import { LoadingSpinner } from "@/components/LoadingStates";
 
 const Gallery = () => {
   const [locations, setLocations] = useState<Location[]>([]);
@@ -26,8 +28,13 @@ const Gallery = () => {
 
   return (
     <div className="min-h-screen pt-20">
+      <SEO
+        title="Galeria - Alessandro Karatê e Kobudo"
+        description="Confira fotos dos nossos dojos e espaços de treinamento. Veja o karatê tradicional Shorin-Ryu em ação em Palmital e região."
+        keywords="galeria karate, fotos dojo, locais treino karate palmital, academia karate"
+      />
       {/* Hero Section */}
-      <section className="relative py-20 border-b border-primary bg-gradient-hero">
+      <section className="relative py-20 border-b border-primary bg-gradient-hero" aria-labelledby="gallery-hero">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1555597673-b21d5c935865?q=80&w=2070')] bg-cover bg-center opacity-10" />
         <div className="container mx-auto px-4 relative z-10">
           <h1 className="text-5xl md:text-6xl font-bold text-primary-foreground text-center mb-6">
@@ -41,9 +48,9 @@ const Gallery = () => {
 
       {/* Gallery Sections */}
       {loading ? (
-        <section className="py-20  bg-gradient-to-br from-background to-secondary/30">
-          <div className="container mx-auto px-4 text-center">
-            <p className="text-muted-foreground">Carregando locais...</p>
+        <section className="py-20 bg-gradient-to-br from-background to-secondary/30">
+          <div className="container mx-auto px-4">
+            <LoadingSpinner />
           </div>
         </section>
       ) : locations.length === 0 ? (
@@ -83,9 +90,11 @@ const Gallery = () => {
                         <div className="aspect-[4/3] overflow-hidden relative">
                           <img
                             src={image.imageUrl}
-                            alt={image.caption || `Foto ${imageIndex + 1} - ${location.name}`}
+                            alt={image.caption || `Foto ${imageIndex + 1} do local ${location.name}`}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                             loading="lazy"
+                            width="400"
+                            height="300"
                           />
                           {image.caption && (
                             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">

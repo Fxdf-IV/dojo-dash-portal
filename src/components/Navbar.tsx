@@ -32,11 +32,18 @@ const Navbar = () => {
     }
     return location.pathname === path;
   };
-  return <nav className="fixed top-0 w-full z-50 bg-secondary border-b border-primary/20">
+  return <nav className="fixed top-0 w-full z-50 bg-secondary border-b border-primary/20" role="navigation" aria-label="Menu principal">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           <Link to="/" className="flex items-center gap-3 group">
-            <img src={logo} alt="Alessandro Karatê e Kobudo" className="h-14 w-14 transition-transform group-hover:scale-110" />
+            <img 
+              src={logo} 
+              alt="Logo Alessandro Karatê e Kobudo" 
+              className="h-14 w-14 transition-transform group-hover:scale-110"
+              width="56"
+              height="56"
+              loading="eager"
+            />
             <div className="hidden md:block">
               <span className="text-primary-foreground font-bold text-xl">Alessandro Karatê e Kobudo</span>
               <p className="text-muted-foreground text-xs">Palmital - SP</p>
@@ -76,7 +83,12 @@ const Navbar = () => {
           </div>
 
           {/* Mobile Menu Button */}
-          <button className="md:hidden text-primary-foreground" onClick={() => setIsOpen(!isOpen)}>
+          <button 
+            className="md:hidden text-primary-foreground" 
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label={isOpen ? "Fechar menu" : "Abrir menu"}
+            aria-expanded={isOpen}
+          >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>

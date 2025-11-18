@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { MapPin, Phone, Mail, Facebook, Instagram, MessageCircle } from "lucide-react";
 import { contactSettingsService, locationsService } from "@/services";
 import type { Location } from "@/types";
+import { SEO } from "@/components/SEO";
 
 const DEFAULT_WHATSAPP_NUMBER = "18997558617";
 const DEFAULT_WHATSAPP_MESSAGE =
@@ -61,8 +62,13 @@ const Contact = () => {
     window.open(whatsappUrl, "_blank");
   };
   return <div className="min-h-screen pt-20">
+      <SEO
+        title="Contato - Alessandro Karatê e Kobudo"
+        description="Entre em contato conosco. Tire suas dúvidas ou venha conhecer nossos dojos em Palmital, Marília e Pirapozinho. WhatsApp disponível."
+        keywords="contato karate palmital, dojo palmital telefone, whatsapp karate, aulas karate contato"
+      />
       {/* Hero Section */}
-      <section className="relative py-20 border-b border-primary bg-gradient-hero">
+      <section className="relative py-20 border-b border-primary bg-gradient-hero" aria-labelledby="contact-hero">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1571902943202-507ec2618e8f?q=80&w=2075')] bg-cover bg-center opacity-10" />
         <div className="container mx-auto px-4 relative z-10">
           <h1 className="text-5xl md:text-6xl font-bold text-primary-foreground text-center mb-6">
