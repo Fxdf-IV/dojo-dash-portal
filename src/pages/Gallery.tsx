@@ -64,21 +64,21 @@ const Gallery = () => {
             </div>
           ) : (
             <Tabs value={selectedLocation} onValueChange={setSelectedLocation} className="w-full">
-              <TabsList className="w-full flex flex-wrap justify-center gap-2 h-auto p-2 bg-secondary/50 mb-12">
+              <TabsList className="grid w-full mb-8">
                 {locations.map((location) => (
                   <TabsTrigger
                     key={location.id}
                     value={location.id}
-                    className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground px-6 py-3"
+                    className="border-primary/20 overflow-hidden"
                   >
                     <MapPin className="w-4 h-4" />
-                    <span className="font-semibold">{location.name}</span>
+                    <span className="aspect-video overflow-hidden">{location.name}</span>
                   </TabsTrigger>
                 ))}
               </TabsList>
 
               {locations.map((location) => (
-                <TabsContent key={location.id} value={location.id} className="mt-0">
+                <TabsContent key={location.id} value={location.id} className="mt-0 animate-fade-in">
                   {/* Location Header */}
                   <div className="text-center mb-12 animate-fade-in">
                     <div className="flex items-center justify-center gap-3 mb-4">
