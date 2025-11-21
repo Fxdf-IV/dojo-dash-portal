@@ -10,6 +10,7 @@ export interface ILocation extends Document {
   description?: string;
   imageUrl?: string;
   images: ILocationImage[];
+  schedule?: { day: string; time: string }[];
   orderIndex?: number;
 }
 
@@ -18,11 +19,18 @@ const LocationImageSchema = new Schema({
   caption: { type: String },
 }, { _id: false });
 
+const ScheduleItemSchema = new Schema({
+  day: { type: String, required: true },
+  startTime: { type: String, required: true },
+  endTime: { type: String, required: true },
+}, { _id: false });
+
 const LocationSchema = new Schema<ILocation>({
   name: { type: String, required: true },
   description: { type: String },
   imageUrl: { type: String },
   images: [LocationImageSchema],
+  schedule: [ScheduleItemSchema],
   orderIndex: { type: Number, default: 0 },
 }, { timestamps: true });
 

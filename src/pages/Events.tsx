@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Clock, Users, CheckCircle, XCircle, DollarSign } from "lucide-react";
+import { Calendar, Clock, Users, CheckCircle, XCircle } from "lucide-react";
 import { eventsService } from "@/services";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
@@ -12,6 +12,8 @@ import { ptBR } from "date-fns/locale";
 import { normalizeImageUrl } from "@/utils/imageUrl";
 import { SEO } from "@/components/SEO";
 import { LoadingSpinner } from "@/components/LoadingStates";
+import { AnimatedDivider } from "@/components/AnimatedDivider";
+import HERO_IMAGE from "@/assets/images/hero/EventCover.jpg";
 
 const Events = () => {
   const { user } = useAuth();
@@ -128,17 +130,21 @@ const Events = () => {
         keywords="eventos karate, campeonato karate palmital, competições artes marciais, treinos especiais"
       />
       {/* Hero Section */}
-      <section className="relative py-20 border-b border-primary bg-gradient-hero" aria-labelledby="events-hero">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1555597673-b21d5c935865?q=80&w=2070')] bg-cover bg-center opacity-10" />
-        <div className="container mx-auto px-4 relative z-10">
-          <h1 className="text-5xl md:text-6xl font-bold text-primary-foreground text-center mb-6">
-            Eventos
-          </h1>
-          <p className="text-xl text-primary-foreground/90 text-center max-w-3xl mx-auto">
-            Participe dos eventos do dojo e acompanhe nossa agenda de atividades
-          </p>
-        </div>
-      </section>
+      <section className="relative py-20 bg-gradient-hero" aria-labelledby="gallery-hero">
+              <div
+                className="absolute inset-0 bg-cover bg-[center_20%] opacity-20"
+                style={{ backgroundImage: `url('${HERO_IMAGE}')` }}
+              />
+              <div className="container mx-auto px-4 relative z-10">
+                <h1 id="gallery-hero" className="text-5xl md:text-6xl font-bold text-primary-foreground text-center mb-6">
+                  Eventos
+                </h1>
+                <p className="text-xl text-primary-foreground/90 text-center max-w-3xl mx-auto">
+                  Participe dos eventos do dojo e acompanhe nossa agenda de atividades.
+                </p>
+              </div>
+          </section>
+          <AnimatedDivider />
 
       {/* Upcoming Events */}
       <section className="py-20 bg-gradient-to-br from-background to-secondary/30">
@@ -170,7 +176,6 @@ const Events = () => {
                       </span>
                       {event.registrationPrice !== undefined && event.registrationPrice > 0 && (
                         <span className="flex items-center gap-1 text-primary font-semibold">
-                          <DollarSign className="w-4 h-4" />
                           R$ {event.registrationPrice.toFixed(2).replace('.', ',')}
                         </span>
                       )}
@@ -250,7 +255,6 @@ const Events = () => {
                       </span>
                       {event.registrationPrice !== undefined && event.registrationPrice > 0 && (
                         <span className="flex items-center gap-1 text-primary font-semibold">
-                          <DollarSign className="w-4 h-4" />
                           R$ {event.registrationPrice.toFixed(2).replace('.', ',')}
                         </span>
                       )}
@@ -279,6 +283,7 @@ const Events = () => {
           </div>
         </section>
       )}
+      <AnimatedDivider />
     </div>
   );
 };

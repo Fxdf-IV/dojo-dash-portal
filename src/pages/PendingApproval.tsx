@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { AnimatedDivider } from "@/components/AnimatedDivider";
 
 const PendingApproval = () => {
   const { user, refreshUser } = useAuth();
@@ -45,7 +46,7 @@ const PendingApproval = () => {
   }, []); // Empty dependency array - runs only once on mount
 
   return (
-    <div className="min-h-screen pt-20 flex items-center justify-center bg-gradient-to-br from-background to-secondary/30">
+    <><div className="min-h-screen pt-20 flex items-center justify-center bg-gradient-to-br from-background to-secondary/30">
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-2xl mx-auto">
           <Card className="border-primary/20 shadow-lg">
@@ -59,10 +60,10 @@ const PendingApproval = () => {
                 </div>
               </div>
               <CardTitle className="text-3xl md:text-4xl font-bold mb-2">
-                Conta criada com sucesso!
+                Conta pendente para aprovação!
               </CardTitle>
               <CardDescription className="text-lg">
-                Sua solicitação de cadastro foi recebida
+                Sua conta está em análise com o administrador.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -76,7 +77,7 @@ const PendingApproval = () => {
                       Aguardando aprovação
                     </h3>
                     <p className="text-muted-foreground leading-relaxed">
-                      Consulte o seu sensei para realizar a ativação da sua conta na plataforma.
+                      Consulte o seus senseis para realizar a ativação da sua conta na plataforma.
                       Assim que sua conta for aprovada, você terá acesso completo aos materiais de treinamento.
                     </p>
                   </div>
@@ -93,9 +94,9 @@ const PendingApproval = () => {
                       <CheckCircle2 className="w-5 h-5 text-primary" />
                     </div>
                     <div>
-                      <p className="font-medium">Sua conta foi criada</p>
+                      <p className="font-medium">Sua conta está criada, mas em análise</p>
                       <p className="text-sm text-muted-foreground">
-                        Seus dados foram registrados no sistema
+                        Seus dados estão registrados no sistema
                       </p>
                     </div>
                   </div>
@@ -127,7 +128,7 @@ const PendingApproval = () => {
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <Button
                   variant="outline"
-                  className="flex-1"
+                  className="flex-1 hover:bg-primary-foreground hover:text-primary hover:border-primary hover:shadow-primary"
                   onClick={() => {
                     refreshUser();
                   }}
@@ -153,6 +154,8 @@ const PendingApproval = () => {
         </div>
       </div>
     </div>
+      <AnimatedDivider />
+    </>
   );
 };
 

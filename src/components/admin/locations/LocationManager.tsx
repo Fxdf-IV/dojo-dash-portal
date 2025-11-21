@@ -25,6 +25,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -33,7 +40,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ImageUpload } from "@/components/ui/image-upload";
 import { MultipleImageUpload } from "@/components/ui/multiple-image-upload";
 import { useToast } from "@/hooks/use-toast";
-import { Location } from "@/types";
+import { Location, ScheduleItem } from "@/types";
 import { locationsService } from "@/services";
 
 interface LocationManagerProps {
@@ -41,6 +48,16 @@ interface LocationManagerProps {
   loading: boolean;
   onUpdate: (locations: Location[]) => void;
 }
+
+const DAYS_OF_WEEK = [
+  "Segunda-feira",
+  "Terça-feira",
+  "Quarta-feira",
+  "Quinta-feira",
+  "Sexta-feira",
+  "Sábado",
+  "Domingo",
+];
 
 export const LocationManager = ({
   locations,
@@ -52,15 +69,21 @@ export const LocationManager = ({
   const [editingLocation, setEditingLocation] = useState<Location | null>(null);
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<{
+    name: string;
+    description: string;
+    schedule: ScheduleItem[];
+  }>({
     name: "",
     description: "",
+    schedule: [],
   });
 
   const resetForm = () => {
     setForm({
       name: "",
       description: "",
+      schedule: [],
     });
     setImageFiles([]);
     setCoverImageFile(null);
@@ -68,17 +91,22 @@ export const LocationManager = ({
 
   const handleAdd = async () => {
     try {
-      const fd = new FormData();
-      fd.append("name", form.name);
-      fd.append("description", form.description || "");
-
-      // Adicionar imagem de capa se existir
+      let newLocation;
       if (coverImageFile) {
+        const fd = new FormData();
+        fd.append("name", form.name);
+        fd.append("description", form.description || "");
+        fd.append("schedule", JSON.stringify(form.schedule));
         fd.append("image", coverImageFile);
+        newLocation = await locationsService.create(fd);
+      } else {
+        newLocation = await locationsService.create({
+          name: form.name,
+          description: form.description || "",
+          schedule: form.schedule,
+        });
       }
 
-      const newLocation = await locationsService.create(fd);
-      
       // Adicionar imagens da galeria se existirem
       if (imageFiles.length > 0) {
         const galleryFd = new FormData();
@@ -87,7 +115,7 @@ export const LocationManager = ({
         });
 
         await locationsService.addImage(newLocation.id, galleryFd);
-        
+
         // Recarregar o local para obter as imagens atualizadas
         const updatedLocation = await locationsService.getById(newLocation.id);
         onUpdate([...locations, updatedLocation]);
@@ -110,16 +138,21 @@ export const LocationManager = ({
   const handleEdit = async () => {
     if (!editingLocation) return;
     try {
-      const fd = new FormData();
-      fd.append("name", form.name);
-      fd.append("description", form.description || "");
-
-      // Adicionar imagem de capa se houver nova
+      let updated;
       if (coverImageFile) {
+        const fd = new FormData();
+        fd.append("name", form.name);
+        fd.append("description", form.description || "");
+        fd.append("schedule", JSON.stringify(form.schedule));
         fd.append("image", coverImageFile);
+        updated = await locationsService.update(editingLocation.id, fd);
+      } else {
+        updated = await locationsService.update(editingLocation.id, {
+          name: form.name,
+          description: form.description || "",
+          schedule: form.schedule,
+        });
       }
-
-      const updated = await locationsService.update(editingLocation.id, fd);
 
       // Adicionar novas imagens à galeria se existirem
       if (imageFiles.length > 0) {
@@ -129,7 +162,7 @@ export const LocationManager = ({
         });
 
         await locationsService.addImage(updated.id, galleryFd);
-        
+
         // Recarregar o local para obter as imagens atualizadas
         const updatedWithImages = await locationsService.getById(updated.id);
         onUpdate(locations.map((l) => (l.id === updatedWithImages.id ? updatedWithImages : l)));
@@ -176,7 +209,7 @@ export const LocationManager = ({
       const oldIndex = locations.findIndex((l) => l.id === active.id);
       const newIndex = locations.findIndex((l) => l.id === over.id);
       const reordered = arrayMove(locations, oldIndex, newIndex);
-      
+
       // Atualizar estado local imediatamente
       onUpdate(reordered);
 
@@ -211,7 +244,7 @@ export const LocationManager = ({
     <>
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
               <CardTitle>Gerenciar Locais</CardTitle>
               <CardDescription>
@@ -220,12 +253,12 @@ export const LocationManager = ({
             </div>
             <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
               <DialogTrigger asChild>
-                <Button>
+                <Button className="w-full sm:w-auto">
                   <Plus className="w-4 h-4 mr-2" />
                   Adicionar Local
                 </Button>
               </DialogTrigger>
-              <DialogContent>
+              <DialogContent className="max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                   <DialogTitle>Novo Local</DialogTitle>
                   <DialogDescription>
@@ -251,6 +284,89 @@ export const LocationManager = ({
                       }
                       rows={3}
                     />
+                  </div>
+                  <div>
+                    <Label>Horários</Label>
+                    <div className="space-y-2 mt-2">
+                      {form.schedule.map((item, index) => (
+                        <div key={index} className="flex gap-2 items-center">
+                          <Select
+                            value={item.day}
+                            onValueChange={(value) => {
+                              const newSchedule = [...form.schedule];
+                              newSchedule[index].day = value;
+                              setForm({ ...form, schedule: newSchedule });
+                            }}
+                          >
+                            <SelectTrigger className="w-[180px]">
+                              <SelectValue placeholder="Dia" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {DAYS_OF_WEEK.map((day) => (
+                                <SelectItem key={day} value={day}>
+                                  {day}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <Input
+                            type="time"
+                            value={item.startTime}
+                            onChange={(e) => {
+                              const newSchedule = [...form.schedule];
+                              newSchedule[index].startTime = e.target.value;
+                              setForm({ ...form, schedule: newSchedule });
+                            }}
+                            className="w-[120px]"
+                            placeholder="Início"
+                          />
+                          <Input
+                            type="time"
+                            value={item.endTime}
+                            onChange={(e) => {
+                              const newSchedule = [...form.schedule];
+                              newSchedule[index].endTime = e.target.value;
+                              setForm({ ...form, schedule: newSchedule });
+                            }}
+                            className="w-[120px]"
+                            placeholder="Término"
+                          />
+                          <Input
+                            value={item.activity || ""}
+                            onChange={(e) => {
+                              const newSchedule = [...form.schedule];
+                              newSchedule[index].activity = e.target.value;
+                              setForm({ ...form, schedule: newSchedule });
+                            }}
+                            className="w-[140px]"
+                            placeholder="Atividade"
+                          />
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => {
+                              const newSchedule = form.schedule.filter((_, i) => i !== index);
+                              setForm({ ...form, schedule: newSchedule });
+                            }}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      ))}
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() =>
+                          setForm({
+                            ...form,
+                            schedule: [...form.schedule, { day: "", startTime: "", endTime: "", activity: "" }],
+                          })
+                        }
+                      >
+                        <Plus className="w-4 h-4 mr-2" /> Adicionar Horário
+                      </Button>
+                    </div>
                   </div>
                   <ImageUpload
                     label="Imagem de Capa"
@@ -310,6 +426,7 @@ export const LocationManager = ({
                         setForm({
                           name: location.name,
                           description: location.description || "",
+                          schedule: location.schedule || [],
                         });
                         setImageFiles([]);
                       }}
@@ -334,7 +451,7 @@ export const LocationManager = ({
           }
         }}
       >
-        <DialogContent>
+        <DialogContent className="max-h-[90vh] min-w-[35vw] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Editar Local</DialogTitle>
             <DialogDescription>Atualize os dados do local</DialogDescription>
@@ -358,6 +475,89 @@ export const LocationManager = ({
                 }
                 rows={3}
               />
+            </div>
+            <div>
+              <Label>Horários</Label>
+              <div className="space-y-2 mt-2">
+                {form.schedule.map((item, index) => (
+                  <div key={index} className="flex gap-2 items-center">
+                    <Select
+                      value={item.day}
+                      onValueChange={(value) => {
+                        const newSchedule = [...form.schedule];
+                        newSchedule[index].day = value;
+                        setForm({ ...form, schedule: newSchedule });
+                      }}
+                    >
+                      <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="Dia" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {DAYS_OF_WEEK.map((day) => (
+                          <SelectItem key={day} value={day}>
+                            {day}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Input
+                      type="time"
+                      value={item.startTime}
+                      onChange={(e) => {
+                        const newSchedule = [...form.schedule];
+                        newSchedule[index].startTime = e.target.value;
+                        setForm({ ...form, schedule: newSchedule });
+                      }}
+                      className="w-[120px]"
+                      placeholder="Início"
+                    />
+                    <Input
+                      type="time"
+                      value={item.endTime}
+                      onChange={(e) => {
+                        const newSchedule = [...form.schedule];
+                        newSchedule[index].endTime = e.target.value;
+                        setForm({ ...form, schedule: newSchedule });
+                      }}
+                      className="w-[120px]"
+                      placeholder="Término"
+                    />
+                    <Input
+                      value={item.activity || ""}
+                      onChange={(e) => {
+                        const newSchedule = [...form.schedule];
+                        newSchedule[index].activity = e.target.value;
+                        setForm({ ...form, schedule: newSchedule });
+                      }}
+                      className="w-[140px]"
+                      placeholder="Atividade"
+                    />
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => {
+                        const newSchedule = form.schedule.filter((_, i) => i !== index);
+                        setForm({ ...form, schedule: newSchedule });
+                      }}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                ))}
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() =>
+                    setForm({
+                      ...form,
+                      schedule: [...form.schedule, { day: "", startTime: "", endTime: "", activity: "" }],
+                    })
+                  }
+                >
+                  <Plus className="w-4 h-4 mr-2" /> Adicionar Horário
+                </Button>
+              </div>
             </div>
             <ImageUpload
               label="Imagem de Capa"
@@ -501,7 +701,7 @@ export const LocationManager = ({
 
                       // Recarregar o local para obter as imagens atualizadas
                       const updatedLocation = await locationsService.getById(photosDialogLocation.id);
-                      
+
                       onUpdate(locations.map(l => l.id === photosDialogLocation.id ? updatedLocation : l));
                       setPhotosDialogLocation(updatedLocation);
                       setNewGalleryImageFiles([]);
@@ -563,16 +763,22 @@ function SortableLocationCard({
       style={style}
       className="border rounded-lg p-4 space-y-3 bg-card"
     >
-      <div className="flex items-start gap-3">
-        <button
-          className="cursor-grab active:cursor-grabbing mt-1"
-          {...attributes}
-          {...listeners}
-        >
-          <GripVertical className="w-5 h-5 text-muted-foreground" />
-        </button>
-        <div className="flex-1">
-          <h3 className="font-semibold">{location.name}</h3>
+      <div className="flex flex-col sm:flex-row items-start gap-3">
+        <div className="flex items-center w-full sm:w-auto gap-3">
+          <button
+            className="cursor-grab active:cursor-grabbing mt-1"
+            {...attributes}
+            {...listeners}
+          >
+            <GripVertical className="w-5 h-5 text-muted-foreground" />
+          </button>
+          <div className="flex-1 sm:hidden">
+            <h3 className="font-semibold">{location.name}</h3>
+          </div>
+        </div>
+
+        <div className="flex-1 w-full">
+          <h3 className="font-semibold hidden sm:block">{location.name}</h3>
           {location.description && (
             <p className="text-sm text-muted-foreground">
               {location.description}
@@ -582,18 +788,15 @@ function SortableLocationCard({
             {location.images?.length || 0} foto(s) na galeria
           </p>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={onManagePhotos}>
-            <Images className="w-4 h-4 mr-1" />
-            Fotos
+        <div className="flex gap-2 w-full sm:w-auto justify-end">
+          <Button variant="outline" size="icon" onClick={onManagePhotos} className="sm:flex-none" title="Fotos">
+            <Images className="w-4 h-4" />
           </Button>
-          <Button variant="outline" size="sm" onClick={onEdit}>
-            <Pencil className="w-4 h-4 mr-1" />
-            Editar
+          <Button variant="outline" size="icon" onClick={onEdit} className="sm:flex-none" title="Editar">
+            <Pencil className="w-4 h-4" />
           </Button>
-          <Button variant="outline" size="sm" onClick={onDelete}>
-            <Trash2 className="w-4 h-4 mr-1" />
-            Remover
+          <Button variant="outline" size="icon" onClick={onDelete} className="sm:flex-none" title="Remover">
+            <Trash2 className="w-4 h-4" />
           </Button>
         </div>
       </div>

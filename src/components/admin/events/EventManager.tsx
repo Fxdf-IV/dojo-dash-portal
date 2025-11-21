@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
 import { Plus, Pencil, Trash2, Calendar, Users } from "lucide-react";
 import {
   Dialog,
@@ -48,6 +48,12 @@ export const EventManager = ({
     date: "",
     registrationPrice: 0,
   });
+
+  const handlePriceChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const rawValue = e.target.value.replace(/\D/g, "");
+    const amount = rawValue ? parseInt(rawValue, 10) / 100 : 0;
+    setForm({ ...form, registrationPrice: amount });
+  };
 
   const resetForm = () => {
     setForm({
@@ -189,12 +195,12 @@ export const EventManager = ({
                       <Label htmlFor="event-price">Preço (R$)</Label>
                       <Input
                         id="event-price"
-                        type="number"
-                        step="0.01"
-                        value={form.registrationPrice || 0}
-                        onChange={(e) =>
-                          setForm({ ...form, registrationPrice: parseFloat(e.target.value) || 0 })
-                        }
+                        type="text"
+                        value={form.registrationPrice.toLocaleString("pt-BR", {
+                          style: "currency",
+                          currency: "BRL",
+                        })}
+                        onChange={handlePriceChange}
                       />
                     </div>
                   </div>
@@ -237,24 +243,24 @@ export const EventManager = ({
                 .map((event) => (
                   <div
                     key={event.id}
-                    className="border rounded-lg p-4 flex items-start gap-4"
+                    className="border rounded-lg p-4 flex flex-col sm:flex-row items-start gap-4"
                   >
                     {event.imageUrl && (
                       <img
                         src={event.imageUrl}
                         alt={event.title}
-                        className="w-24 h-24 rounded-md object-cover flex-shrink-0"
+                        className="w-full sm:w-24 h-32 sm:h-24 rounded-md object-cover flex-shrink-0"
                       />
                     )}
 
-                    <div className="flex-1 min-w-0">
+                    <div className="flex-1 min-w-0 w-full">
                       <h3 className="font-semibold">{event.title}</h3>
                       {event.description && (
                         <p className="text-sm text-muted-foreground mt-1">
                           {event.description}
                         </p>
                       )}
-                      <div className="flex items-center gap-4 mt-2 text-sm">
+                      <div className="flex flex-wrap items-center gap-4 mt-2 text-sm">
                         <div className="flex items-center gap-1">
                           <Calendar className="w-4 h-4 text-muted-foreground" />
                           <span>
@@ -271,7 +277,7 @@ export const EventManager = ({
                       </div>
                     </div>
 
-                    <div className="flex gap-2 flex-shrink-0">
+                    <div className="flex gap-2 flex-shrink-0 w-full sm:w-auto mt-2 sm:mt-0">
                       <Button
                         variant="outline"
                         size="sm"
@@ -285,6 +291,7 @@ export const EventManager = ({
                           });
                           setImageFile(null);
                         }}
+                        className="flex-1 sm:flex-none"
                       >
                         <Pencil className="w-4 h-4 mr-1" />
                         Editar
@@ -293,6 +300,7 @@ export const EventManager = ({
                         variant="outline"
                         size="sm"
                         onClick={() => handleDelete(event.id)}
+                        className="flex-1 sm:flex-none"
                       >
                         <Trash2 className="w-4 h-4 mr-1" />
                         Remover
@@ -356,12 +364,12 @@ export const EventManager = ({
                 <Label htmlFor="edit-event-price">Preço (R$)</Label>
                 <Input
                   id="edit-event-price"
-                  type="number"
-                  step="0.01"
-                  value={form.registrationPrice || 0}
-                  onChange={(e) =>
-                    setForm({ ...form, registrationPrice: parseFloat(e.target.value) || 0 })
-                  }
+                  type="text"
+                  value={form.registrationPrice.toLocaleString("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  })}
+                  onChange={handlePriceChange}
                 />
               </div>
             </div>

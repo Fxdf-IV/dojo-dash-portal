@@ -17,6 +17,7 @@ import { LocationManager } from "@/components/admin/locations/LocationManager";
 import { SenseiManager } from "@/components/admin/senseis/SenseiManager";
 import { EventManager } from "@/components/admin/events/EventManager";
 import { ContactConfigModal } from "@/components/admin/ContactConfigModal";
+import { AnimatedDivider } from "@/components/AnimatedDivider";
 
 const AdminDashboard = () => {
   const { user } = useAuth();
@@ -147,10 +148,10 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen pt-20 bg-gradient-to-br from-background to-secondary/30">
+    <><div className="min-h-screen pt-20 bg-gradient-to-br from-background to-secondary/30">
       {/* Header */}
       <section className="bg-gradient-hero border-b border-primary py-12">
-        <div className="container mx-auto px-4 flex justify-between items-start">
+        <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <h1 className="text-4xl font-bold text-primary-foreground mb-2">
               Painel Administrativo
@@ -194,44 +195,41 @@ const AdminDashboard = () => {
               students={students}
               loading={loadingStudents}
               onUpdate={setStudents}
-              locations={locations}
-            />
+              locations={locations} />
           </TabsContent>
 
           <TabsContent value="materials" className="mt-6">
             <MaterialManager
               materials={materials}
               loading={loadingMaterials}
-              onUpdate={setMaterials}
-            />
+              onUpdate={setMaterials} />
           </TabsContent>
 
           <TabsContent value="locations" className="mt-6">
             <LocationManager
               locations={locations}
               loading={loadingLocations}
-              onUpdate={setLocations}
-            />
+              onUpdate={setLocations} />
           </TabsContent>
 
           <TabsContent value="senseis" className="mt-6">
             <SenseiManager
               senseis={senseis}
               loading={loadingSenseis}
-              onUpdate={setSenseis}
-            />
+              onUpdate={setSenseis} />
           </TabsContent>
 
           <TabsContent value="events" className="mt-6">
             <EventManager
               events={events}
               loading={loadingEvents}
-              onUpdate={setEvents}
-            />
+              onUpdate={setEvents} />
           </TabsContent>
         </Tabs>
       </section>
     </div>
+    <AnimatedDivider />
+    </>
   );
 };
 

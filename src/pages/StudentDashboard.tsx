@@ -11,6 +11,7 @@ import type { Material } from "@/types";
 import { useToast } from "@/hooks/use-toast";
 import { getBeltDisplay } from "@/constants/beltDisplay";
 import YouTubeEmbed, { useIsYouTubeUrl } from "@/components/ui/youtube-embed";
+import { AnimatedDivider } from "@/components/AnimatedDivider";
 
 const StudentDashboard = () => {
   const { user, refreshUser } = useAuth();
@@ -95,7 +96,7 @@ const StudentDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen pt-20 bg-gradient-to-br from-background to-secondary/30">
+    <><div className="min-h-screen pt-20 bg-gradient-to-br from-background to-secondary/30">
       {/* Header */}
       <section className="bg-gradient-hero py-12">
         <div className="container mx-auto px-4">
@@ -110,16 +111,20 @@ const StudentDashboard = () => {
             </div>
             {beltDisplay && (
               <Badge
-                // Rael, muda isso aqui por favor
                 className={`text-lg px-6 py-3 font-semibold shadow-[0_0_10px_0_rgba(0,0,0,0.7)] [text-shadow:_1px_1px_10px_black] ${beltDisplay.textClass}`}
-                style={
-                  beltDisplay.background.startsWith("linear-gradient")
-                    ? { background: beltDisplay.background }
-                    : { backgroundColor: beltDisplay.background }
-                }
+                style={beltDisplay.background.startsWith("linear-gradient")
+                  ? { background: beltDisplay.background }
+                  : { backgroundColor: beltDisplay.background }}
               >
                 <span className="font-bold">{beltDisplay.label}</span>
-                <span className="ml-2 opacity-90">• {beltDisplay.description}</span>
+
+                <span
+                  className={`ml-2 opacity-90 ${beltDisplay.background === "#000000" || beltDisplay.label?.includes("Dan")
+                      ? "text-outline-black"
+                      : ""}`}
+                >
+                  • {beltDisplay.description}
+                </span>
               </Badge>
             )}
           </div>
@@ -183,14 +188,13 @@ const StudentDashboard = () => {
                             <YouTubeEmbed
                               url={kihon.videoUrl}
                               title={kihon.title}
-                              className="mb-2"
-                            />
+                              className="mb-2" />
                           ) : (
-                              <a href={kihon.videoUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-primary hover:underline">
-                                <Video className="w-4 h-4" />
-                                Assistir vídeo
-                              </a>
-                            )
+                            <a href={kihon.videoUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-primary hover:underline">
+                              <Video className="w-4 h-4" />
+                              Assistir vídeo
+                            </a>
+                          )
                         ) : (
                           <div className="aspect-video bg-muted/50 rounded flex items-center justify-center">
                             <Video className="w-12 h-12 text-muted-foreground" />
@@ -221,50 +225,49 @@ const StudentDashboard = () => {
                 </Card>
               ) : (
                 availableMaterials.katas.map((kata) => (
-                <Card key={kata.id} className="border-primary/20 hover:border-primary transition-all">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Trophy className="w-5 h-5 text-primary" />
-                      {kata.title}
-                    </CardTitle>
-                    <CardDescription>{kata.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      {kata.content && (
-                        <p className="text-sm text-muted-foreground">{kata.content}</p>
-                      )}
+                  <Card key={kata.id} className="border-primary/20 hover:border-primary transition-all">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Trophy className="w-5 h-5 text-primary" />
+                        {kata.title}
+                      </CardTitle>
+                      <CardDescription>{kata.description}</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        {kata.content && (
+                          <p className="text-sm text-muted-foreground">{kata.content}</p>
+                        )}
                         <div className="space-y-3">
-                        {kata.videoUrl ? (
+                          {kata.videoUrl ? (
                             useIsYouTubeUrl(kata.videoUrl) ? (
                               <YouTubeEmbed
                                 url={kata.videoUrl}
                                 title={kata.title}
-                                className="mb-2"
-                              />
+                                className="mb-2" />
                             ) : (
-                                <a href={kata.videoUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-primary hover:underline">
-                                  <Video className="w-4 h-4" />
-                                  Assistir vídeo
-                                </a>
-                              )
-                        ) : (
-                          <div className="aspect-video bg-muted/50 rounded flex items-center justify-center">
-                            <Video className="w-12 h-12 text-muted-foreground" />
-                          </div>
-                        )}
-                        {kata.imageUrl && (
+                              <a href={kata.videoUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-primary hover:underline">
+                                <Video className="w-4 h-4" />
+                                Assistir vídeo
+                              </a>
+                            )
+                          ) : (
+                            <div className="aspect-video bg-muted/50 rounded flex items-center justify-center">
+                              <Video className="w-12 h-12 text-muted-foreground" />
+                            </div>
+                          )}
+                          {kata.imageUrl && (
                             <div className="flex gap-4">
                               <a href={kata.imageUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-primary hover:underline">
                                 <FileText className="w-4 h-4" />
                                 Ver diagrama
                               </a>
                             </div>
-                        )}
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                    </CardContent>
+                  </Card>
                 ))
               )}
             </div>
@@ -287,14 +290,14 @@ const StudentDashboard = () => {
                 </Card>
               ) : (
                 availableMaterials.theory.map((item) => (
-                <Card key={item.id} className="border-primary/20 hover:border-primary transition-all">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <FileText className="w-5 h-5 text-primary" />
-                      {item.title}
-                    </CardTitle>
-                    <CardDescription>{item.description}</CardDescription>
-                  </CardHeader>
+                  <Card key={item.id} className="border-primary/20 hover:border-primary transition-all">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <FileText className="w-5 h-5 text-primary" />
+                        {item.title}
+                      </CardTitle>
+                      <CardDescription>{item.description}</CardDescription>
+                    </CardHeader>
                     <CardContent>
                       <div className="space-y-3">
                         {item.content && (
@@ -305,8 +308,7 @@ const StudentDashboard = () => {
                             <img
                               src={item.imageUrl}
                               alt={item.title}
-                              className="w-full h-full object-cover"
-                            />
+                              className="w-full h-full object-cover" />
                           </div>
                         )}
                         {item.videoUrl && (
@@ -314,20 +316,19 @@ const StudentDashboard = () => {
                             <YouTubeEmbed
                               url={item.videoUrl}
                               title={item.title}
-                              className="mb-2"
-                            />
+                              className="mb-2" />
                           ) : (
-                              <div className="flex gap-2">
-                                <a href={item.videoUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-primary hover:underline">
-                                  <Video className="w-4 h-4" />
-                                  Assistir Vídeo
-                                </a>
-                              </div>
+                            <div className="flex gap-2">
+                              <a href={item.videoUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-primary hover:underline">
+                                <Video className="w-4 h-4" />
+                                Assistir Vídeo
+                              </a>
+                            </div>
                           )
                         )}
                       </div>
                     </CardContent>
-                </Card>
+                  </Card>
                 ))
               )}
             </div>
@@ -368,8 +369,7 @@ const StudentDashboard = () => {
                             <img
                               src={bunkai.imageUrl}
                               alt={bunkai.title}
-                              className="w-full h-full object-cover"
-                            />
+                              className="w-full h-full object-cover" />
                           </div>
                         )}
                         {bunkai.videoUrl && (
@@ -377,15 +377,14 @@ const StudentDashboard = () => {
                             <YouTubeEmbed
                               url={bunkai.videoUrl}
                               title={bunkai.title}
-                              className="mb-2"
-                            />
+                              className="mb-2" />
                           ) : (
-                              <div className="flex gap-2">
-                                <a href={bunkai.videoUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-primary hover:underline">
-                                  <Video className="w-4 h-4" />
-                                  Assistir Vídeo
-                                </a>
-                              </div>
+                            <div className="flex gap-2">
+                              <a href={bunkai.videoUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-primary hover:underline">
+                                <Video className="w-4 h-4" />
+                                Assistir Vídeo
+                              </a>
+                            </div>
                           )
                         )}
                       </div>
@@ -398,6 +397,8 @@ const StudentDashboard = () => {
         </Tabs>
       </section>
     </div>
+    <AnimatedDivider />
+    </>
   );
 };
 

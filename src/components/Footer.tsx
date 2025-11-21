@@ -1,5 +1,6 @@
 import { Facebook, Instagram, Youtube, Mail, Phone, MapPin } from "lucide-react";
 import logo from "@/assets/logo.png";
+
 const Footer = () => {
   return <footer className="bg-secondary border-t border-primary/20" role="contentinfo" aria-label="Rodapé do site">
       <div className="container mx-auto px-4 py-12">

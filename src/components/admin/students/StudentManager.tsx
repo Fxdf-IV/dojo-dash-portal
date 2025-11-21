@@ -422,94 +422,197 @@ export const StudentManager = ({
                 <p className="text-sm text-muted-foreground">Nenhum aluno cadastrado.</p>
               </div>
             ) : (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Nome</TableHead>
-                    <TableHead>Email</TableHead>
-                    <TableHead>Local</TableHead>
-                    <TableHead>Faixa</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="text-right">Ações</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
+              <>
+                {/* Desktop Table View */}
+                <div className="hidden md:block">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Nome</TableHead>
+                        <TableHead>Email</TableHead>
+                        <TableHead>Local</TableHead>
+                        <TableHead>Faixa</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead className="text-right">Ações</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {students.map((student) => (
+                        <TableRow key={student.id}>
+                          <TableCell className="font-medium">{student.name}</TableCell>
+                          <TableCell>{student.email}</TableCell>
+                          <TableCell>{student.location}</TableCell>
+                          <TableCell>
+                            {renderBeltBadge(student.beltId)}
+                          </TableCell>
+                          <TableCell>{renderStatusBadge(student.status)}</TableCell>
+                          <TableCell className="text-right space-x-2">
+                            {student.status === "pending" && (
+                              <Button
+                                size="sm"
+                                onClick={() => handleApprove(student.id)}
+                                className="bg-gradient-to-r from-green-400 via-green-500 to-emerald-600 hover:from-green-500 hover:via-green-600 hover:to-emerald-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-500 transform hover:scale-105 font-semibold relative overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:translate-x-[-100%] before:animate-[shimmer_2s_ease-in-out_infinite] hover:before:animate-none"
+                              >
+                                <CheckCircle className="w-4 h-4 mr-1" />
+                                Ativar
+                              </Button>
+                            )}
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => {
+                                setEditingStudent(student);
+                                setForm({
+                                  name: student.name,
+                                  email: student.email,
+                                  phone: student.phone || "",
+                                  birthDate: student.birthDate || "",
+                                  startDate: student.startDate?.slice(0, 10) || "",
+                                  beltId: student.beltId,
+                                  location: student.location,
+                                  status: student.status,
+                                  password: "",
+                                  confirmPassword: "",
+                                });
+                                setIsEditOpen(true);
+                              }}
+                            >
+                              <Pencil className="w-4 h-4 mr-1" />
+                              Editar
+                            </Button>
+                            <AlertDialog open={deleteId === student.id} onOpenChange={(open) => {
+                              if (!open) setDeleteId(null);
+                            }}>
+                              <AlertDialogTrigger asChild>
+                                <Button
+                                  size="sm"
+                                  variant="destructive"
+                                  onClick={() => setDeleteId(student.id)}
+                                >
+                                  <Trash2 className="w-4 h-4 mr-1" />
+                                  Remover
+                                </Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>Remover aluno</AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    Tem certeza que deseja remover este aluno? Esta ação não pode ser desfeita.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                  <AlertDialogAction onClick={() => handleDelete(student.id)}>
+                                    Remover
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+
+                {/* Mobile Card View */}
+                <div className="md:hidden space-y-4 p-4">
                   {students.map((student) => (
-                    <TableRow key={student.id}>
-                      <TableCell className="font-medium">{student.name}</TableCell>
-                      <TableCell>{student.email}</TableCell>
-                      <TableCell>{student.location}</TableCell>
-                      <TableCell>
-                        {renderBeltBadge(student.beltId)}
-                      </TableCell>
-                      <TableCell>{renderStatusBadge(student.status)}</TableCell>
-                      <TableCell className="text-right space-x-2">
+                    <div key={student.id} className="border rounded-lg p-4 space-y-3 bg-card shadow-sm">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h3 className="font-semibold text-lg">{student.name}</h3>
+                          <p className="text-sm text-muted-foreground">{student.email}</p>
+                        </div>
+                        {renderStatusBadge(student.status)}
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2 text-sm">
+                        <div>
+                          <span className="text-muted-foreground">Local:</span>
+                          <p className="font-medium">{student.location}</p>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground">Faixa:</span>
+                          <div className="mt-1">
+                            {renderBeltBadge(student.beltId)}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="pt-3 flex flex-col gap-2">
                         {student.status === "pending" && (
                           <Button
                             size="sm"
                             onClick={() => handleApprove(student.id)}
-                            className="bg-gradient-to-r from-green-400 via-green-500 to-emerald-600 hover:from-green-500 hover:via-green-600 hover:to-emerald-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-500 transform hover:scale-105 font-semibold relative overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:translate-x-[-100%] before:animate-[shimmer_2s_ease-in-out_infinite] hover:before:animate-none"
+                            className="w-full bg-gradient-to-r from-green-400 via-green-500 to-emerald-600 hover:from-green-500 hover:via-green-600 hover:to-emerald-700 text-white"
                           >
-                            <CheckCircle className="w-4 h-4 mr-1" />
-                            Ativar
+                            <CheckCircle className="w-4 h-4 mr-2" />
+                            Aprovar Cadastro
                           </Button>
                         )}
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => {
-                            setEditingStudent(student);
-                            setForm({
-                              name: student.name,
-                              email: student.email,
-                              phone: student.phone || "",
-                              birthDate: student.birthDate || "",
-                              startDate: student.startDate?.slice(0, 10) || "",
-                              beltId: student.beltId,
-                              location: student.location,
-                              status: student.status,
-                              password: "",
-                              confirmPassword: "",
-                            });
-                            setIsEditOpen(true);
-                          }}
-                        >
-                          <Pencil className="w-4 h-4 mr-1" />
-                          Editar
-                        </Button>
-                        <AlertDialog open={deleteId === student.id} onOpenChange={(open) => {
-                          if (!open) setDeleteId(null);
-                        }}>
-                          <AlertDialogTrigger asChild>
-                            <Button
-                              size="sm"
-                              variant="destructive"
-                              onClick={() => setDeleteId(student.id)}
-                            >
-                              <Trash2 className="w-4 h-4 mr-1" />
-                              Remover
-                            </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>Remover aluno</AlertDialogTitle>
-                              <AlertDialogDescription>
-                                Tem certeza que deseja remover este aluno? Esta ação não pode ser desfeita.
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                              <AlertDialogAction onClick={() => handleDelete(student.id)}>
+
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="flex-1"
+                            onClick={() => {
+                              setEditingStudent(student);
+                              setForm({
+                                name: student.name,
+                                email: student.email,
+                                phone: student.phone || "",
+                                birthDate: student.birthDate || "",
+                                startDate: student.startDate?.slice(0, 10) || "",
+                                beltId: student.beltId,
+                                location: student.location,
+                                status: student.status,
+                                password: "",
+                                confirmPassword: "",
+                              });
+                              setIsEditOpen(true);
+                            }}
+                          >
+                            <Pencil className="w-4 h-4 mr-2" />
+                            Editar
+                          </Button>
+
+                          <AlertDialog open={deleteId === student.id} onOpenChange={(open) => {
+                            if (!open) setDeleteId(null);
+                          }}>
+                            <AlertDialogTrigger asChild>
+                              <Button
+                                size="sm"
+                                variant="destructive"
+                                className="flex-1"
+                                onClick={() => setDeleteId(student.id)}
+                              >
+                                <Trash2 className="w-4 h-4 mr-2" />
                                 Remover
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
-                      </TableCell>
-                    </TableRow>
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Remover aluno</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  Tem certeza que deseja remover este aluno? Esta ação não pode ser desfeita.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                <AlertDialogAction onClick={() => handleDelete(student.id)}>
+                                  Remover
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </div>
+                      </div>
+                    </div>
                   ))}
-                </TableBody>
-              </Table>
+                </div>
+              </>
             )}
           </div>
         </CardContent>

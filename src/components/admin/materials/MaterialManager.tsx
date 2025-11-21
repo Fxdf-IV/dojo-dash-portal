@@ -8,7 +8,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -35,7 +41,7 @@ export const MaterialManager = ({
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [editingMaterial, setEditingMaterial] = useState<Material | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [videoFile, setVideoFile] = useState<File | null>(null);
+
   const [form, setForm] = useState({
     title: "",
     type: "kihon" as "kihon" | "kata" | "theory" | "bunkai",
@@ -67,21 +73,20 @@ export const MaterialManager = ({
       minBeltId: "white",
     });
     setImageFile(null);
-    setVideoFile(null);
   };
 
   const handleAdd = async () => {
     try {
       let newMaterial;
-      if (imageFile || videoFile) {
+      if (imageFile) {
         const fd = new FormData();
         fd.append("title", form.title);
         fd.append("type", form.type);
         fd.append("description", form.description || "");
         fd.append("content", form.content || "");
         fd.append("minBeltId", form.minBeltId);
+        fd.append("videoUrl", form.videoUrl || "");
         if (imageFile) fd.append("image", imageFile);
-        if (videoFile) fd.append("video", videoFile);
         newMaterial = await materialsService.create(fd);
       } else {
         newMaterial = await materialsService.create(form);
@@ -103,15 +108,15 @@ export const MaterialManager = ({
     if (!editingMaterial) return;
     try {
       let updated;
-      if (imageFile || videoFile) {
+      if (imageFile) {
         const fd = new FormData();
         fd.append("title", form.title);
         fd.append("type", form.type);
         fd.append("description", form.description || "");
         fd.append("content", form.content || "");
         fd.append("minBeltId", form.minBeltId);
+        fd.append("videoUrl", form.videoUrl || "");
         if (imageFile) fd.append("image", imageFile);
-        if (videoFile) fd.append("video", videoFile);
         updated = await materialsService.update(editingMaterial.id, fd);
       } else {
         updated = await materialsService.update(editingMaterial.id, form);
@@ -174,7 +179,9 @@ export const MaterialManager = ({
                     <Input
                       id="material-title"
                       value={form.title}
-                      onChange={(e) => setForm({ ...form, title: e.target.value })}
+                      onChange={(e) =>
+                        setForm({ ...form, title: e.target.value })
+                      }
                     />
                   </div>
                   <div>
@@ -223,14 +230,14 @@ export const MaterialManager = ({
                     />
                   </div>
                   <div>
-                    <Label htmlFor="material-video">Upload Vídeo</Label>
-                    <input
-                      id="material-video"
-                      type="file"
-                      accept="video/mp4,video/webm"
+                    <Label htmlFor="material-video-url">YouTube URL</Label>
+                    <Input
+                      id="material-video-url"
+                      value={form.videoUrl}
                       onChange={(e) =>
-                        setVideoFile(e.target.files?.[0] || null)
+                        setForm({ ...form, videoUrl: e.target.value })
                       }
+                      placeholder="https://www.youtube.com/watch?v=..."
                     />
                   </div>
                   <ImageUpload
@@ -304,7 +311,6 @@ export const MaterialManager = ({
                         minBeltId: m.minBeltId || "white",
                       });
                       setImageFile(null);
-                      setVideoFile(null);
                     }}
                     onDelete={handleDelete}
                   />
@@ -316,12 +322,15 @@ export const MaterialManager = ({
       </Card>
 
       {/* Edit Dialog */}
-      <Dialog open={!!editingMaterial} onOpenChange={(open) => {
-        if (!open) {
-          setEditingMaterial(null);
-          resetForm();
-        }
-      }}>
+      <Dialog
+        open={!!editingMaterial}
+        onOpenChange={(open) => {
+          if (!open) {
+            setEditingMaterial(null);
+            resetForm();
+          }
+        }}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Editar Material</DialogTitle>
@@ -357,12 +366,12 @@ export const MaterialManager = ({
               />
             </div>
             <div>
-              <Label htmlFor="edit-material-video">Vídeo</Label>
-              <input
-                id="edit-material-video"
-                type="file"
-                accept="video/mp4,video/webm"
-                onChange={(e) => setVideoFile(e.target.files?.[0] || null)}
+              <Label htmlFor="edit-material-video-url">YouTube URL</Label>
+              <Input
+                id="edit-material-video-url"
+                value={form.videoUrl}
+                onChange={(e) => setForm({ ...form, videoUrl: e.target.value })}
+                placeholder="https://www.youtube.com/watch?v=..."
               />
             </div>
             <ImageUpload
@@ -377,13 +386,20 @@ export const MaterialManager = ({
                     await uploadService.deleteImage(editingMaterial.imageUrl);
 
                     // Atualizar material no backend para remover URL da imagem
-                    const updated = await materialsService.update(editingMaterial.id, {
-                      ...form,
-                      imageUrl: "",
-                    });
+                    const updated = await materialsService.update(
+                      editingMaterial.id,
+                      {
+                        ...form,
+                        imageUrl: "",
+                      }
+                    );
 
                     // Atualizar lista local
-                    onUpdate(materials.map(m => m.id === editingMaterial.id ? updated : m));
+                    onUpdate(
+                      materials.map((m) =>
+                        m.id === editingMaterial.id ? updated : m
+                      )
+                    );
 
                     // Atualizar formulário e material sendo editado
                     setForm({ ...form, imageUrl: "" });

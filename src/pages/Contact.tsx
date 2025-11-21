@@ -5,6 +5,8 @@ import { MapPin, Phone, Mail, Facebook, Instagram, MessageCircle } from "lucide-
 import { contactSettingsService, locationsService } from "@/services";
 import type { Location } from "@/types";
 import { SEO } from "@/components/SEO";
+import { AnimatedDivider } from "@/components/AnimatedDivider";
+import HERO_IMAGE from "@/assets/images/hero/ContactCover.jpg";
 
 const DEFAULT_WHATSAPP_NUMBER = "18997558617";
 const DEFAULT_WHATSAPP_MESSAGE =
@@ -68,17 +70,21 @@ const Contact = () => {
         keywords="contato karate palmital, dojo palmital telefone, whatsapp karate, aulas karate contato"
       />
       {/* Hero Section */}
-      <section className="relative py-20 border-b border-primary bg-gradient-hero" aria-labelledby="contact-hero">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1571902943202-507ec2618e8f?q=80&w=2075')] bg-cover bg-center opacity-10" />
-        <div className="container mx-auto px-4 relative z-10">
-          <h1 className="text-5xl md:text-6xl font-bold text-primary-foreground text-center mb-6">
-            Entre em Contato
-          </h1>
-          <p className="text-xl text-primary-foreground/90 text-center max-w-3xl mx-auto">
-            Tem dúvidas ou quer começar a treinar? Estamos prontos para ajudar você!
-          </p>
-        </div>
-      </section>
+      <section className="relative py-20 bg-gradient-hero" aria-labelledby="gallery-hero">
+                  <div
+                    className="absolute inset-0 bg-[center_30%] opacity-20 bg-fixed"
+                    style={{ backgroundImage: `url('${HERO_IMAGE}')` }}
+                  />
+                  <div className="container mx-auto px-4 relative z-10">
+                    <h1 id="gallery-hero" className="text-5xl md:text-6xl font-bold text-primary-foreground text-center mb-6">
+                      Entre em Contato
+                    </h1>
+                    <p className="text-xl text-primary-foreground/90 text-center max-w-3xl mx-auto">
+                      Tem dúvidas ou quer começar a treinar? Estamos prontos para ajudar você!
+                    </p>
+                  </div>
+              </section>
+              <AnimatedDivider />
 
       {/* Contact Section */}
       <section className="py-20 bg-gradient-to-br from-background to-secondary/30">
@@ -185,7 +191,8 @@ const Contact = () => {
             </div>
           </div>
         </div>
-      </section>
+    </section>
+    <AnimatedDivider />
     </div>;
 };
 export default Contact;

@@ -42,6 +42,7 @@ const transformLocation = (location: any) => {
       imageUrl: img.imageUrl,
       caption: img.caption,
     })) || [],
+    schedule: obj.schedule || [],
     orderIndex: obj.orderIndex ?? 0,
     createdAt: obj.createdAt,
     updatedAt: obj.updatedAt,
@@ -127,11 +128,21 @@ router.post('/', authenticate, upload.single('image'), async (req: any, res) => 
     }
 
     // Criar novo local
+    let schedule = req.body.schedule;
+    if (typeof schedule === 'string') {
+      try {
+        schedule = JSON.parse(schedule);
+      } catch (e) {
+        schedule = [];
+      }
+    }
+
     const location = await Location.create({
       name,
       description: description || '',
       imageUrl,
       images: [],
+      schedule: schedule || [],
     });
 
     res.json({ location: transformLocation(location) });
@@ -196,6 +207,18 @@ router.put('/:id', authenticate, upload.single('image'), async (req: any, res) =
         }
       }
       location.imageUrl = undefined;
+    }
+
+    if (req.body.schedule) {
+      let schedule = req.body.schedule;
+      if (typeof schedule === 'string') {
+        try {
+          schedule = JSON.parse(schedule);
+        } catch (e) {
+          schedule = [];
+        }
+      }
+      location.schedule = schedule;
     }
 
     await location.save();

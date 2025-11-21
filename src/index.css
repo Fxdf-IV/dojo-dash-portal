@@ -46,7 +46,7 @@ All colors MUST be HSL.
     --dojo-gray: 0 0% 20%;
 
     /* Gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(0 0% 5%) 0%, hsl(0 85% 50%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(0 0% 0%) 15%, hsl(0 75% 25%) 100%);
     --gradient-overlay: linear-gradient(180deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.4) 100%);
 
     /* Shadows */
@@ -132,5 +132,13 @@ All colors MUST be HSL.
 
   .animate-scale-in {
     animation: scale-in 0.3s ease-out;
+  }
+  
+  .text-outline-black {
+    text-shadow: 
+      -1px -1px 0 #000,
+       1px -1px 0 #000,
+      -1px 1px 0 #000,
+       1px 1px 0 #000;
   }
 }

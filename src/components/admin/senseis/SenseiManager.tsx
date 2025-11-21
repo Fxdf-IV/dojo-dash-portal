@@ -104,11 +104,11 @@ export const SenseiManager = ({
       fd.append("rank", form.rank);
       fd.append("description", form.description || "");
       fd.append("orderIndex", form.orderIndex.toString());
-      
+
       if (imageFile) {
         fd.append("image", imageFile);
       }
-      
+
       const updated = await senseisService.update(editingSensei.id, fd);
       onUpdate(senseis.map((s) => (s.id === updated.id ? updated : s)));
       setEditingSensei(null);
@@ -407,29 +407,40 @@ function SortableSenseiCard({
     <div
       ref={setNodeRef}
       style={style}
-      className="border rounded-lg p-4 flex items-start gap-4 bg-card"
+      className="border rounded-lg p-4 flex flex-col sm:flex-row items-start gap-4 bg-card"
     >
-      <button
-        className="cursor-grab active:cursor-grabbing text-muted-foreground pt-1"
-        {...attributes}
-        {...listeners}
-      >
-        <GripVertical className="w-5 h-5" />
-      </button>
+      <div className="flex items-center w-full sm:w-auto gap-3">
+        <button
+          className="cursor-grab active:cursor-grabbing text-muted-foreground pt-1"
+          {...attributes}
+          {...listeners}
+        >
+          <GripVertical className="w-5 h-5" />
+        </button>
 
-      {sensei.imageUrl && (
-        <img
-          src={sensei.imageUrl}
-          alt={sensei.name}
-          className="w-24 h-24 rounded-md object-cover flex-shrink-0"
-        />
-      )}
+        {sensei.imageUrl && (
+          <img
+            src={sensei.imageUrl}
+            alt={sensei.name}
+            className="w-16 h-16 sm:w-24 sm:h-24 rounded-md object-cover flex-shrink-0"
+          />
+        )}
 
-      <div className="flex-1 min-w-0">
-        <h3 className="font-semibold">{sensei.name}</h3>
-        <p className="text-sm text-primary font-medium">
-          {BELT_GRADES.find((b) => b.id === sensei.rank)?.name || sensei.rank}
-        </p>
+        <div className="flex-1 sm:hidden">
+          <h3 className="font-semibold">{sensei.name}</h3>
+          <p className="text-sm text-primary font-medium">
+            {BELT_GRADES.find((b) => b.id === sensei.rank)?.name || sensei.rank}
+          </p>
+        </div>
+      </div>
+
+      <div className="flex-1 min-w-0 w-full">
+        <div className="hidden sm:block">
+          <h3 className="font-semibold">{sensei.name}</h3>
+          <p className="text-sm text-primary font-medium">
+            {BELT_GRADES.find((b) => b.id === sensei.rank)?.name || sensei.rank}
+          </p>
+        </div>
         {sensei.description && (
           <p className="text-sm text-muted-foreground mt-1">
             {sensei.description}
@@ -437,12 +448,12 @@ function SortableSenseiCard({
         )}
       </div>
 
-      <div className="flex gap-2 flex-shrink-0">
-        <Button variant="outline" size="sm" onClick={onEdit}>
+      <div className="flex gap-2 flex-shrink-0 w-full sm:w-auto">
+        <Button variant="outline" size="sm" onClick={onEdit} className="flex-1 sm:flex-none">
           <Pencil className="w-4 h-4 mr-1" />
           Editar
         </Button>
-        <Button variant="outline" size="sm" onClick={onDelete}>
+        <Button variant="outline" size="sm" onClick={onDelete} className="flex-1 sm:flex-none">
           <Trash2 className="w-4 h-4 mr-1" />
           Remover
         </Button>

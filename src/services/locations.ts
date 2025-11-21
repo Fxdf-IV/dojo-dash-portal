@@ -16,12 +16,12 @@ interface ImageResponse {
 export const locationsService = {
   async getAll(): Promise<Location[]> {
     const response = await apiRequest<LocationsResponse>('/locations');
-    return response.locations;
+    return response.locations.map(parseLocation);
   },
 
   async getById(id: string): Promise<Location> {
     const response = await apiRequest<LocationResponse>(`/locations/${id}`);
-    return response.location;
+    return parseLocation(response.location);
   },
 
   async create(data: Partial<Location> | FormData): Promise<Location> {
@@ -48,7 +48,7 @@ export const locationsService = {
       }
 
       const result = await response.json();
-      return result.location;
+      return parseLocation(result.location);
     }
 
     const response = await apiRequest<LocationResponse>('/locations', {
@@ -57,7 +57,7 @@ export const locationsService = {
       requireAuth: true,
     });
 
-    return response.location;
+    return parseLocation(response.location);
   },
 
   async update(id: string, data: Partial<Location> | FormData): Promise<Location> {
@@ -84,7 +84,7 @@ export const locationsService = {
       }
 
       const result = await response.json();
-      return result.location;
+      return parseLocation(result.location);
     }
 
     const response = await apiRequest<LocationResponse>(`/locations/${id}`, {
@@ -93,7 +93,7 @@ export const locationsService = {
       requireAuth: true,
     });
 
-    return response.location;
+    return parseLocation(response.location);
   },
 
   async delete(id: string): Promise<void> {
@@ -164,3 +164,18 @@ export const locationsService = {
   },
 };
 
+const parseLocation = (location: Location): Location => {
+  console.log("Parsing location:", location.name, "Schedule:", location.schedule, "Type:", typeof location.schedule);
+  if (location.schedule && typeof location.schedule === 'string') {
+    try {
+      return {
+        ...location,
+        schedule: JSON.parse(location.schedule),
+      };
+    } catch (e) {
+      console.error('Error parsing schedule:', e);
+      return { ...location, schedule: [] };
+    }
+  }
+  return location;
+};

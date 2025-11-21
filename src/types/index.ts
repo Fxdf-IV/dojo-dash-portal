@@ -47,12 +47,20 @@ export interface LocationImage {
   caption?: string;
 }
 
+export interface ScheduleItem {
+  day: string;
+  startTime: string;
+  endTime: string;
+  activity?: string;
+}
+
 export interface Location {
   id: string;
   name: string;
   description?: string;
   imageUrl?: string;
   images: LocationImage[];
+  schedule?: ScheduleItem[];
   orderIndex?: number;
   createdAt?: string;
   updatedAt?: string;

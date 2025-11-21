@@ -11,6 +11,8 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { locationsService } from "@/services";
 import type { Location } from "@/types";
+import HERO_IMAGE from "@/assets/images/hero/LoginCover.jpg";
+import { AnimatedDivider } from "@/components/AnimatedDivider";
 
 const Login = () => {
   const { toast } = useToast();
@@ -112,145 +114,147 @@ const Login = () => {
       });
     }
   };
-  return <div className="min-h-screen pt-20 flex items-center justify-center bg-gradient-to-br from-background to-secondary/30">
-      <div className="absolute inset-0 bg-gradient-hero opacity-5" />
+  return <><div className="min-h-screen pt-20 flex items-center justify-center relative overflow-hidden">
+    <div className="absolute inset-0 bg-gradient-hero" />
+    <div
+      className="absolute inset-0 bg-cover bg-[center_100%] bg-no-repeat opacity-20 bg-fixed justify-center items-center"
+      style={{ backgroundImage: `url('${HERO_IMAGE}')` }} />
 
-      <div className="container mx-auto px-4 py-12 relative z-10 bg-slate-50">
-        <div className="max-w-md mx-auto">
-          <div className="text-center mb-8">
-            <img src={logo} alt="Alessandro Karatê e Kobudo" className="h-20 w-20 mx-auto mb-4" />
-            <h1 className="text-3xl font-bold text-foreground mb-2">Área do Aluno</h1>
-            <p className="text-muted-foreground">Acesse sua conta ou cadastre-se</p>
-          </div>
+    <div className="container mx-auto px-4 py-12 relative z-10">
+      <div className="max-w-md mx-auto">
+        <div className="text-center mb-8">
+          <img src={logo} alt="Alessandro Karatê e Kobudo" className="h-20 w-20 mx-auto mb-4" />
+          <h1 className="text-3xl font-bold text-primary-foreground mb-4">Área do Aluno</h1>
+          <p className="text-primary-foreground mb-4">Acesse sua conta ou cadastre-se</p>
+        </div>
 
-          <Tabs defaultValue="login" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="login">Login</TabsTrigger>
-              <TabsTrigger value="signup">Cadastro</TabsTrigger>
-            </TabsList>
+        <Tabs defaultValue="login" className="w-full">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger className="hover:text-primary" value="login">Login</TabsTrigger>
+            <TabsTrigger className="hover:text-primary" value="signup">Cadastro</TabsTrigger>
+          </TabsList>
 
-            <TabsContent value="login">
-              <Card className="border-primary/20">
-                <CardHeader>
-                  <CardTitle>Entrar na Conta</CardTitle>
-                  <CardDescription>Digite suas credenciais para acessar</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <form onSubmit={handleLogin} className="space-y-4">
-                    <div>
-                      <Label htmlFor="login-email">Email</Label>
-                      <Input id="login-email" type="email" placeholder="seu@email.com" value={loginData.email} onChange={e => setLoginData({
+          <TabsContent value="login">
+            <Card className="border-primary/20">
+              <CardHeader>
+                <CardTitle>Entrar na Conta</CardTitle>
+                <CardDescription>Digite suas credenciais para acessar</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleLogin} className="space-y-4">
+                  <div>
+                    <Label htmlFor="login-email">Email</Label>
+                    <Input id="login-email" type="email" placeholder="seu@email.com" value={loginData.email} onChange={e => setLoginData({
                       ...loginData,
                       email: e.target.value
                     })} required />
-                    </div>
-                    <div>
-                      <Label htmlFor="login-password">Senha</Label>
-                      <Input id="login-password" type="password" placeholder="••••••••" value={loginData.password} onChange={e => setLoginData({
+                  </div>
+                  <div>
+                    <Label htmlFor="login-password">Senha</Label>
+                    <Input id="login-password" type="password" placeholder="••••••••" value={loginData.password} onChange={e => setLoginData({
                       ...loginData,
                       password: e.target.value
                     })} required />
-                    </div>
-                    <Button type="submit" className="w-full shadow-glow">
-                      Entrar
-                    </Button>
-                    <div className="text-center text-sm text-muted-foreground">
-                      Esqueceu sua senha?{" "}
-                      <span className="text-primary cursor-pointer hover:underline">
-                        Recuperar senha
-                      </span>
-                    </div>
-                  </form>
-                </CardContent>
-              </Card>
-            </TabsContent>
+                  </div>
+                  <Button type="submit" className="w-full shadow-glow">
+                    Entrar
+                  </Button>
+                  <div className="text-center text-sm text-muted-foreground">
+                    Esqueceu sua senha?{" "}
+                    <span className="text-primary cursor-pointer hover:underline">
+                      Recuperar senha
+                    </span>
+                  </div>
+                </form>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-            <TabsContent value="signup">
-              <Card className="border-primary/20">
-                <CardHeader>
-                  <CardTitle>Criar Conta</CardTitle>
-                  <CardDescription>
-                    Preencha os dados para solicitar seu cadastro
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <form onSubmit={handleSignup} className="space-y-4">
-                    <div>
-                      <Label htmlFor="signup-name">Nome Completo</Label>
-                      <Input id="signup-name" type="text" placeholder="Seu nome completo" value={signupData.name} onChange={e => setSignupData({
+          <TabsContent value="signup">
+            <Card className="border-primary/20">
+              <CardHeader>
+                <CardTitle>Criar Conta</CardTitle>
+                <CardDescription>
+                  Preencha os dados para solicitar seu cadastro
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleSignup} className="space-y-4">
+                  <div>
+                    <Label htmlFor="signup-name">Nome Completo</Label>
+                    <Input id="signup-name" type="text" placeholder="Seu nome completo" value={signupData.name} onChange={e => setSignupData({
                       ...signupData,
                       name: e.target.value
                     })} required />
-                    </div>
-                    <div>
-                      <Label htmlFor="signup-email">Email</Label>
-                      <Input id="signup-email" type="email" placeholder="seu@email.com" value={signupData.email} onChange={e => setSignupData({
+                  </div>
+                  <div>
+                    <Label htmlFor="signup-email">Email</Label>
+                    <Input id="signup-email" type="email" placeholder="seu@email.com" value={signupData.email} onChange={e => setSignupData({
                       ...signupData,
                       email: e.target.value
                     })} required />
-                    </div>
-                    <div>
-                      <Label htmlFor="signup-location">Onde você treina?</Label>
-                      <Select
-                        value={signupData.location}
-                        onValueChange={value => setSignupData({
-                          ...signupData,
-                          location: value
-                        })}
-                        disabled={loadingLocations || locationNames.length === 0}
-                      >
-                        <SelectTrigger id="signup-location">
-                          <SelectValue
-                            placeholder={
-                              loadingLocations
-                                ? "Carregando locais..."
-                                : locationNames.length === 0
-                                  ? "Nenhum local disponível"
-                                  : "Selecione o local"
-                            }
-                          />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {locationNames.map(location => (
-                            <SelectItem key={location} value={location}>
-                              {location}
-                            </SelectItem>
-                          ))}
-                          {signupData.location && !locationNames.includes(signupData.location) && (
-                            <SelectItem value={signupData.location}>
-                              {signupData.location}
-                            </SelectItem>
-                          )}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div>
-                      <Label htmlFor="signup-password">Senha</Label>
-                      <Input id="signup-password" type="password" placeholder="••••••••" value={signupData.password} onChange={e => setSignupData({
+                  </div>
+                  <div>
+                    <Label htmlFor="signup-location">Onde você treina?</Label>
+                    <Select
+                      value={signupData.location}
+                      onValueChange={value => setSignupData({
+                        ...signupData,
+                        location: value
+                      })}
+                      disabled={loadingLocations || locationNames.length === 0}
+                    >
+                      <SelectTrigger id="signup-location">
+                        <SelectValue
+                          placeholder={loadingLocations
+                            ? "Carregando locais..."
+                            : locationNames.length === 0
+                              ? "Nenhum local disponível"
+                              : "Selecione o local"} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {locationNames.map(location => (
+                          <SelectItem key={location} value={location}>
+                            {location}
+                          </SelectItem>
+                        ))}
+                        {signupData.location && !locationNames.includes(signupData.location) && (
+                          <SelectItem value={signupData.location}>
+                            {signupData.location}
+                          </SelectItem>
+                        )}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label htmlFor="signup-password">Senha</Label>
+                    <Input id="signup-password" type="password" placeholder="••••••••" value={signupData.password} onChange={e => setSignupData({
                       ...signupData,
                       password: e.target.value
                     })} required />
-                    </div>
-                    <div>
-                      <Label htmlFor="signup-confirm">Confirmar Senha</Label>
-                      <Input id="signup-confirm" type="password" placeholder="••••••••" value={signupData.confirmPassword} onChange={e => setSignupData({
+                  </div>
+                  <div>
+                    <Label htmlFor="signup-confirm">Confirmar Senha</Label>
+                    <Input id="signup-confirm" type="password" placeholder="••••••••" value={signupData.confirmPassword} onChange={e => setSignupData({
                       ...signupData,
                       confirmPassword: e.target.value
                     })} required />
-                    </div>
-                    <Button type="submit" className="w-full shadow-glow">
-                      Solicitar Cadastro
-                    </Button>
-                    <p className="text-xs text-center text-muted-foreground">
-                      Seu cadastro será analisado pela administração e você receberá uma confirmação por email.
-                    </p>
-                  </form>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
-        </div>
+                  </div>
+                  <Button type="submit" className="w-full shadow-glow">
+                    Solicitar Cadastro
+                  </Button>
+                  <p className="text-xs text-center text-muted-foreground">
+                    Seu cadastro será analisado pela administração e você receberá uma confirmação por email.
+                  </p>
+                </form>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </div>
-    </div>;
+    </div>
+  </div>
+  <AnimatedDivider />
+  </>
 };
 export default Login;

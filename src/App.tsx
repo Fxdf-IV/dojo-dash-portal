@@ -32,10 +32,10 @@ const App = () => (
           <Navbar />
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/history" element={<History />} />
-            <Route path="/gallery" element={<Gallery />} />
-            <Route path="/events" element={<Events />} />
-            <Route path="/contact" element={<Contact />} />
+            <Route path="/historia" element={<History />} />
+            <Route path="/galeria" element={<Gallery />} />
+            <Route path="/eventos" element={<Events />} />
+            <Route path="/contato" element={<Contact />} />
             <Route path="/login" element={<Login />} />
             <Route
               path="/pending-approval"

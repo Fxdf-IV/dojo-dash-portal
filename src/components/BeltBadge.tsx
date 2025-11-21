@@ -39,15 +39,20 @@ const BeltBadge = ({ kyu, dan, beltId, className = "" }: BeltBadgeProps) => {
   if (beltId) {
     const belt = BELT_GRADES.find(b => b.id === beltId);
     if (belt) {
+
+      const shouldOutline =
+        belt.rank === "dan" &&
+        (belt.level >= 1 && belt.level <= 6 || belt.color === "#000000");
+
       return (
         <Badge
-          className={`font-semibold ${className}`}
+          className={`font-semibold ${className} ${shouldOutline ? "text-outline-black" : ""}`}
           style={{
             backgroundColor: belt.color,
-            color: belt.rank === 'kyu' && ['white', 'yellow', 'green'].includes(belt.id) ? '#1F2937' : '#FFFFFF'
+            color: belt.rank === "kyu" && ["white", "yellow", "green"].includes(belt.id) ? "#1F2937" : "#FFFFFF"
           }}
         >
-          {belt.rank === 'dan' ? `${belt.level}º Dan` : `${belt.level}º Kyu`}
+          {belt.rank === "dan" ? `${belt.level}º Dan` : `${belt.level}º Kyu`}
         </Badge>
       );
     }
@@ -56,9 +61,12 @@ const BeltBadge = ({ kyu, dan, beltId, className = "" }: BeltBadgeProps) => {
   // Fallback para o sistema antigo (kyu/dan)
   const style = getBeltColor(kyu, dan);
 
+  const shouldOutline =
+    (dan && dan >= 1 && dan <= 6) || style.color === "#000000";
+
   return (
     <Badge
-      className={`font-semibold ${className}`}
+      className={`font-semibold ${className} ${shouldOutline ? "text-outline-black" : ""}`}
       style={{
         ...(style.gradient
           ? { background: style.gradient }

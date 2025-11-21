@@ -2,6 +2,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, Italic } from "lucide-react";
 import BeltGrades from "@/components/BeltGrades";
 import { SEO } from "@/components/SEO";
+import { AnimatedDivider } from "@/components/AnimatedDivider";
+import HERO_IMAGE from "@/assets/images/hero/HistoryCover.jpg";
+
 const History = () => {
   const timeline = [
     {
@@ -64,19 +67,23 @@ const History = () => {
       />
       {/* Hero Section */}
       <section className="relative py-20 bg-gradient-hero" aria-labelledby="history-hero">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1559827260-dc66d52bef19?q=80&w=2070')] bg-cover bg-center opacity-10" />
+        <div
+          className="absolute inset-0 bg-[center_bottom_-18%] bg-center opacity-20 bg-fixed"
+          style={{ backgroundImage: `url('${HERO_IMAGE}')` }}
+        />
         <div className="container mx-auto px-4 relative z-10">
           <h1 className="text-5xl md:text-6xl font-bold text-primary-foreground text-center mb-6">
             Nossa História
           </h1>
           <p className="text-xl text-primary-foreground/90 text-center max-w-3xl mx-auto">
-            Uma jornada de décadas dedicada à tradição, disciplina e formação de caráter através do karatê
+            Uma jornada de décadas dedicada à tradição, disciplina e formação de caráter através do karatê.
           </p>
         </div>
-      </section>
+    </section>
+    <AnimatedDivider />
 
       {/* History of Life and Dojo Section */}
-      <section className="py-20 border-t border-primary bg-gradient-to-br from-background to-secondary/30">
+      <section className="py-20 bg-gradient-to-br from-background to-secondary/30">
         <div className="container mx-auto px-4 max-w-4xl">
           <h2 className="text-4xl font-bold text-center mb-12 text-foreground">
             História de Vida e do Dojo
@@ -132,7 +139,6 @@ const History = () => {
         <br></br>
 
         {/* Philosophy Section */}
-        
           <h2 className="text-4xl font-bold text-center mb-12 text-foreground">
             Filosofia e Tradição
           </h2>
@@ -173,9 +179,14 @@ const History = () => {
       </section>
 
       {/* Timeline Section */}
-      <section className="py-20 border-t border-primary bg-gradient-to-br from-background to-secondary/30">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-16 text-foreground">
+      <section className="py-20 border-t border-primary relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-hero" />
+        <div 
+          className="absolute inset-0 bg-cover bg-center opacity-20 bg-fixed"
+          style={{ backgroundImage: `url('${HERO_IMAGE}')` }}
+        />
+        <div className="container mx-auto px-4 relative z-10">
+          <h2 className="text-4xl font-bold text-center text-primary-foreground mb-16 animate-fade-in">
             Linha do Tempo
           </h2>
 
@@ -202,7 +213,7 @@ const History = () => {
 
       {/* Style Section */}
         <div className="container mx-auto px-4 max-w-4xl mt-12">
-            <h2 className="text-4xl font-bold text-center mb-12 text-foreground">
+            <h2 className="text-4xl font-bold text-center text-primary-foreground mb-16 animate-fade-in">
               Shorin-Ryu Shinshukan
             </h2>
             
@@ -257,17 +268,19 @@ const History = () => {
             </div>
           </div>
         </div>
-      </section>
+    </section>
+    <AnimatedDivider />
     
       {/* Belt Grades Section */}
-      <section className="py-20 border-t border-primary bg-gradient-to-br from-background to-secondary/30">
-        <div className="container mx-auto px-4 max-w-6xl">
-          <h2 className="text-4xl font-bold text-center mb-12 text-foreground">
+      <section className="py-20 border-primary bg-gradient-to-br from-background to-secondary/30">
+        <div className="container mx-auto px-20 max-w-5xl">
+          <h2 className="text-4xl font-bold text-center mb-16 text-foreground">
             Sistema de Graduação
           </h2>
           <BeltGrades />
         </div>
       </section>
-    </div>;
+      <AnimatedDivider />
+  </div>;
 };
 export default History;

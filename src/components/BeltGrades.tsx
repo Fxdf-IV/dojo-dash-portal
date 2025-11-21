@@ -46,7 +46,13 @@ const BeltGrades = () => {
               }
             >
               <span className="font-bold">{grade.level}</span>
-              <span className="ml-2 opacity-90">• {grade.name}</span>
+              <span
+              className={`ml-2 opacity-90 ${
+                (grade.color === "#000000" || grade.level === "6º Dan (Rokudan)") ? "text-outline-black" : ""
+              }`}
+            >
+              • {grade.name}
+            </span>
             </Badge>
           ))}
         </div>

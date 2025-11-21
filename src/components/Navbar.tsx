@@ -10,41 +10,45 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { isAuthenticated, user, logout } = useAuth();
-  const navLinks = [{
-    name: "Início",
-    path: "/"
-  }, {
-    name: "História",
-    path: "/history"
-  }, {
-    name: "Galeria",
-    path: "/gallery"
-  }, {
-    name: "Eventos",
-    path: "/events"
-  }, {
-    name: "Contato",
-    path: "/contact"
-  }];
+  const navLinks = [
+    {
+      name: "Início",
+      path: "/",
+    },
+    {
+      name: "História",
+      path: "/historia",
+    },
+    {
+      name: "Galeria",
+      path: "/galeria",
+    },
+    {
+      name: "Eventos",
+      path: "/eventos",
+    },
+    {
+      name: "Contato",
+      path: "/contato",
+    },
+  ];
   const isActive = (path: string) => {
     if (path.includes("#")) {
       return location.pathname === "/" && location.hash === path.split("#")[1];
     }
     return location.pathname === path;
   };
-  return <nav className="fixed top-0 w-full z-50 bg-secondary border-b border-primary/20" role="navigation" aria-label="Menu principal">
+  return (
+    <nav className="fixed top-0 w-full z-50 bg-secondary border-t border-primary/20">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           <Link to="/" className="flex items-center gap-3 group">
-            <img 
-              src={logo} 
-              alt="Logo Alessandro Karatê e Kobudo" 
+            <img
+              src={logo}
+              alt="Alessandro Karatê e Kobudo"
               className="h-14 w-14 transition-transform group-hover:scale-110"
-              width="56"
-              height="56"
-              loading="eager"
             />
-            <div className="hidden md:block">
+            <div className="md:block">
               <span className="text-primary-foreground font-bold text-xl">Alessandro Karatê e Kobudo</span>
               <p className="text-muted-foreground text-xs">Palmital - SP</p>
             </div>
@@ -52,14 +56,26 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
-            {navLinks.map(link => <Link key={link.path} to={link.path} className={`text-sm font-medium transition-colors hover:text-primary ${isActive(link.path) ? "text-primary" : "text-primary-foreground"}`}>
+            {navLinks.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                className={`text-sm font-medium transition-colors hover:text-primary ${
+                  isActive(link.path)
+                    ? "text-primary"
+                    : "text-primary-foreground"
+                }`}
+              >
                 {link.name}
-              </Link>)}
+              </Link>
+            ))}
             {isAuthenticated ? (
               <>
                 <Link to={user?.role === "admin" ? "/admin" : "/student"}>
                   <Button variant="default" size="sm" className="shadow-glow">
-                    {user?.role === "admin" ? "Área da Administração" : "Área do Aluno"}
+                    {user?.role === "admin"
+                      ? "Área da Administração"
+                      : "Área do Aluno"}
                   </Button>
                 </Link>
                 <Button
@@ -77,32 +93,53 @@ const Navbar = () => {
               </>
             ) : (
               <Link to="/login">
-                <Button variant="default" size="sm" className="shadow-glow">Cadastrar-se / Entrar</Button>
+                <Button variant="default" size="sm" className="shadow-glow">
+                  Cadastrar-se / Entrar
+                </Button>
               </Link>
             )}
           </div>
 
           {/* Mobile Menu Button */}
-          <button 
-            className="md:hidden text-primary-foreground" 
+          <button
+            className="md:hidden text-primary-foreground"
             onClick={() => setIsOpen(!isOpen)}
-            aria-label={isOpen ? "Fechar menu" : "Abrir menu"}
-            aria-expanded={isOpen}
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
 
         {/* Mobile Navigation */}
-        {isOpen && <div className="md:hidden pb-4 space-y-3">
-            {navLinks.map(link => <Link key={link.path} to={link.path} className={`block py-2 text-sm font-medium transition-colors ${isActive(link.path) ? "text-primary" : "text-primary-foreground"}`} onClick={() => setIsOpen(false)}>
+        {isOpen && (
+          <div className="md:hidden pb-4 space-y-3">
+            {navLinks.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                className={`block py-2 text-sm font-medium transition-colors ${
+                  isActive(link.path)
+                    ? "text-primary"
+                    : "text-primary-foreground"
+                }`}
+                onClick={() => setIsOpen(false)}
+              >
                 {link.name}
-              </Link>)}
+              </Link>
+            ))}
             {isAuthenticated ? (
               <>
-                <Link to={user?.role === "admin" ? "/admin" : "/student"} onClick={() => setIsOpen(false)}>
-                  <Button variant="default" size="sm" className="w-full shadow-glow">
-                    {user?.role === "admin" ? "Área da Administração" : "Área do Aluno"}
+                <Link
+                  to={user?.role === "admin" ? "/admin" : "/student"}
+                  onClick={() => setIsOpen(false)}
+                >
+                  <Button
+                    variant="default"
+                    size="sm"
+                    className="w-full shadow-glow"
+                  >
+                    {user?.role === "admin"
+                      ? "Área da Administração"
+                      : "Área do Aluno"}
                   </Button>
                 </Link>
                 <Button
@@ -121,13 +158,19 @@ const Navbar = () => {
               </>
             ) : (
               <Link to="/login" onClick={() => setIsOpen(false)}>
-                <Button variant="default" size="sm" className="w-full shadow-glow">
+                <Button
+                  variant="default"
+                  size="sm"
+                  className="w-full shadow-glow"
+                >
                   Cadastrar-se / Entrar
                 </Button>
               </Link>
             )}
-          </div>}
+          </div>
+        )}
       </div>
-    </nav>;
+    </nav>
+  );
 };
 export default Navbar;
