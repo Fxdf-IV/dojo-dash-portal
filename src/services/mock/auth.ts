@@ -17,6 +17,7 @@ const MOCK_STUDENT: User = {
   email: 'student@test.com',
   role: 'student',
   status: 'active',
+  beltId: 'yellow',
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
 };
