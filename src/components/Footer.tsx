@@ -1,6 +1,7 @@
-import { Facebook, Instagram, Youtube, Mail, Phone, MapPin, Heart } from "lucide-react";
+import { Facebook, Instagram, Mail, Phone, MapPin, Heart } from "lucide-react";
 import logo from "@/assets/logo.webp";
 import manekiIcon from "@/assets/MenekiNeekoIco.webp";
+import { dojoConfig } from "@/config/dojo";
 
 const Footer = () => {
   return <footer className="bg-secondary border-t border-primary/20" role="contentinfo" aria-label="Rodapé do site">
@@ -11,19 +12,19 @@ const Footer = () => {
             <div className="flex items-center gap-3">
               <img 
                 src={logo} 
-                alt="Logo Alessandro Karatê e Kobudo" 
+                alt={`Logo ${dojoConfig.name}`} 
                 className="h-12 w-12"
                 width="48"
                 height="48"
                 loading="lazy"
               />
               <div>
-                <h3 className="text-primary-foreground font-bold text-lg">Alessandro Karatê e Kobudo</h3>
-                <p className="text-muted-foreground text-xs">Dojo Palmital - SP</p>
+                <h3 className="text-primary-foreground font-bold text-lg">{dojoConfig.name}</h3>
+                <p className="text-muted-foreground text-xs">Dojo {dojoConfig.location}</p>
               </div>
             </div>
             <p className="text-sm text-muted-foreground">
-              Tradição, disciplina e respeito. Formando não apenas karatecas, mas cidadãos de caráter.
+              {dojoConfig.description}
             </p>
           </div>
 
@@ -33,15 +34,15 @@ const Footer = () => {
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
                 <Phone size={16} />
-                <span>(18) 99755-8617</span>
+                <span>{dojoConfig.phone}</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
                 <Mail size={16} />
-                <span>alekaratepalmital1@gmail.com</span>
+                <span>{dojoConfig.email}</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
                 <MapPin size={16} />
-                <span>Palmital - SP</span>
+                <span>{dojoConfig.location}</span>
               </div>
             </div>
           </div>
@@ -51,7 +52,7 @@ const Footer = () => {
             <h4 className="text-primary-foreground font-semibold text-lg">Redes Sociais</h4>
             <div className="flex gap-4">
               <a 
-                href="https://www.facebook.com/alessandrodokarate" 
+                href={dojoConfig.social.facebook} 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="p-2 bg-primary/10 rounded-full text-primary hover:bg-primary hover:text-primary-foreground transition-all"
@@ -60,7 +61,7 @@ const Footer = () => {
                 <Facebook size={20} />
               </a>
               <a 
-                href="https://www.instagram.com/alessandrodokarate/" 
+                href={dojoConfig.social.instagram} 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="p-2 bg-primary/10 rounded-full text-primary hover:bg-primary hover:text-primary-foreground transition-all"
