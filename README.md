@@ -15,6 +15,21 @@ npm run dev
 
 Servidor roda em: **http://localhost:8080**
 
+## 🎨 Modo Portfólio (Mock Mode)
+
+Este projeto possui um modo especial para demonstração em portfólio, onde não é necessário rodar o backend (API/MongoDB). Neste modo, a aplicação utiliza dados fictícios (mock data) para simular todas as funcionalidades.
+
+### Como ativar
+
+1. Crie ou edite o arquivo `.env` na raiz do projeto.
+2. Defina a variável `VITE_USE_MOCK` como `true`:
+
+```env
+VITE_USE_MOCK=true
+```
+
+3. Reinicie o servidor de desenvolvimento: `npm run dev`.
+
 ## 📚 Documentação
 
 - **[API Documentation](./docs/API_DOCUMENTATION.md)** - Referência completa da API

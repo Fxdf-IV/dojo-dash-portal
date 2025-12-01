@@ -1,12 +1,26 @@
 // Export central de todos os services
 
-export { authService } from './auth';
-export { studentsService } from './students';
-export { materialsService } from './materials';
-export { locationsService } from './locations';
-export { senseisService } from './senseis';
-export { contactsService } from './contacts';
-export { contactSettingsService } from './contactSettings';
-export { eventsService } from './events';
-export { usersService } from './users';
+const useMock = import.meta.env.VITE_USE_MOCK === 'true';
+
+import { senseisService as realSenseis } from './senseis';
+import { senseisService as mockSenseis } from './mock/senseis';
+
+import { locationsService as realLocations } from './locations';
+import { locationsService as mockLocations } from './mock/locations';
+
+import { eventsService as realEvents } from './events';
+import { eventsService as mockEvents } from './mock/events';
+
+export const senseisService = useMock ? mockSenseis : realSenseis;
+export const locationsService = useMock ? mockLocations : realLocations;
+export const eventsService = useMock ? mockEvents : realEvents;
+
+export * from './auth';
+export * from './users';
+export * from './students';
+export * from './materials';
+export * from './contacts';
+export * from './upload';
+export * from './contactSettings';
 export { apiRequest, ApiError, getAuthToken, setAuthToken, clearAuthToken } from './api';
+
