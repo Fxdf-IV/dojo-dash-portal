@@ -45,4 +45,11 @@ export const authService = {
       requireAuth: true,
     });
   },
+
+  async requestPasswordReset(email: string): Promise<{ success: boolean; message?: string }> {
+    return await apiRequest<{ success: boolean; message?: string }>('/auth/request-password-reset', {
+      method: 'POST',
+      body: JSON.stringify({ email }),
+    });
+  },
 };

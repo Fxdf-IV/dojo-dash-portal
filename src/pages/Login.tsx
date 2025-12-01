@@ -6,12 +6,12 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo.webp";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
-import { locationsService } from "@/services";
+import { locationsService, authService } from "@/services";
 import type { Location } from "@/types";
-import HERO_IMAGE from "@/assets/images/hero/LoginCover.jpg";
+import HERO_IMAGE from "@/assets/images/hero/LoginCover.webp";
 import { AnimatedDivider } from "@/components/AnimatedDivider";
 
 const Login = () => {
@@ -141,10 +141,38 @@ const Login = () => {
                 <CardDescription>Digite suas credenciais para acessar</CardDescription>
               </CardHeader>
               <CardContent>
-                <form onSubmit={handleLogin} className="space-y-4">
+                <form onSubmit={async (e) => {
+                  e.preventDefault();
+                  try {
+                    // Backend handles email or username logic automatically
+                    const { user } = await login(loginData.email, loginData.password);
+                    toast({
+                      title: "Login realizado com sucesso!",
+                      description: "Redirecionando para sua área..."
+                    });
+                    setTimeout(() => {
+                      // Check if student is pending approval
+                      if (user?.role === 'student' && user?.status === 'pending') {
+                        navigate("/pending-approval");
+                      } else if (user?.role === 'student') {
+                        navigate("/student");
+                      } else if (user?.role === 'admin') {
+                        navigate("/admin");
+                      } else {
+                        navigate("/");
+                      }
+                    }, 1000);
+                  } catch (error) {
+                    toast({
+                      title: "Erro no login",
+                      description: "Credenciais inválidas. Tente novamente.",
+                      variant: "destructive"
+                    });
+                  }
+                }} className="space-y-4">
                   <div>
-                    <Label htmlFor="login-email">Email</Label>
-                    <Input id="login-email" type="email" placeholder="seu@email.com" value={loginData.email} onChange={e => setLoginData({
+                    <Label htmlFor="login-email">Email ou Usuário</Label>
+                    <Input id="login-email" type="text" placeholder="seu@email.com ou seu.usuario" value={loginData.email} onChange={e => setLoginData({
                       ...loginData,
                       email: e.target.value
                     })} required />
@@ -161,7 +189,38 @@ const Login = () => {
                   </Button>
                   <div className="text-center text-sm text-muted-foreground">
                     Esqueceu sua senha?{" "}
-                    <span className="text-primary cursor-pointer hover:underline">
+                    <span
+                      className="text-primary cursor-pointer hover:underline"
+                      onClick={async () => {
+                        if (!loginData.email) {
+                          toast({
+                            title: "Campo obrigatório",
+                            description: "Por favor, insira seu email no campo de login para recupera a senha.",
+                            variant: "destructive",
+                          });
+                          return;
+                        }
+
+                        try {
+                          const response = await authService.requestPasswordReset(loginData.email);
+                          if (response.success) {
+                            navigate("/pending-approval");
+                          } else {
+                            toast({
+                              title: "Email não encontrado",
+                              description: "Email não cadastrado. Entre em contato com um de seus senseis.",
+                              variant: "destructive",
+                            });
+                          }
+                        } catch (error) {
+                          toast({
+                            title: "Erro",
+                            description: "Erro ao verificar email. Tente novamente.",
+                            variant: "destructive",
+                          });
+                        }
+                      }}
+                    >
                       Recuperar senha
                     </span>
                   </div>

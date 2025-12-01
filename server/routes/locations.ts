@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import express from 'express';
 import multer from 'multer';
 import Location from '../models/Location.js';
 import Image from '../models/Image.js';
@@ -10,7 +9,7 @@ const router = Router();
 // Configurar multer para armazenar em memória (não em disco)
 const storage = multer.memoryStorage();
 
-const fileFilter = (req: express.Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
+const fileFilter = (req: any, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
   const allowedTypes = /jpeg|jpg|png|gif|webp/;
   const extname = allowedTypes.test(file.originalname.toLowerCase());
   const mimetype = allowedTypes.test(file.mimetype);
@@ -37,6 +36,7 @@ const transformLocation = (location: any) => {
     id: obj._id.toString(),
     name: obj.name,
     description: obj.description,
+    mapUrl: obj.mapUrl,
     imageUrl: obj.imageUrl,
     images: obj.images?.map((img: any) => ({
       imageUrl: img.imageUrl,
@@ -60,7 +60,7 @@ router.get('/', async (req, res) => {
 });
 
 // PUT /api/locations/reorder - Atualizar ordem dos locais
-router.put('/reorder', authenticate, async (req: any, res) => {
+router.put('/reorder', authenticate, requireAdmin, async (req: any, res) => {
   try {
     const { locations: locationsOrder } = req.body;
 
@@ -100,9 +100,9 @@ router.get('/:id', async (req, res) => {
 });
 
 // POST /api/locations - Criar novo local
-router.post('/', authenticate, upload.single('image'), async (req: any, res) => {
+router.post('/', authenticate, requireAdmin, upload.single('image'), async (req: any, res) => {
   try {
-    const { name, description } = req.body;
+    const { name, description, mapUrl } = req.body;
 
     if (!name) {
       return res.status(400).json({ error: 'Nome do local é obrigatório' });
@@ -140,6 +140,7 @@ router.post('/', authenticate, upload.single('image'), async (req: any, res) => 
     const location = await Location.create({
       name,
       description: description || '',
+      mapUrl: mapUrl || '',
       imageUrl,
       images: [],
       schedule: schedule || [],
@@ -153,9 +154,9 @@ router.post('/', authenticate, upload.single('image'), async (req: any, res) => 
 });
 
 // PUT /api/locations/:id - Atualizar local
-router.put('/:id', authenticate, upload.single('image'), async (req: any, res) => {
+router.put('/:id', authenticate, requireAdmin, upload.single('image'), async (req: any, res) => {
   try {
-    const { name, description, removeImage } = req.body;
+    const { name, description, mapUrl, removeImage } = req.body;
 
     const location = await Location.findById(req.params.id);
 
@@ -165,6 +166,7 @@ router.put('/:id', authenticate, upload.single('image'), async (req: any, res) =
 
     location.name = name || location.name;
     location.description = description !== undefined ? description : location.description;
+    location.mapUrl = mapUrl !== undefined ? mapUrl : location.mapUrl;
 
     if (req.file && req.file.buffer) {
       // Remover imagem anterior do banco se existir
@@ -231,7 +233,7 @@ router.put('/:id', authenticate, upload.single('image'), async (req: any, res) =
 });
 
 // DELETE /api/locations/:id
-router.delete('/:id', authenticate, async (req: any, res) => {
+router.delete('/:id', authenticate, requireAdmin, async (req: any, res) => {
   try {
     const location = await Location.findById(req.params.id);
 
@@ -275,7 +277,7 @@ router.delete('/:id', authenticate, async (req: any, res) => {
 });
 
 // POST /api/locations/:id/images - Adicionar imagens à galeria
-router.post('/:id/images', authenticate, upload.array('images', 20), async (req: any, res) => {
+router.post('/:id/images', authenticate, requireAdmin, upload.array('images', 20), async (req: any, res) => {
   try {
     const locationId = req.params.id;
     const location = await Location.findById(locationId);
@@ -307,7 +309,7 @@ router.post('/:id/images', authenticate, upload.array('images', 20), async (req:
 
         const imageId = (image as any)._id.toString();
         const imageUrl = `/api/upload/image/${imageId}`;
-        
+
         newImages.push({
           imageUrl,
           caption: '',
@@ -328,7 +330,7 @@ router.post('/:id/images', authenticate, upload.array('images', 20), async (req:
 });
 
 // DELETE /api/locations/:id/images/:imageIndex
-router.delete('/:id/images/:imageIndex', authenticate, async (req: any, res) => {
+router.delete('/:id/images/:imageIndex', authenticate, requireAdmin, async (req: any, res) => {
   try {
     const location = await Location.findById(req.params.id);
 

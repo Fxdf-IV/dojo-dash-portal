@@ -2,7 +2,9 @@ import mongoose, { Schema, Document } from 'mongoose';
 import bcrypt from 'bcryptjs';
 
 export interface IUser extends Document {
-  email: string;
+  name?: string;
+  email?: string;
+  username?: string;
   password: string;
   role: 'admin' | 'student';
   createdAt: Date;
@@ -11,21 +13,34 @@ export interface IUser extends Document {
 }
 
 const UserSchema = new Schema<IUser>({
-  email: { type: String, required: true, unique: true, lowercase: true },
+  name: { type: String },
+  email: { type: String, lowercase: true },
+  username: { type: String, lowercase: true },
   password: { type: String, required: true },
   role: { type: String, enum: ['admin', 'student'], default: 'student' },
 }, { timestamps: true });
 
+// Validar que pelo menos um dos dois (email ou username) existe
+UserSchema.pre('validate', function(next) {
+  if (!this.email && !this.username) {
+    next(new Error('Usuário deve ter email ou nome de usuário'));
+  } else {
+    next();
+  }
+});
+
 // Hash password antes de salvar
 UserSchema.pre('save', async function(next) {
-  if (!this.isModified('password')) return next();
-  this.password = await bcrypt.hash(this.password, 10);
+  const user = this as any as IUser;
+  if (!user.isModified('password')) return next();
+  user.password = await bcrypt.hash(user.password, 10);
   next();
 });
 
 // Método para comparar senha
 UserSchema.methods.comparePassword = async function(candidatePassword: string) {
-  return bcrypt.compare(candidatePassword, this.password);
+  const user = this as any as IUser;
+  return bcrypt.compare(candidatePassword, user.password);
 };
 
-export default mongoose.model<IUser>('User', UserSchema);
+export default mongoose.models.User || mongoose.model<IUser>('User', UserSchema);

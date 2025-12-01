@@ -10,4 +10,4 @@ const ContactSettingsSchema = new Schema<IContactSettings>({
   whatsappMessage: { type: String, required: true, default: 'Olá, gostaria de conhecer o karatê do Alessandro Dojo. Como eu posso começar?' },
 }, { timestamps: true });
 
-export default mongoose.model<IContactSettings>('ContactSettings', ContactSettingsSchema);
+export default mongoose.models.ContactSettings || mongoose.model<IContactSettings>('ContactSettings', ContactSettingsSchema);

@@ -10,7 +10,7 @@ import { materialsService } from "@/services";
 import type { Material } from "@/types";
 import { useToast } from "@/hooks/use-toast";
 import { getBeltDisplay } from "@/constants/beltDisplay";
-import YouTubeEmbed, { useIsYouTubeUrl } from "@/components/ui/youtube-embed";
+import YouTubeEmbed, { isYouTubeUrl } from "@/components/ui/youtube-embed";
 import { AnimatedDivider } from "@/components/AnimatedDivider";
 
 const StudentDashboard = () => {
@@ -184,7 +184,7 @@ const StudentDashboard = () => {
                           <p className="text-sm text-muted-foreground">{kihon.content}</p>
                         )}
                         {kihon.videoUrl ? (
-                          useIsYouTubeUrl(kihon.videoUrl) ? (
+                          isYouTubeUrl(kihon.videoUrl) ? (
                             <YouTubeEmbed
                               url={kihon.videoUrl}
                               title={kihon.title}
@@ -240,7 +240,7 @@ const StudentDashboard = () => {
                         )}
                         <div className="space-y-3">
                           {kata.videoUrl ? (
-                            useIsYouTubeUrl(kata.videoUrl) ? (
+                            isYouTubeUrl(kata.videoUrl) ? (
                               <YouTubeEmbed
                                 url={kata.videoUrl}
                                 title={kata.title}
@@ -312,7 +312,7 @@ const StudentDashboard = () => {
                           </div>
                         )}
                         {item.videoUrl && (
-                          useIsYouTubeUrl(item.videoUrl) ? (
+                          isYouTubeUrl(item.videoUrl) ? (
                             <YouTubeEmbed
                               url={item.videoUrl}
                               title={item.title}
@@ -373,7 +373,7 @@ const StudentDashboard = () => {
                           </div>
                         )}
                         {bunkai.videoUrl && (
-                          useIsYouTubeUrl(bunkai.videoUrl) ? (
+                          isYouTubeUrl(bunkai.videoUrl) ? (
                             <YouTubeEmbed
                               url={bunkai.videoUrl}
                               title={bunkai.title}

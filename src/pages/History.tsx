@@ -3,7 +3,7 @@ import { Calendar, Italic } from "lucide-react";
 import BeltGrades from "@/components/BeltGrades";
 import { SEO } from "@/components/SEO";
 import { AnimatedDivider } from "@/components/AnimatedDivider";
-import HERO_IMAGE from "@/assets/images/hero/HistoryCover.jpg";
+import HERO_IMAGE from "@/assets/images/hero/HistoryCover.webp";
 
 const History = () => {
   const timeline = [
@@ -68,7 +68,7 @@ const History = () => {
       {/* Hero Section */}
       <section className="relative py-20 bg-gradient-hero" aria-labelledby="history-hero">
         <div
-          className="absolute inset-0 bg-[center_bottom_-18%] bg-center opacity-20 bg-fixed"
+          className="absolute inset-0 bg-cover opacity-20 bg-fixed bg-[center_-25rem]"
           style={{ backgroundImage: `url('${HERO_IMAGE}')` }}
         />
         <div className="container mx-auto px-4 relative z-10">

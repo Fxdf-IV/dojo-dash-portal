@@ -6,6 +6,7 @@ export interface User {
   id: string;
   name: string;
   email: string;
+  username?: string;
   role: UserRole;
   beltId?: string;
   location?: string;
@@ -51,13 +52,13 @@ export interface ScheduleItem {
   day: string;
   startTime: string;
   endTime: string;
-  activity?: string;
 }
 
 export interface Location {
   id: string;
   name: string;
   description?: string;
+  mapUrl?: string;
   imageUrl?: string;
   images: LocationImage[];
   schedule?: ScheduleItem[];

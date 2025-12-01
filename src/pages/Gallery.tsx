@@ -10,6 +10,7 @@ import {
   Image as ImageIcon,
   ChevronLeft,
   ChevronRight,
+  ArrowDown,
 } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useState, useEffect } from "react";
@@ -18,7 +19,9 @@ import type { Location } from "@/types";
 import { SEO } from "@/components/SEO";
 import { LoadingSpinner } from "@/components/LoadingStates";
 import { AnimatedDivider } from "@/components/AnimatedDivider";
-import HERO_IMAGE from "@/assets/images/hero/GalleryCover.jpg";
+import HERO_IMAGE from "@/assets/images/hero/GalleryCover.webp";
+
+const INITIAL_VISIBLE_COUNT = 12;
 
 const Gallery = () => {
   const [locations, setLocations] = useState<Location[]>([]);
@@ -27,6 +30,7 @@ const Gallery = () => {
 
   const [pageSize, setPageSize] = useState<number>(4); // responsive number of visible items
   const [startIndex, setStartIndex] = useState<number>(0); // window start for visible items
+  const [visibleImagesCount, setVisibleImagesCount] = useState<number>(INITIAL_VISIBLE_COUNT);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [modalImage, setModalImage] = useState<{
     imageUrl: string;
@@ -63,6 +67,7 @@ const Gallery = () => {
   // keep visible window in sync when selection changes
   useEffect(() => {
     if (!selectedLocation) return;
+    setVisibleImagesCount(INITIAL_VISIBLE_COUNT); // Reset visible images when location changes
     const idx = locations.findIndex((l) => l.id === selectedLocation);
     if (idx < 0) return;
     // if selected is before window, shift window left
@@ -112,7 +117,7 @@ const Gallery = () => {
         aria-labelledby="gallery-hero"
       >
         <div
-          className="absolute inset-0 bg-cover bg-[center_bottom_-25%] opacity-20 bg-fixed"
+          className="absolute inset-0 bg-cover opacity-20 bg-fixed bg-[center_-20rem]"
           style={{ backgroundImage: `url('${HERO_IMAGE}')` }}
         />
         <div className="container mx-auto px-4 relative z-10">
@@ -230,51 +235,71 @@ const Gallery = () => {
 
                     {/* Photo Grid */}
                     {location.images && location.images.length > 0 ? (
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-                        {location.images.map((image, imageIndex) => (
-                          <Card
-                            key={imageIndex}
-                            className="border-primary/20 hover:border-primary transition-all hover:shadow-glow overflow-hidden group cursor-pointer animate-scale-in"
-                            onClick={() => {
-                              setModalImage({
-                                imageUrl: image.imageUrl,
-                                caption: image.caption,
-                              });
-                              setModalOpen(true);
-                            }}
-                            style={{ animationDelay: `${imageIndex * 0.05}s` }}
-                          >
-                            <CardContent className="p-0">
-                              <div className="aspect-[4/3] overflow-hidden relative">
-                                <img
-                                  src={image.imageUrl}
-                                  alt={
-                                    image.caption ||
-                                    `Foto ${imageIndex + 1} do local ${
-                                      location.name
-                                    }`
-                                  }
-                                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                                  loading="lazy"
-                                  width="400"
-                                  height="300"
-                                />
-                                {image.caption && (
-                                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                                    <p className="text-white text-sm font-medium">
-                                      {image.caption}
-                                    </p>
+                      <div className="flex flex-col gap-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+                          {location.images
+                            .slice(0, visibleImagesCount)
+                            .map((image, imageIndex) => (
+                              <Card
+                                key={imageIndex}
+                                className="border-primary/20 hover:border-primary transition-all hover:shadow-glow overflow-hidden group cursor-pointer animate-scale-in"
+                                onClick={() => {
+                                  setModalImage({
+                                    imageUrl: image.imageUrl,
+                                    caption: image.caption,
+                                  });
+                                  setModalOpen(true);
+                                }}
+                                style={{
+                                  animationDelay: `${imageIndex * 0.05}s`,
+                                }}
+                              >
+                                <CardContent className="p-0">
+                                  <div className="aspect-[4/3] overflow-hidden relative">
+                                    <img
+                                      src={image.imageUrl}
+                                      alt={
+                                        image.caption ||
+                                        `Foto ${imageIndex + 1} do local ${
+                                          location.name
+                                        }`
+                                      }
+                                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                      loading="lazy"
+                                      width="400"
+                                      height="300"
+                                    />
+                                    {image.caption && (
+                                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                                        <p className="text-white text-sm font-medium">
+                                          {image.caption}
+                                        </p>
+                                      </div>
+                                    )}
+                                    <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/10 transition-colors duration-300 flex items-center justify-center">
+                                      <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                        <ImageIcon className="w-12 h-12 text-white drop-shadow-lg" />
+                                      </div>
+                                    </div>
                                   </div>
-                                )}
-                                <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/10 transition-colors duration-300 flex items-center justify-center">
-                                  <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    <ImageIcon className="w-12 h-12 text-white drop-shadow-lg" />
-                                  </div>
-                                </div>
-                              </div>
-                            </CardContent>
-                          </Card>
-                        ))}
+                                </CardContent>
+                              </Card>
+                            ))}
+                        </div>
+
+                        {visibleImagesCount < location.images.length && (
+                          <div className="text-center pt-8 pb-4">
+                            <button
+                              onClick={() =>
+                                setVisibleImagesCount((prev) => prev + INITIAL_VISIBLE_COUNT)
+                              }
+                              className="group inline-flex items-center gap-2 text-lg font-medium text-foreground hover:text-primary transition-colors"
+                            >
+                              Ver mais
+                              <ArrowDown className="w-5 h-5 group-hover:translate-y-1 transition-transform" />
+                            </button>
+                          </div>
+                        )}
                       </div>
                     ) : (
                       <div className="text-center py-12">

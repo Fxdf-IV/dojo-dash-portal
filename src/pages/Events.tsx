@@ -1,19 +1,13 @@
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Calendar, Clock, Users, CheckCircle, XCircle } from "lucide-react";
 import { eventsService } from "@/services";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import type { Event } from "@/types";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
-import { normalizeImageUrl } from "@/utils/imageUrl";
 import { SEO } from "@/components/SEO";
 import { LoadingSpinner } from "@/components/LoadingStates";
 import { AnimatedDivider } from "@/components/AnimatedDivider";
-import HERO_IMAGE from "@/assets/images/hero/EventCover.jpg";
+import HERO_IMAGE from "@/assets/images/hero/EventCover.webp";
+import { EventCard } from "@/components/EventCard";
 
 const Events = () => {
   const { user } = useAuth();
@@ -31,10 +25,11 @@ const Events = () => {
       setLoading(true);
       const data = await eventsService.getAll();
       setEvents(data);
-    } catch (error: any) {
+    } catch (error) {
+      const err = error as Error;
       toast({
         title: "Erro ao carregar eventos",
-        description: error.message || "Não foi possível carregar os eventos.",
+        description: err.message || "Não foi possível carregar os eventos.",
         variant: "destructive",
       });
     } finally {
@@ -60,10 +55,11 @@ const Events = () => {
         title: "Inscrição confirmada!",
         description: "Sua presença foi confirmada no evento.",
       });
-    } catch (error: any) {
+    } catch (error) {
+      const err = error as Error;
       toast({
         title: "Erro ao se inscrever",
-        description: error.message || "Não foi possível confirmar sua presença.",
+        description: err.message || "Não foi possível confirmar sua presença.",
         variant: "destructive",
       });
     } finally {
@@ -82,10 +78,11 @@ const Events = () => {
         title: "Inscrição cancelada",
         description: "Sua presença foi cancelada no evento.",
       });
-    } catch (error: any) {
+    } catch (error) {
+      const err = error as Error;
       toast({
         title: "Erro ao cancelar inscrição",
-        description: error.message || "Não foi possível cancelar sua inscrição.",
+        description: err.message || "Não foi possível cancelar sua inscrição.",
         variant: "destructive",
       });
     } finally {
@@ -105,22 +102,7 @@ const Events = () => {
   const upcomingEvents = events.filter(e => !isPastEvent(e));
   const pastEvents = events.filter(e => isPastEvent(e));
 
-  const renderEventImage = (imageUrl?: string, title?: string) => {
-    const normalized = normalizeImageUrl(imageUrl);
-    const src = normalized || "/placeholder.svg";
-    return (
-      <div className="aspect-video overflow-hidden bg-muted/50">
-        <img
-          src={src}
-          alt={title ? `Imagem do evento ${title}` : "Imagem do evento"}
-          className="w-full h-full object-cover"
-          loading="lazy"
-          width="640"
-          height="360"
-        />
-      </div>
-    );
-  };
+
 
   return (
     <div className="min-h-screen pt-20">
@@ -132,7 +114,7 @@ const Events = () => {
       {/* Hero Section */}
       <section className="relative py-20 bg-gradient-hero" aria-labelledby="gallery-hero">
               <div
-                className="absolute inset-0 bg-cover bg-[center_20%] opacity-20"
+                className="absolute inset-0 opacity-20 bg-fixed bg-[length:100%_auto] bg-[center_5rem] bg-no-repeat" 
                 style={{ backgroundImage: `url('${HERO_IMAGE}')` }}
               />
               <div className="container mx-auto px-4 relative z-10">
@@ -161,74 +143,16 @@ const Events = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {upcomingEvents.map((event) => (
-                <Card key={event.id} className="border-primary/20 hover:border-primary transition-all hover:shadow-glow overflow-hidden">
-                  {renderEventImage(event.imageUrl, event.title)}
-                  <CardHeader>
-                    <CardTitle className="text-2xl">{event.title}</CardTitle>
-                    <CardDescription className="flex flex-wrap items-center gap-4 mt-2">
-                      <span className="flex items-center gap-1">
-                        <Calendar className="w-4 h-4" />
-                        {format(new Date(event.date), "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Clock className="w-4 h-4" />
-                        {format(new Date(event.date), "HH:mm")}
-                      </span>
-                      {event.registrationPrice !== undefined && event.registrationPrice > 0 && (
-                        <span className="flex items-center gap-1 text-primary font-semibold">
-                          R$ {event.registrationPrice.toFixed(2).replace('.', ',')}
-                        </span>
-                      )}
-                      {(!event.registrationPrice || event.registrationPrice === 0) && (
-                        <span className="flex items-center gap-1 text-green-600 dark:text-green-400 font-semibold">
-                          Gratuito
-                        </span>
-                      )}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    {event.description && (
-                      <p className="text-muted-foreground mb-4">{event.description}</p>
-                    )}
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <Users className="w-4 h-4" />
-                        <span>{event.registeredCount} inscrito(s)</span>
-                      </div>
-                      {user && (
-                        <Button
-                          onClick={() =>
-                            isRegistered(event)
-                              ? handleUnregister(event.id)
-                              : handleRegister(event.id)
-                          }
-                          disabled={registering === event.id}
-                          variant={isRegistered(event) ? "outline" : "default"}
-                          size="sm"
-                        >
-                          {registering === event.id ? (
-                            "Processando..."
-                          ) : isRegistered(event) ? (
-                            <>
-                              <XCircle className="w-4 h-4 mr-2" />
-                              Cancelar
-                            </>
-                          ) : (
-                            <>
-                              <CheckCircle className="w-4 h-4 mr-2" />
-                              Confirmar Presença
-                            </>
-                          )}
-                        </Button>
-                      )}
-                    </div>
-                    {!user && (
-                      <p className="text-sm text-muted-foreground mt-2">
-                        Faça login para se inscrever no evento
-                      </p>
-                    )}
-                  </CardContent>
-                </Card>
+                <EventCard
+                  key={event.id}
+                  event={event}
+                  isRegistered={isRegistered(event)}
+                  isRegistering={registering === event.id}
+                  isPast={false}
+                  onRegister={handleRegister}
+                  onUnregister={handleUnregister}
+                  showActions={!!user}
+                />
               ))}
             </div>
           )}
@@ -244,40 +168,16 @@ const Events = () => {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {pastEvents.map((event) => (
-                <Card key={event.id} className="border-primary/20 opacity-75">
-                  {renderEventImage(event.imageUrl, event.title)}
-                  <CardHeader>
-                    <CardTitle className="text-2xl">{event.title}</CardTitle>
-                    <CardDescription className="flex flex-wrap items-center gap-4 mt-2">
-                      <span className="flex items-center gap-1">
-                        <Calendar className="w-4 h-4" />
-                        {format(new Date(event.date), "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
-                      </span>
-                      {event.registrationPrice !== undefined && event.registrationPrice > 0 && (
-                        <span className="flex items-center gap-1 text-primary font-semibold">
-                          R$ {event.registrationPrice.toFixed(2).replace('.', ',')}
-                        </span>
-                      )}
-                      {(!event.registrationPrice || event.registrationPrice === 0) && (
-                        <span className="flex items-center gap-1 text-green-600 dark:text-green-400 font-semibold">
-                          Gratuito
-                        </span>
-                      )}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    {event.description && (
-                      <p className="text-muted-foreground mb-4">{event.description}</p>
-                    )}
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Users className="w-4 h-4" />
-                      <span>{event.registeredCount} participante(s)</span>
-                    </div>
-                    <Badge variant="secondary" className="mt-2">
-                      Evento Realizado
-                    </Badge>
-                  </CardContent>
-                </Card>
+                <EventCard
+                  key={event.id}
+                  event={event}
+                  isRegistered={isRegistered(event)}
+                  isRegistering={false}
+                  isPast={true}
+                  onRegister={() => {}}
+                  onUnregister={() => {}}
+                  showActions={false}
+                />
               ))}
             </div>
           </div>

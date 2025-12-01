@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
 import type { Connect } from 'vite';
 import { connectDatabase } from './config/database.js';
 
@@ -12,6 +13,7 @@ import senseisRoutes from './routes/senseis.js';
 import contactsRoutes from './routes/contacts.js';
 import uploadRoutes from './routes/upload.js';
 import eventsRoutes from './routes/events.js';
+import usersRoutes from './routes/users.js';
 
 export function setupApiServer(middlewares: Connect.Server) {
   // Conectar ao MongoDB
@@ -19,6 +21,12 @@ export function setupApiServer(middlewares: Connect.Server) {
 
   // Criar app Express para rotas API
   const app = express();
+
+  // Security Headers
+  // Em desenvolvimento, precisamos relaxar a CSP para permitir que o Vite funcione (scripts inline, etc)
+  app.use(helmet({
+    contentSecurityPolicy: process.env.NODE_ENV === 'production' ? undefined : false,
+  }));
 
   // CORS configuration
   app.use(cors({
@@ -29,7 +37,7 @@ export function setupApiServer(middlewares: Connect.Server) {
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   }));
-  
+
   // Servir arquivos estáticos da pasta public (para outros arquivos estáticos, não uploads)
   app.use(express.static('public', {
     maxAge: '1y', // Cache por 1 ano para arquivos estáticos
@@ -54,7 +62,7 @@ export function setupApiServer(middlewares: Connect.Server) {
     }
     express.json()(req, res, next);
   });
-  
+
   app.use((req, res, next) => {
     // Pular middlewares JSON/URL encoded para rotas de upload
     if (req.path.startsWith('/api/upload')) {
@@ -65,6 +73,11 @@ export function setupApiServer(middlewares: Connect.Server) {
 
   // Logging middleware (dev)
   app.use((req, res, next) => {
+    // Only log in development mode or if explicitly enabled
+    if (process.env.NODE_ENV === 'production') {
+      next();
+      return;
+    }
 
     if (!req.path.startsWith('/api')) {
       next();
@@ -72,18 +85,22 @@ export function setupApiServer(middlewares: Connect.Server) {
     }
 
     console.log(`[API] ${req.method} ${req.path}`);
-    
+
     // Não tentar ler o body em rotas de upload (multipart/form-data)
     if (!req.path.startsWith('/api/upload')) {
-      console.log('Body:', req.body);
+      // Limit body logging to avoid clutter
+      const body = req.body;
+      if (body && Object.keys(body).length > 0) {
+         console.log('Body:', JSON.stringify(body).substring(0, 200) + (JSON.stringify(body).length > 200 ? '...' : ''));
+      }
     } else {
       console.log('Body: [multipart/form-data - não processado]');
     }
-    
-    console.log('Query:', JSON.stringify(req.query));
-    console.log('Params:', JSON.stringify(req.params));
-    console.log('Content-Type:', req.headers['content-type']);
-    console.log('--------------------------------');
+
+    if (Object.keys(req.query).length > 0) console.log('Query:', JSON.stringify(req.query));
+    if (Object.keys(req.params).length > 0) console.log('Params:', JSON.stringify(req.params));
+    // console.log('Content-Type:', req.headers['content-type']);
+    // console.log('--------------------------------');
     next();
   });
 
@@ -96,6 +113,7 @@ export function setupApiServer(middlewares: Connect.Server) {
   app.use('/api/contacts', contactsRoutes);
   app.use('/api/contact-settings', contactsRoutes);
   app.use('/api/events', eventsRoutes);
+  app.use('/api/users', usersRoutes);
 
   // Health check
   app.get('/api/health', (req, res) => {

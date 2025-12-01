@@ -16,5 +16,5 @@ const ImageSchema = new Schema<IImage>({
   data: { type: Buffer, required: true },
 }, { timestamps: true });
 
-export default mongoose.model<IImage>('Image', ImageSchema);
+export default mongoose.models.Image || mongoose.model<IImage>('Image', ImageSchema);
 

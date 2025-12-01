@@ -2,6 +2,8 @@
 
 Portal completo para gerenciamento de dojo de karatê com backend API integrado.
 
+> 📘 **Relatório Detalhado:** Para uma visão aprofundada sobre as tecnologias, arquitetura e funcionalidades, consulte o [Relatório do Projeto](./PROJECT_REPORT.md).
+
 ## 🚀 Quick Start
 
 ```bash
@@ -12,18 +14,11 @@ npm run dev
 
 Servidor roda em: **http://localhost:8080**
 
-## 🔑 Login de Teste
-
-| Tipo  | Email              | Senha |
-|-------|--------------------|-------|
-| Admin | `adm@email.com`    | `1234`|
-| Aluno | `aluno@email.com`  | `1234`|
-
 ## 📚 Documentação
 
 - **[API Documentation](./docs/API_DOCUMENTATION.md)** - Referência completa da API
 - **[Integração Frontend](./docs/INTEGRACAO_FRONTEND.md)** - Guia de integração
-- **[Quick Start API](./docs/README_API.md)** - Visão geral rápida
+
 - **[Testes](./docs/TESTES.sh)** - Script automatizado de testes
 
 ## Como editar este código?
@@ -31,6 +26,7 @@ Servidor roda em: **http://localhost:8080**
 ### Requisitos
 
 - Node.js & npm instalados - [instalar com nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- MongoDB (Local ou Atlas)
 
 ### Passos para desenvolvimento local
 
@@ -44,7 +40,10 @@ cd <YOUR_PROJECT_NAME>
 # Step 3: Instale as dependências
 npm i
 
-# Step 4: Inicie o servidor de desenvolvimento
+# Step 4: Configure as variáveis de ambiente (.env)
+cp .env.template .env
+
+# Step 5: Inicie o servidor de desenvolvimento
 npm run dev
 ```
 
@@ -56,12 +55,15 @@ npm run dev
 - React
 - shadcn-ui
 - Tailwind CSS
+- TanStack Query
+- React Hook Form + Zod
 
 ### Backend
 - Express
 - TypeScript
-- Database em memória (desenvolvimento)
+- MongoDB (Mongoose)
 - CORS habilitado
+- Multer (Uploads)
 
 ## 🏗️ Arquitetura
 
@@ -71,7 +73,7 @@ Vite Dev Server (porta 8080)
     └── Express API (/api/*)
             ├── Rotas de autenticação
             ├── CRUD completo
-            └── Database mock
+            └── MongoDB Connection
 ```
 
 ## 📁 Estrutura do Projeto
@@ -85,7 +87,7 @@ dojo-dash-portal/
 │   └── TESTES.sh
 ├── server/                    # 🔧 Backend
 │   ├── index.ts
-│   ├── lib/
+│   ├── config/
 │   │   └── database.ts
 │   └── routes/
 │       ├── auth.ts
@@ -93,8 +95,10 @@ dojo-dash-portal/
 │       ├── materials.ts
 │       ├── locations.ts
 │       ├── senseis.ts
-│       └── contacts.ts
+│       ├── contacts.ts
+│       └── ...
 ├── src/                       # ⚛️ Frontend React
+├── PROJECT_REPORT.md          # 📄 Relatório Detalhado
 └── vite.config.ts            # ⚙️ Config Vite + API
 ```
 

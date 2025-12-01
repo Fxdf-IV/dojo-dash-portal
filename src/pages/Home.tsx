@@ -16,18 +16,17 @@ import {
   ChevronRight,
   Clock,
   Calendar,
-  BicepsFlexed,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo.webp";
 import { AnimatedDivider } from "@/components/AnimatedDivider";
 import { senseisService, locationsService } from "@/services";
 import type { Sensei, Location } from "@/types";
-import { BELT_GRADES } from "@/components/BeltSelect";
 import { SEO } from "@/components/SEO";
 import { LoadingGrid } from "@/components/LoadingStates";
-import HERO_IMAGE from "@/assets/images/hero/HomeCover.jpg";
+import { SenseisCarousel } from "@/components/SenseisCarousel";
+import HERO_IMAGE from "@/assets/images/hero/HomeCover.webp";
 
 const Home = () => {
   const [senseis, setSenseis] = useState<Sensei[]>([]);
@@ -195,7 +194,7 @@ const Home = () => {
               treino.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center w-fit mx-auto">
-              <Link to="/contact">
+              <Link to="/contato">
                 <Button
                   size="lg"
                   className="bg-primary hover:bg-primary/90 text-primary-foreground border-0 shadow-glow hover:shadow-xl transition-all duration-500 transform hover:scale-105 font-semibold relative overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:translate-x-[-100%] before:animate-[shimmer_2s_ease-in-out_infinite] hover:before:animate-none text-lg px-8 w-full sm:w-auto"
@@ -234,48 +233,8 @@ const Home = () => {
 
             {loadingSenseis ? (
               <LoadingGrid count={3} />
-            ) : senseis.length === 0 ? (
-              <div className="text-center py-12">
-                <p className="text-muted-foreground">
-                  Nenhum sensei encontrado.
-                </p>
-              </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                {senseis.map((sensei) => (
-                  <Card
-                    key={sensei.id}
-                    className="border-primary/20 hover:border-primary transition-all hover:shadow-glow overflow-hidden group"
-                  >
-                    <div className="aspect-square overflow-hidden bg-muted/50 flex items-center justify-center">
-                      {sensei.imageUrl ? (
-                        <img
-                          src={sensei.imageUrl}
-                          alt={`Foto de ${sensei.name} - ${sensei.rank}`}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          loading="lazy"
-                        />
-                      ) : (
-                        <div className="text-muted-foreground">
-                          Foto do Sensei
-                        </div>
-                      )}
-                    </div>
-                    <CardContent className="p-6 text-center">
-                      <h3 className="text-2xl font-bold mb-1 text-card-foreground group-hover:text-primary transition-colors">
-                        {sensei.name}
-                      </h3>
-                      <p className="text-primary font-semibold mb-4 text-sm">
-                        {BELT_GRADES.find((belt) => belt.id === sensei.rank)
-                          ?.name || sensei.rank}
-                      </p>
-                      <p className="text-muted-foreground text-sm leading-relaxed">
-                        {sensei.description}
-                      </p>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+              <SenseisCarousel senseis={senseis} />
             )}
           </div>
         </section>
@@ -453,8 +412,6 @@ const Home = () => {
                                   <span className="font-medium text-left flex-1 ml-2">{item.day}</span>
                                   <Clock className="w-4 h-4 text-primary ml-16" />
                                   <span className="text-muted-foreground flex-1 ml-2">{item.startTime} - {item.endTime}</span>
-                                  <BicepsFlexed className="w-4 h-4 text-primary ml-16" />
-                                  <span className="text-muted-foreground flex-1 ml-2">{item.activity}</span>
                                 </div>
                               ))}
                             </div>
@@ -484,7 +441,7 @@ const Home = () => {
               Junte-se a nós e descubra o verdadeiro espírito do karatê
               tradicional
             </p>
-            <Link to="/contact">
+            <Link to="/contato">
               <Button
                 size="lg"
                 variant="outline"

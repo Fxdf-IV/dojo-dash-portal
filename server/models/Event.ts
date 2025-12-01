@@ -18,5 +18,5 @@ const EventSchema = new Schema<IEvent>({
   registeredStudents: [{ type: Schema.Types.ObjectId, ref: 'User' }],
 }, { timestamps: true });
 
-export default mongoose.model<IEvent>('Event', EventSchema);
+export default mongoose.models.Event || mongoose.model<IEvent>('Event', EventSchema);
 

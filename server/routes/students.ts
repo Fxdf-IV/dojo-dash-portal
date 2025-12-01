@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import Student from '../models/Student.js';
 import User from '../models/User.js';
+import { authenticate, requireAdmin, AuthRequest } from '../middleware/auth.js';
 
 const router = Router();
 
@@ -30,13 +31,24 @@ const transformStudent = (student: any) => {
 };
 
 // GET /api/students
-router.get('/', async (req, res) => {
+router.get('/', authenticate, async (req: AuthRequest, res) => {
   try {
     const { status, location } = req.query;
 
     const filter: any = {};
     if (status) filter.status = status;
     if (location) filter.location = location;
+
+    // Se não for admin, só pode ver a si mesmo (embora a listagem geralmente seja para admins/senseis)
+    // Por enquanto, vamos permitir que alunos vejam lista mas talvez filtrar dados sensíveis?
+    // Melhor: apenas admin vê tudo. Aluno vê apenas seu próprio registro via /me ou /:id
+
+    if (req.user.role !== 'admin') {
+      // Se não for admin, retorna apenas o próprio aluno se coincidir com filtro, ou erro
+      // Mas para simplificar e seguir o padrão de segurança:
+      // Listagem geral = Apenas Admin
+      return res.status(403).json({ error: 'Acesso negado. Apenas administradores.' });
+    }
 
     const students = await Student.find(filter).sort({ createdAt: -1 });
 
@@ -47,12 +59,18 @@ router.get('/', async (req, res) => {
 });
 
 // GET /api/students/:id
-router.get('/:id', async (req, res) => {
+router.get('/:id', authenticate, async (req: AuthRequest, res) => {
   try {
     const student = await Student.findById(req.params.id);
 
     if (!student) {
       return res.status(404).json({ error: 'Aluno não encontrado' });
+    }
+
+    // Verificação de permissão: Admin ou o próprio aluno
+    const isOwner = student.userId.toString() === req.user._id.toString();
+    if (req.user.role !== 'admin' && !isOwner) {
+      return res.status(403).json({ error: 'Acesso negado.' });
     }
 
     res.json({ student: transformStudent(student) });
@@ -62,7 +80,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // POST /api/students
-router.post('/', async (req, res) => {
+router.post('/', authenticate, requireAdmin, async (req, res) => {
   try {
     const {
       userId,
@@ -139,7 +157,7 @@ router.post('/', async (req, res) => {
 });
 
 // PUT /api/students/:id
-router.put('/:id', async (req, res) => {
+router.put('/:id', authenticate, async (req: AuthRequest, res) => {
   try {
     const {
       name,
@@ -159,7 +177,30 @@ router.put('/:id', async (req, res) => {
       return res.status(404).json({ error: 'Aluno não encontrado' });
     }
 
-    let userRecord = await User.findById(student.userId);
+    // Verificação de permissão: Admin ou o próprio aluno
+    const isOwner = student.userId.toString() === req.user._id.toString();
+    if (req.user.role !== 'admin' && !isOwner) {
+      return res.status(403).json({ error: 'Acesso negado.' });
+    }
+
+    // Alunos não podem alterar certos campos
+    if (!isOwner && req.user.role !== 'admin') {
+      // Redundante com o check acima, mas para clareza:
+      // Se fosse permitir edição parcial, aqui bloqueariamos campos sensíveis.
+      // Como permitimos edição, vamos restringir o que o aluno pode mudar?
+      // Por enquanto, manteremos a lógica original mas protegida por auth.
+      // TODO: Refinar quais campos o aluno pode editar (ex: não pode mudar beltId ou status)
+    }
+
+    // Se for aluno editando a si mesmo, impedir alteração de status, beltId, location (exceto se admin)
+    if (isOwner && req.user.role !== 'admin') {
+      if (beltId && beltId !== student.beltId) return res.status(403).json({ error: 'Alunos não podem alterar sua própria faixa.' });
+      if (status && status !== student.status) return res.status(403).json({ error: 'Alunos não podem alterar seu próprio status.' });
+      // Location talvez seja permitido mudar? Vamos bloquear por segurança.
+      if (location && location !== student.location) return res.status(403).json({ error: 'Alunos não podem alterar seu dojo.' });
+    }
+
+    const userRecord = await User.findById(student.userId);
     if (!userRecord) {
       return res.status(404).json({ error: 'Usuário associado não encontrado' });
     }
@@ -208,7 +249,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // DELETE /api/students/:id
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authenticate, requireAdmin, async (req, res) => {
   try {
     const student = await Student.findByIdAndDelete(req.params.id);
 

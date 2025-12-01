@@ -88,6 +88,7 @@ const seed = async () => {
     {
       name: 'CT Maylson Campos',
       description: 'Centro de treinamento principal com infraestrutura completa para formação técnica e espiritual. Equipado com tatames profissionais, ambiente climatizado e espaço dedicado ao estudo da tradição Shorin-Ryu.',
+      mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3696.654724742981!2d-50.22067522374668!3d-22.09999997983161!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9495111111111111%3A0x1111111111111111!2sPalmital%2C%20SP!5e0!3m2!1spt-BR!2sbr!4v1700000000000!5m2!1spt-BR!2sbr',
       imageUrl: 'https://images.unsplash.com/photo-1544427920-c49ccfb85579?q=80&w=2062',
       images: [
         {
@@ -107,6 +108,7 @@ const seed = async () => {
     {
       name: 'Bola e Cidadania',
       description: 'Projeto social que transforma vidas através do karatê. Atendemos comunidades carentes levando valores como disciplina, respeito e cidadania. Mais que técnicas marciais, formamos cidadãos conscientes e comprometidos.',
+      mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3696.654724742981!2d-50.22067522374668!3d-22.09999997983161!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9495111111111111%3A0x1111111111111111!2sPalmital%2C%20SP!5e0!3m2!1spt-BR!2sbr!4v1700000000000!5m2!1spt-BR!2sbr',
       imageUrl: 'https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?q=80&w=2071',
       images: [
         {
@@ -126,6 +128,7 @@ const seed = async () => {
     {
       name: 'Projeto Gota Verde',
       description: 'Iniciativa que une karatê tradicional e consciência ambiental. Praticamos em harmonia com a natureza, realizando treinos ao ar livre e atividades de preservação. O respeito do dojo se estende ao planeta.',
+      mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3696.654724742981!2d-50.22067522374668!3d-22.09999997983161!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9495111111111111%3A0x1111111111111111!2sPalmital%2C%20SP!5e0!3m2!1spt-BR!2sbr!4v1700000000000!5m2!1spt-BR!2sbr',
       imageUrl: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070',
       images: [
         {
@@ -145,6 +148,7 @@ const seed = async () => {
     {
       name: 'Colégio Expoente',
       description: 'Parceria educacional que integra o karatê ao ambiente escolar. Os alunos desenvolvem disciplina, concentração e autocontrole que refletem no desempenho acadêmico. Uma formação que une corpo, mente e conhecimento.',
+      mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3696.654724742981!2d-50.22067522374668!3d-22.09999997983161!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9495111111111111%3A0x1111111111111111!2sPalmital%2C%20SP!5e0!3m2!1spt-BR!2sbr!4v1700000000000!5m2!1spt-BR!2sbr',
       imageUrl: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=2070',
       images: [
         {

@@ -16,4 +16,4 @@ const SenseiSchema = new Schema<ISensei>({
   orderIndex: { type: Number, default: 0 },
 }, { timestamps: true });
 
-export default mongoose.model<ISensei>('Sensei', SenseiSchema);
+export default mongoose.models.Sensei || mongoose.model<ISensei>('Sensei', SenseiSchema);

@@ -24,4 +24,4 @@ const StudentSchema = new Schema<IStudent>({
   status: { type: String, enum: ['active', 'pending', 'inactive'], default: 'pending' },
 }, { timestamps: true });
 
-export default mongoose.model<IStudent>('Student', StudentSchema);
+export default mongoose.models.Student || mongoose.model<IStudent>('Student', StudentSchema);

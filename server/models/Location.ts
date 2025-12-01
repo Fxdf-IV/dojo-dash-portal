@@ -8,6 +8,7 @@ export interface ILocationImage {
 export interface ILocation extends Document {
   name: string;
   description?: string;
+  mapUrl?: string;
   imageUrl?: string;
   images: ILocationImage[];
   schedule?: { day: string; time: string }[];
@@ -28,10 +29,11 @@ const ScheduleItemSchema = new Schema({
 const LocationSchema = new Schema<ILocation>({
   name: { type: String, required: true },
   description: { type: String },
+  mapUrl: { type: String },
   imageUrl: { type: String },
   images: [LocationImageSchema],
   schedule: [ScheduleItemSchema],
   orderIndex: { type: Number, default: 0 },
 }, { timestamps: true });
 
-export default mongoose.model<ILocation>('Location', LocationSchema);
+export default mongoose.models.Location || mongoose.model<ILocation>('Location', LocationSchema);

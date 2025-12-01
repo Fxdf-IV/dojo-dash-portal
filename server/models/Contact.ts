@@ -16,4 +16,4 @@ const ContactSchema = new Schema<IContact>({
   status: { type: String, enum: ['new', 'read', 'replied'], default: 'new' },
 }, { timestamps: true });
 
-export default mongoose.model<IContact>('Contact', ContactSchema);
+export default mongoose.models.Contact || mongoose.model<IContact>('Contact', ContactSchema);

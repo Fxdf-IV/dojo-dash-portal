@@ -6,6 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { AnimatedDivider } from "@/components/AnimatedDivider";
+import HERO_IMAGE from "@/assets/images/hero/LoginCover.webp";
 
 const PendingApproval = () => {
   const { user, refreshUser } = useAuth();
@@ -46,8 +47,14 @@ const PendingApproval = () => {
   }, []); // Empty dependency array - runs only once on mount
 
   return (
-    <><div className="min-h-screen pt-20 flex items-center justify-center bg-gradient-to-br from-background to-secondary/30">
-      <div className="container mx-auto px-4 py-12">
+    <>
+      <div className="min-h-screen pt-20 flex items-center justify-center relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-hero" />
+        <div
+          className="absolute inset-0 bg-cover bg-[center_100%] bg-no-repeat opacity-20 bg-fixed justify-center items-center"
+          style={{ backgroundImage: `url('${HERO_IMAGE}')` }}
+        />
+        <div className="container mx-auto px-4 py-12 relative z-10">
         <div className="max-w-2xl mx-auto">
           <Card className="border-primary/20 shadow-lg">
             <CardHeader className="text-center pb-4">

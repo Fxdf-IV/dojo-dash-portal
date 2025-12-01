@@ -36,9 +36,10 @@ export const AnimatedDivider = ({
       <img 
         src={imageSrc} 
         alt={alt} 
-        className={`absolute top-0 left-0 w-full h-auto object-cover -translate-y-1/2 pointer-events-none opacity-98 transition-transform duration-1000 ease-out ${
+        className={`absolute top-0 left-0 w-full h-auto object-cover -translate-y-1/2 pointer-events-none opacity-98 transition-transform ease-out ${
           isVisible ? 'translate-x-[-1%]' : '-translate-x-full'
         }`} 
+        style={{ transitionDuration: '1500ms' }}
       />
     </div>
   );  

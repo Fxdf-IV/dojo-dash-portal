@@ -2,7 +2,7 @@ import { Router } from 'express';
 import multer from 'multer';
 import Sensei from '../models/Sensei.js';
 import Image from '../models/Image.js';
-import { authenticate } from '../middleware/auth.js';
+import { authenticate, requireAdmin } from '../middleware/auth.js';
 
 // Configurar multer para armazenar em memória (não em disco)
 const storage = multer.memoryStorage();
@@ -55,7 +55,7 @@ router.get('/', async (req, res) => {
 });
 
 // PUT /api/senseis/reorder - Atualizar ordem dos senseis
-router.put('/reorder', authenticate, async (req: any, res) => {
+router.put('/reorder', authenticate, requireAdmin, async (req: any, res) => {
   try {
     const { senseis: senseisOrder } = req.body;
 
@@ -95,11 +95,11 @@ router.get('/:id', async (req, res) => {
 });
 
 // POST /api/senseis
-router.post('/', authenticate, upload.single('image'), async (req: any, res) => {
+router.post('/', authenticate, requireAdmin, upload.single('image'), async (req: any, res) => {
   try {
-    const { name, rank, description, orderIndex } = req.body;
+    const { name, rank, description, orderIndex, imageUrl: bodyImageUrl } = req.body;
 
-    let imageUrl = undefined;
+    let imageUrl = bodyImageUrl;
     if (req.file && req.file.buffer) {
       // Gerar nome único para o arquivo
       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -136,7 +136,7 @@ router.post('/', authenticate, upload.single('image'), async (req: any, res) => 
 });
 
 // PUT /api/senseis/:id
-router.put('/:id', authenticate, upload.single('image'), async (req: any, res) => {
+router.put('/:id', authenticate, requireAdmin, upload.single('image'), async (req: any, res) => {
   try {
     const { name, rank, description, removeImage } = req.body;
 
@@ -227,7 +227,7 @@ router.put('/:id', authenticate, upload.single('image'), async (req: any, res) =
 });
 
 // DELETE /api/senseis/:id
-router.delete('/:id', authenticate, async (req: any, res) => {
+router.delete('/:id', authenticate, requireAdmin, async (req: any, res) => {
   try {
     const sensei = await Sensei.findById(req.params.id);
 

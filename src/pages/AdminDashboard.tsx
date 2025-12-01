@@ -1,6 +1,6 @@
 ﻿import { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Users, BookOpen, MapPin, User2, Calendar } from "lucide-react";
+import { Users, BookOpen, MapPin, User2, Calendar, Shield } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -9,13 +9,15 @@ import {
   locationsService,
   senseisService,
   eventsService,
+  usersService,
 } from "@/services";
-import type { Student, Material, Location, Sensei, Event } from "@/types";
-import { StudentManager } from "@/components/admin/students/StudentManager";
+import type { Student, Material, Location, Sensei, Event, User } from "@/types";
+import { StudentManager } from "@/components/admin/users/students/StudentManager";
 import { MaterialManager } from "@/components/admin/materials/MaterialManager";
 import { LocationManager } from "@/components/admin/locations/LocationManager";
 import { SenseiManager } from "@/components/admin/senseis/SenseiManager";
 import { EventManager } from "@/components/admin/events/EventManager";
+import { AdminManager } from "@/components/admin/users/admins/AdminManager";
 import { ContactConfigModal } from "@/components/admin/ContactConfigModal";
 import { AnimatedDivider } from "@/components/AnimatedDivider";
 
@@ -29,6 +31,7 @@ const AdminDashboard = () => {
   const [locations, setLocations] = useState<Location[]>([]);
   const [senseis, setSenseis] = useState<Sensei[]>([]);
   const [events, setEvents] = useState<Event[]>([]);
+  const [admins, setAdmins] = useState<User[]>([]);
 
   // Estados de carregamento
   const [loadingStudents, setLoadingStudents] = useState(true);
@@ -36,6 +39,7 @@ const AdminDashboard = () => {
   const [loadingLocations, setLoadingLocations] = useState(true);
   const [loadingSenseis, setLoadingSenseis] = useState(true);
   const [loadingEvents, setLoadingEvents] = useState(true);
+  const [loadingAdmins, setLoadingAdmins] = useState(true);
 
   // Fetch functions
   const fetchStudents = async () => {
@@ -123,6 +127,23 @@ const AdminDashboard = () => {
     }
   };
 
+  const fetchAdmins = async () => {
+    try {
+      setLoadingAdmins(true);
+      const data = await usersService.getAll("admin");
+      setAdmins(data);
+    } catch (error) {
+      console.error("Erro ao carregar administradores:", error);
+      toast({
+        title: "Erro",
+        description: "Erro ao carregar administradores",
+        variant: "destructive",
+      });
+    } finally {
+      setLoadingAdmins(false);
+    }
+  };
+
   // Load all data on mount
   useEffect(() => {
     const loadAll = async () => {
@@ -132,6 +153,7 @@ const AdminDashboard = () => {
         fetchLocations(),
         fetchSenseis(),
         fetchEvents(),
+        fetchAdmins(),
       ]);
     };
     loadAll();
@@ -167,10 +189,14 @@ const AdminDashboard = () => {
       {/* Main Content */}
       <section className="container mx-auto px-4 py-12">
         <Tabs defaultValue="students" className="w-full">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="students" className="flex items-center gap-2">
               <Users className="w-4 h-4" />
               <span className="hidden sm:inline">Alunos</span>
+            </TabsTrigger>
+            <TabsTrigger value="admins" className="flex items-center gap-2">
+              <Shield className="w-4 h-4" />
+              <span className="hidden sm:inline">Administradores</span>
             </TabsTrigger>
             <TabsTrigger value="materials" className="flex items-center gap-2">
               <BookOpen className="w-4 h-4" />
@@ -224,6 +250,13 @@ const AdminDashboard = () => {
               events={events}
               loading={loadingEvents}
               onUpdate={setEvents} />
+          </TabsContent>
+
+          <TabsContent value="admins" className="mt-6">
+            <AdminManager
+              admins={admins}
+              loading={loadingAdmins}
+              onUpdate={setAdmins} />
           </TabsContent>
         </Tabs>
       </section>

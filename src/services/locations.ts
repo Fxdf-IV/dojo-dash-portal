@@ -154,10 +154,11 @@ export const locationsService = {
     });
   },
 
-  async removeCoverImage(id: string, name: string, description: string): Promise<Location> {
+  async removeCoverImage(id: string, name: string, description: string, mapUrl: string): Promise<Location> {
     const fd = new FormData();
     fd.append('name', name);
     fd.append('description', description || '');
+    fd.append('mapUrl', mapUrl || '');
     fd.append('removeImage', 'true');
 
     return this.update(id, fd);

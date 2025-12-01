@@ -78,6 +78,7 @@ export const YouTubeEmbed: React.FC<YouTubeEmbedProps> = ({
         frameBorder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowFullScreen
+        referrerPolicy="strict-origin-when-cross-origin"
         className="w-full h-full"
       />
     </div>
@@ -85,9 +86,9 @@ export const YouTubeEmbed: React.FC<YouTubeEmbedProps> = ({
 };
 
 /**
- * Hook para verificar se uma URL é do YouTube
+ * Função para verificar se uma URL é do YouTube
  */
-export const useIsYouTubeUrl = (url?: string): boolean => {
+export const isYouTubeUrl = (url?: string): boolean => {
   if (!url) return false;
   return extractYouTubeId(url) !== null;
 };

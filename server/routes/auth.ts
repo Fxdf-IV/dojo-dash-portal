@@ -11,7 +11,14 @@ router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    // Tentar encontrar por email OU username
+    const user = await User.findOne({
+      $or: [
+        { email: email },
+        { username: email } // O campo 'email' do body pode conter o username
+      ]
+    });
+
     if (!user || !(await user.comparePassword(password))) {
       return res.status(401).json({ error: 'Credenciais inválidas' });
     }
@@ -19,9 +26,10 @@ router.post('/login', async (req, res) => {
     const token = generateToken((user._id as any).toString());
 
     // Buscar dados do aluno se for student
-    let userData: any = {
+    const userData: any = {
       id: user._id as any,
       email: user.email,
+      username: user.username,
       role: user.role,
     };
 
@@ -34,8 +42,8 @@ router.post('/login', async (req, res) => {
         userData.status = student.status;
       }
     } else {
-      // Admin tem nome fixo
-      userData.name = 'Administrador';
+      // Admin pode ter nome salvo no User
+      userData.name = user.name || 'Administrador';
     }
 
     res.json({
@@ -99,6 +107,35 @@ router.post('/logout', async (req, res) => {
   res.json({ success: true });
 });
 
+// POST /api/auth/request-password-reset
+router.post('/request-password-reset', async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      return res.status(400).json({ error: 'Email é obrigatório' });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.json({ success: false, message: 'Email não cadastrado' });
+    }
+
+    // Se for aluno, mudar status para pending
+    if (user.role === 'student') {
+      const student = await Student.findOne({ userId: user._id });
+      if (student) {
+        student.status = 'pending';
+        await student.save();
+      }
+    }
+
+    res.json({ success: true });
+  } catch (error: any) {
+    console.error('Request password reset error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // GET /api/auth/me - Buscar dados atualizados do usuário
 router.get('/me', async (req, res) => {
   try {
@@ -117,9 +154,10 @@ router.get('/me', async (req, res) => {
     }
 
     // Buscar dados do aluno se for student
-    let userData: any = {
+    const userData: any = {
       id: user._id as any,
       email: user.email,
+      username: user.username,
       role: user.role,
     };
 
@@ -132,7 +170,7 @@ router.get('/me', async (req, res) => {
         userData.status = student.status;
       }
     } else {
-      userData.name = 'Administrador';
+      userData.name = user.name || 'Administrador';
     }
 
     res.json({ user: userData });

@@ -5,6 +5,7 @@ import { authenticate as authenticateToken } from '../middleware/auth.js';
 const router = Router();
 
 // Helper para transformar _id em id
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const transformEvent = (event: any) => {
   const obj = event.toObject ? event.toObject() : event;
   return {
@@ -14,6 +15,7 @@ const transformEvent = (event: any) => {
     date: obj.date,
     imageUrl: obj.imageUrl,
     registrationPrice: obj.registrationPrice,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     registeredStudents: obj.registeredStudents?.map((id: any) => id.toString()) || [],
     registeredCount: obj.registeredStudents?.length || 0,
     createdAt: obj.createdAt,
@@ -26,8 +28,9 @@ router.get('/', async (req, res) => {
   try {
     const events = await Event.find().sort({ date: 1 });
     res.json({ events: events.map(transformEvent) });
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (error) {
+    const err = error as Error;
+    res.status(500).json({ error: err.message });
   }
 });
 
@@ -41,8 +44,9 @@ router.get('/:id', async (req, res) => {
     }
 
     res.json({ event: transformEvent(event) });
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (error) {
+    const err = error as Error;
+    res.status(500).json({ error: err.message });
   }
 });
 
@@ -50,6 +54,7 @@ router.get('/:id', async (req, res) => {
 router.post('/', authenticateToken, async (req, res) => {
   try {
     // Verificar se é admin
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if ((req as any).user.role !== 'admin') {
       return res.status(403).json({ error: 'Acesso negado. Apenas administradores podem criar eventos.' });
     }
@@ -70,8 +75,9 @@ router.post('/', authenticateToken, async (req, res) => {
     });
 
     res.status(201).json({ event: transformEvent(event) });
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (error) {
+    const err = error as Error;
+    res.status(500).json({ error: err.message });
   }
 });
 
@@ -79,12 +85,14 @@ router.post('/', authenticateToken, async (req, res) => {
 router.put('/:id', authenticateToken, async (req, res) => {
   try {
     // Verificar se é admin
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if ((req as any).user.role !== 'admin') {
       return res.status(403).json({ error: 'Acesso negado. Apenas administradores podem editar eventos.' });
     }
 
     const { title, description, date, imageUrl, registrationPrice } = req.body;
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const updateData: any = {
       ...(title && { title }),
       ...(description !== undefined && { description }),
@@ -108,8 +116,9 @@ router.put('/:id', authenticateToken, async (req, res) => {
     }
 
     res.json({ event: transformEvent(event) });
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (error) {
+    const err = error as Error;
+    res.status(500).json({ error: err.message });
   }
 });
 
@@ -117,6 +126,7 @@ router.put('/:id', authenticateToken, async (req, res) => {
 router.delete('/:id', authenticateToken, async (req, res) => {
   try {
     // Verificar se é admin
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if ((req as any).user.role !== 'admin') {
       return res.status(403).json({ error: 'Acesso negado. Apenas administradores podem deletar eventos.' });
     }
@@ -128,8 +138,9 @@ router.delete('/:id', authenticateToken, async (req, res) => {
     }
 
     res.json({ success: true });
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (error) {
+    const err = error as Error;
+    res.status(500).json({ error: err.message });
   }
 });
 
@@ -137,6 +148,7 @@ router.delete('/:id', authenticateToken, async (req, res) => {
 router.post('/:id/register', authenticateToken, async (req, res) => {
   try {
     const eventId = req.params.id;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const userId = (req as any).user._id;
 
     const event = await Event.findById(eventId);
@@ -155,8 +167,9 @@ router.post('/:id/register', authenticateToken, async (req, res) => {
     await event.save();
 
     res.json({ event: transformEvent(event), message: 'Presença confirmada com sucesso!' });
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (error) {
+    const err = error as Error;
+    res.status(500).json({ error: err.message });
   }
 });
 
@@ -164,6 +177,7 @@ router.post('/:id/register', authenticateToken, async (req, res) => {
 router.post('/:id/unregister', authenticateToken, async (req, res) => {
   try {
     const eventId = req.params.id;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const userId = (req as any).user._id;
 
     const event = await Event.findById(eventId);
@@ -179,13 +193,15 @@ router.post('/:id/unregister', authenticateToken, async (req, res) => {
 
     // Remover usuário da lista de registrados
     event.registeredStudents = event.registeredStudents.filter(
-      (id) => id.toString() !== userId.toString()
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (id: any) => id.toString() !== userId.toString()
     );
     await event.save();
 
     res.json({ event: transformEvent(event), message: 'Registro cancelado com sucesso!' });
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (error) {
+    const err = error as Error;
+    res.status(500).json({ error: err.message });
   }
 });
 

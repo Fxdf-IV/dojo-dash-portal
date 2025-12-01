@@ -20,4 +20,4 @@ const MaterialSchema = new Schema<IMaterial>({
   minBeltId: { type: String }, // Mudança: usar beltId em vez de minKyu
 }, { timestamps: true });
 
-export default mongoose.model<IMaterial>('Material', MaterialSchema);
+export default mongoose.models.Material || mongoose.model<IMaterial>('Material', MaterialSchema);

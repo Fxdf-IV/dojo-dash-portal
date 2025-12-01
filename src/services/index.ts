@@ -8,4 +8,5 @@ export { senseisService } from './senseis';
 export { contactsService } from './contacts';
 export { contactSettingsService } from './contactSettings';
 export { eventsService } from './events';
+export { usersService } from './users';
 export { apiRequest, ApiError, getAuthToken, setAuthToken, clearAuthToken } from './api';

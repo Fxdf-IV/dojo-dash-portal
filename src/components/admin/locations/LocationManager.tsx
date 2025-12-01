@@ -25,39 +25,19 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { ImageUpload } from "@/components/ui/image-upload";
 import { MultipleImageUpload } from "@/components/ui/multiple-image-upload";
 import { useToast } from "@/hooks/use-toast";
 import { Location, ScheduleItem } from "@/types";
 import { locationsService } from "@/services";
+import { LocationForm } from "./LocationForm";
 
 interface LocationManagerProps {
   locations: Location[];
   loading: boolean;
   onUpdate: (locations: Location[]) => void;
 }
-
-const DAYS_OF_WEEK = [
-  "Segunda-feira",
-  "Terça-feira",
-  "Quarta-feira",
-  "Quinta-feira",
-  "Sexta-feira",
-  "Sábado",
-  "Domingo",
-];
 
 export const LocationManager = ({
   locations,
@@ -72,10 +52,12 @@ export const LocationManager = ({
   const [form, setForm] = useState<{
     name: string;
     description: string;
+    mapUrl: string;
     schedule: ScheduleItem[];
   }>({
     name: "",
     description: "",
+    mapUrl: "",
     schedule: [],
   });
 
@@ -83,19 +65,30 @@ export const LocationManager = ({
     setForm({
       name: "",
       description: "",
+      mapUrl: "",
       schedule: [],
     });
     setImageFiles([]);
     setCoverImageFile(null);
   };
 
+  const extractMapUrl = (input: string) => {
+    if (input.includes("<iframe")) {
+      const srcMatch = input.match(/src="([^"]+)"/);
+      return srcMatch ? srcMatch[1] : input;
+    }
+    return input;
+  };
+
   const handleAdd = async () => {
     try {
+      const cleanMapUrl = extractMapUrl(form.mapUrl);
       let newLocation;
       if (coverImageFile) {
         const fd = new FormData();
         fd.append("name", form.name);
         fd.append("description", form.description || "");
+        fd.append("mapUrl", cleanMapUrl || "");
         fd.append("schedule", JSON.stringify(form.schedule));
         fd.append("image", coverImageFile);
         newLocation = await locationsService.create(fd);
@@ -103,6 +96,7 @@ export const LocationManager = ({
         newLocation = await locationsService.create({
           name: form.name,
           description: form.description || "",
+          mapUrl: cleanMapUrl || "",
           schedule: form.schedule,
         });
       }
@@ -138,11 +132,13 @@ export const LocationManager = ({
   const handleEdit = async () => {
     if (!editingLocation) return;
     try {
+      const cleanMapUrl = extractMapUrl(form.mapUrl);
       let updated;
       if (coverImageFile) {
         const fd = new FormData();
         fd.append("name", form.name);
         fd.append("description", form.description || "");
+        fd.append("mapUrl", cleanMapUrl || "");
         fd.append("schedule", JSON.stringify(form.schedule));
         fd.append("image", coverImageFile);
         updated = await locationsService.update(editingLocation.id, fd);
@@ -150,6 +146,7 @@ export const LocationManager = ({
         updated = await locationsService.update(editingLocation.id, {
           name: form.name,
           description: form.description || "",
+          mapUrl: cleanMapUrl || "",
           schedule: form.schedule,
         });
       }
@@ -265,138 +262,20 @@ export const LocationManager = ({
                     Preencha os dados do local
                   </DialogDescription>
                 </DialogHeader>
-                <div className="space-y-4 py-2">
-                  <div>
-                    <Label htmlFor="location-name">Nome</Label>
-                    <Input
-                      id="location-name"
-                      value={form.name}
-                      onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="location-description">Descrição</Label>
-                    <Textarea
-                      id="location-description"
-                      value={form.description || ""}
-                      onChange={(e) =>
-                        setForm({ ...form, description: e.target.value })
-                      }
-                      rows={3}
-                    />
-                  </div>
-                  <div>
-                    <Label>Horários</Label>
-                    <div className="space-y-2 mt-2">
-                      {form.schedule.map((item, index) => (
-                        <div key={index} className="flex gap-2 items-center">
-                          <Select
-                            value={item.day}
-                            onValueChange={(value) => {
-                              const newSchedule = [...form.schedule];
-                              newSchedule[index].day = value;
-                              setForm({ ...form, schedule: newSchedule });
-                            }}
-                          >
-                            <SelectTrigger className="w-[180px]">
-                              <SelectValue placeholder="Dia" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {DAYS_OF_WEEK.map((day) => (
-                                <SelectItem key={day} value={day}>
-                                  {day}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <Input
-                            type="time"
-                            value={item.startTime}
-                            onChange={(e) => {
-                              const newSchedule = [...form.schedule];
-                              newSchedule[index].startTime = e.target.value;
-                              setForm({ ...form, schedule: newSchedule });
-                            }}
-                            className="w-[120px]"
-                            placeholder="Início"
-                          />
-                          <Input
-                            type="time"
-                            value={item.endTime}
-                            onChange={(e) => {
-                              const newSchedule = [...form.schedule];
-                              newSchedule[index].endTime = e.target.value;
-                              setForm({ ...form, schedule: newSchedule });
-                            }}
-                            className="w-[120px]"
-                            placeholder="Término"
-                          />
-                          <Input
-                            value={item.activity || ""}
-                            onChange={(e) => {
-                              const newSchedule = [...form.schedule];
-                              newSchedule[index].activity = e.target.value;
-                              setForm({ ...form, schedule: newSchedule });
-                            }}
-                            className="w-[140px]"
-                            placeholder="Atividade"
-                          />
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => {
-                              const newSchedule = form.schedule.filter((_, i) => i !== index);
-                              setForm({ ...form, schedule: newSchedule });
-                            }}
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      ))}
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() =>
-                          setForm({
-                            ...form,
-                            schedule: [...form.schedule, { day: "", startTime: "", endTime: "", activity: "" }],
-                          })
-                        }
-                      >
-                        <Plus className="w-4 h-4 mr-2" /> Adicionar Horário
-                      </Button>
-                    </div>
-                  </div>
-                  <ImageUpload
-                    label="Imagem de Capa"
-                    onChange={(file) => setCoverImageFile(file)}
-                    onRemove={() => setCoverImageFile(null)}
-                    accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
-                    maxSize={5}
-                  />
-                  <MultipleImageUpload
-                    label="Fotos da Galeria"
-                    value={imageFiles}
-                    onChange={setImageFiles}
-                    accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
-                    maxSize={5}
-                    maxFiles={20}
-                    placeholder="Selecione múltiplas imagens para a galeria do local"
-                  />
-                  <div className="flex justify-end gap-2">
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        setIsAddOpen(false);
-                        resetForm();
-                      }}
-                    >
-                      Cancelar
-                    </Button>
-                    <Button onClick={handleAdd}>Adicionar</Button>
-                  </div>
-                </div>
+                <LocationForm
+                  form={form}
+                  setForm={setForm}
+                  coverImageFile={coverImageFile}
+                  setCoverImageFile={setCoverImageFile}
+                  imageFiles={imageFiles}
+                  setImageFiles={setImageFiles}
+                  onSubmit={handleAdd}
+                  onCancel={() => {
+                    setIsAddOpen(false);
+                    resetForm();
+                  }}
+                  submitLabel="Adicionar"
+                />
               </DialogContent>
             </Dialog>
           </div>
@@ -426,6 +305,7 @@ export const LocationManager = ({
                         setForm({
                           name: location.name,
                           description: location.description || "",
+                          mapUrl: location.mapUrl || "",
                           schedule: location.schedule || [],
                         });
                         setImageFiles([]);
@@ -456,164 +336,43 @@ export const LocationManager = ({
             <DialogTitle>Editar Local</DialogTitle>
             <DialogDescription>Atualize os dados do local</DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 py-2">
-            <div>
-              <Label htmlFor="edit-location-name">Nome</Label>
-              <Input
-                id="edit-location-name"
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-              />
-            </div>
-            <div>
-              <Label htmlFor="edit-location-description">Descrição</Label>
-              <Textarea
-                id="edit-location-description"
-                value={form.description || ""}
-                onChange={(e) =>
-                  setForm({ ...form, description: e.target.value })
+          <LocationForm
+            form={form}
+            setForm={setForm}
+            coverImageFile={coverImageFile}
+            setCoverImageFile={setCoverImageFile}
+            imageFiles={imageFiles}
+            setImageFiles={setImageFiles}
+            onSubmit={handleEdit}
+            onCancel={() => {
+              setEditingLocation(null);
+              resetForm();
+            }}
+            submitLabel="Salvar"
+            currentImageUrl={editingLocation?.imageUrl}
+            onRemoveCoverImage={async () => {
+              setCoverImageFile(null);
+              if (editingLocation) {
+                try {
+                  const updated = await locationsService.removeCoverImage(
+                    editingLocation.id,
+                    form.name,
+                    form.description || "",
+                    form.mapUrl || ""
+                  );
+                  onUpdate(locations.map(l => l.id === editingLocation.id ? updated : l));
+                  setEditingLocation(updated);
+                  toast({ title: "Imagem de capa removida com sucesso!" });
+                } catch (error) {
+                  toast({
+                    title: "Erro ao remover imagem de capa",
+                    description: (error as Error).message,
+                    variant: "destructive",
+                  });
                 }
-                rows={3}
-              />
-            </div>
-            <div>
-              <Label>Horários</Label>
-              <div className="space-y-2 mt-2">
-                {form.schedule.map((item, index) => (
-                  <div key={index} className="flex gap-2 items-center">
-                    <Select
-                      value={item.day}
-                      onValueChange={(value) => {
-                        const newSchedule = [...form.schedule];
-                        newSchedule[index].day = value;
-                        setForm({ ...form, schedule: newSchedule });
-                      }}
-                    >
-                      <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder="Dia" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {DAYS_OF_WEEK.map((day) => (
-                          <SelectItem key={day} value={day}>
-                            {day}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <Input
-                      type="time"
-                      value={item.startTime}
-                      onChange={(e) => {
-                        const newSchedule = [...form.schedule];
-                        newSchedule[index].startTime = e.target.value;
-                        setForm({ ...form, schedule: newSchedule });
-                      }}
-                      className="w-[120px]"
-                      placeholder="Início"
-                    />
-                    <Input
-                      type="time"
-                      value={item.endTime}
-                      onChange={(e) => {
-                        const newSchedule = [...form.schedule];
-                        newSchedule[index].endTime = e.target.value;
-                        setForm({ ...form, schedule: newSchedule });
-                      }}
-                      className="w-[120px]"
-                      placeholder="Término"
-                    />
-                    <Input
-                      value={item.activity || ""}
-                      onChange={(e) => {
-                        const newSchedule = [...form.schedule];
-                        newSchedule[index].activity = e.target.value;
-                        setForm({ ...form, schedule: newSchedule });
-                      }}
-                      className="w-[140px]"
-                      placeholder="Atividade"
-                    />
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => {
-                        const newSchedule = form.schedule.filter((_, i) => i !== index);
-                        setForm({ ...form, schedule: newSchedule });
-                      }}
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </div>
-                ))}
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() =>
-                    setForm({
-                      ...form,
-                      schedule: [...form.schedule, { day: "", startTime: "", endTime: "", activity: "" }],
-                    })
-                  }
-                >
-                  <Plus className="w-4 h-4 mr-2" /> Adicionar Horário
-                </Button>
-              </div>
-            </div>
-            <ImageUpload
-              label="Imagem de Capa"
-              value={editingLocation?.imageUrl}
-              onChange={(file) => setCoverImageFile(file)}
-              onRemove={async () => {
-                setCoverImageFile(null);
-                if (editingLocation) {
-                  try {
-                    const updated = await locationsService.removeCoverImage(
-                      editingLocation.id,
-                      form.name,
-                      form.description || ""
-                    );
-
-                    // Atualizar lista local
-                    onUpdate(locations.map(l => l.id === editingLocation.id ? updated : l));
-
-                    // Atualizar local sendo editado
-                    setEditingLocation(updated);
-
-                    toast({ title: "Imagem de capa removida com sucesso!" });
-                  } catch (error) {
-                    toast({
-                      title: "Erro ao remover imagem de capa",
-                      description: (error as Error).message,
-                      variant: "destructive",
-                    });
-                  }
-                }
-              }}
-              accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
-              maxSize={5}
-            />
-            <MultipleImageUpload
-              label="Adicionar Fotos à Galeria"
-              value={imageFiles}
-              onChange={setImageFiles}
-              accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
-              maxSize={5}
-              maxFiles={10}
-              placeholder="Selecione múltiplas imagens para adicionar à galeria durante a edição"
-            />
-            <div className="flex justify-end gap-2">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setEditingLocation(null);
-                  resetForm();
-                }}
-              >
-                Cancelar
-              </Button>
-              <Button onClick={handleEdit}>Salvar</Button>
-            </div>
-          </div>
+              }
+            }}
+          />
         </DialogContent>
       </Dialog>
 

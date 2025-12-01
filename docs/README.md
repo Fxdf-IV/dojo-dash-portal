@@ -6,14 +6,7 @@ Bem-vindo à documentação do projeto!
 
 ## 📖 Documentos Disponíveis
 
-### 🚀 [Quick Start - README_API.md](./README_API.md)
-Começar rapidamente com a API. Ideal para uma visão geral e primeiros passos.
 
-**Contém:**
-- Como iniciar o servidor
-- Credenciais de teste
-- Endpoints principais
-- Arquitetura do projeto
 
 ---
 
@@ -63,10 +56,10 @@ bash TESTES.sh
 
 ### Para desenvolvedores iniciando no projeto:
 
-1. **[README_API.md](./README_API.md)** - Entender o básico
-2. **[API_DOCUMENTATION.md](./API_DOCUMENTATION.md)** - Explorar endpoints
-3. **[TESTES.sh](./TESTES.sh)** - Rodar testes para validar
-4. **[INTEGRACAO_FRONTEND.md](./INTEGRACAO_FRONTEND.md)** - Integrar com o frontend
+
+1. **[API_DOCUMENTATION.md](./API_DOCUMENTATION.md)** - Explorar endpoints
+2. **[TESTES.sh](./TESTES.sh)** - Rodar testes para validar
+3. **[INTEGRACAO_FRONTEND.md](./INTEGRACAO_FRONTEND.md)** - Integrar com o frontend
 
 ---
 
@@ -80,9 +73,9 @@ bash TESTES.sh
 
 ### Para quem vai testar a API:
 
-1. **[README_API.md](./README_API.md)** - Iniciar servidor
-2. **[TESTES.sh](./TESTES.sh)** - Rodar testes automatizados
-3. **[API_DOCUMENTATION.md](./API_DOCUMENTATION.md)** - Testar endpoints manualmente
+
+1. **[TESTES.sh](./TESTES.sh)** - Rodar testes automatizados
+2. **[API_DOCUMENTATION.md](./API_DOCUMENTATION.md)** - Testar endpoints manualmente
 
 ---
 
@@ -91,7 +84,7 @@ bash TESTES.sh
 ```
 docs/
 ├── README.md                    # Este arquivo (índice)
-├── README_API.md                # Quick start
+
 ├── API_DOCUMENTATION.md         # Referência completa
 ├── INTEGRACAO_FRONTEND.md       # Guia de integração
 └── TESTES.sh                    # Script de testes
@@ -105,8 +98,8 @@ docs/
 
 | Preciso de... | Ver documento |
 |---------------|---------------|
-| Iniciar o servidor | [README_API.md](./README_API.md) |
-| Credenciais de teste | [README_API.md](./README_API.md#-login-de-teste) |
+| Iniciar o servidor | [ENV_SETUP.md](../ENV_SETUP.md) |
+| Credenciais de teste | [ENV_SETUP.md](../ENV_SETUP.md#credenciais-de-teste) |
 | Lista de endpoints | [API_DOCUMENTATION.md](./API_DOCUMENTATION.md#-endpoints-disponíveis) |
 | Exemplo de login | [API_DOCUMENTATION.md](./API_DOCUMENTATION.md#login) |
 | Conectar frontend | [INTEGRACAO_FRONTEND.md](./INTEGRACAO_FRONTEND.md) |

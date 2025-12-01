@@ -1,9 +1,10 @@
-import { Facebook, Instagram, Youtube, Mail, Phone, MapPin } from "lucide-react";
-import logo from "@/assets/logo.png";
+import { Facebook, Instagram, Youtube, Mail, Phone, MapPin, Heart } from "lucide-react";
+import logo from "@/assets/logo.webp";
+import manekiIcon from "@/assets/MenekiNeekoIco.webp";
 
 const Footer = () => {
   return <footer className="bg-secondary border-t border-primary/20" role="contentinfo" aria-label="Rodapé do site">
-      <div className="container mx-auto px-4 py-12">
+      <div className="container mx-auto px-4 pt-12 pb-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Logo and Description */}
           <div className="space-y-4">
@@ -72,8 +73,31 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-8 pt-8 border-t border-primary/20 text-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} Alessandro Karatê e Kobudo. Todos os direitos reservados.</p>
+        <div className="mt-8 pt-4 border-t border-primary/20">
+          <div className="flex flex-col md:flex-row justify-center items-center gap-2 text-sm text-muted-foreground text-center">
+            <div className="flex flex-wrap justify-center items-center gap-1">
+              <span>&copy; {new Date().getFullYear()}</span>
+              <span className="hidden md:inline">&bull;</span>
+              <span>Desenvolvido com</span>
+              <Heart className="h-4 w-4 text-red-500 fill-current" />
+              <span>por</span>
+              <a 
+                href="https://github.com/maneki-neeko" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 font-medium hover:text-primary transition-colors"
+              >
+                Maneki Neeko
+                <img 
+                  src={manekiIcon} 
+                  alt="Maneki Neeko" 
+                  className="h-12 w-12 object-contain"
+                />
+              </a>
+            </div>
+            <span className="hidden md:inline">|</span>
+            <p>Todos os direitos reservados.</p>
+          </div>
         </div>
       </div>
     </footer>;
