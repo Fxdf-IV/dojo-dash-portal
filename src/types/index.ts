@@ -30,10 +30,12 @@ export interface Student {
   updatedAt?: string;
 }
 
+export type MaterialType = 'kihon' | 'kata' | 'theory' | 'bunkai';
+
 export interface Material {
   id: string;
   title: string;
-  type: 'kihon' | 'kata' | 'theory' | 'bunkai';
+  type: MaterialType;
   description?: string;
   content?: string;
   videoUrl?: string;

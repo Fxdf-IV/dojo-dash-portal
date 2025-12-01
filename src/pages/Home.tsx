@@ -124,23 +124,23 @@ const Home = () => {
   const values = [
     {
       icon: Shield,
-      title: "Disciplina",
-      description: "A base do karatê tradicional e formação de caráter",
+      title: "Escolha",
+      description: "Escolha seus valores",
     },
     {
       icon: Heart,
-      title: "Respeito",
-      description: "Honra aos mestres, colegas e à tradição milenar",
+      title: "Cada",
+      description: "Cada frase é de seu gosto",
     },
     {
       icon: Users,
-      title: "Comunidade",
-      description: "Formando cidadãos comprometidos com a sociedade",
+      title: "Proprio",
+      description: "Seus próprios valores exibidos da maneira que você desejar",
     },
     {
       icon: Trophy,
-      title: "Excelência",
-      description: "Busca contínua pela perfeição técnica e pessoal",
+      title: "Card",
+      description: "Cada card é único e personalizável",
     },
   ];
 
@@ -188,12 +188,11 @@ const Home = () => {
               {dojoConfig.name}
             </h1>
             <p className="text-xl md:text-2xl text-primary-foreground/90 mb-8 max-w-2xl mx-auto">
-              Tradição Shorin-Ryu
+              Treino e gestão de dojos e negócios
             </p>
             <p className="text-lg text-primary-foreground/80 mb-12 max-w-3xl mx-auto">
-              Mais que um dojo, uma família dedicada à formação integral através
-              do karatê tradicional. Disciplina, respeito e excelência em cada
-              treino.
+              Organize seus treinos, eventos, graduações e muito mais em um só lugar.
+              Essencial para o seu dojo ou negócio.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center w-fit mx-auto">
               <Link to="/contato">
@@ -225,11 +224,10 @@ const Home = () => {
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-                Nossos Senseis
+                Nossos Profissionais
               </h2>
               <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-                Profissionais dedicados a transmitir a tradição e os valores do
-                karatê Shorin-Ryu
+                Área dedicada aos seus Senseis, Tutores, Instrutores e Professores.
               </p>
             </div>
 
@@ -251,11 +249,11 @@ const Home = () => {
           <div className="container mx-auto px-4 relative z-20">
             <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-bold text-primary-foreground mb-6 animate-fade-in">
-                Nossos Valores
+                Seus Valores
               </h2>
               <p className="text-primary-foreground text-lg max-w-2xl mx-auto">
-                Os pilares que sustentam nossa filosofia e guiam cada aluno em
-                sua jornada
+                Seus valores são os pilares que sustentam sua filosofia e guiam cada aluno em
+                sua jornada.
               </p>
             </div>
 
@@ -290,8 +288,7 @@ const Home = () => {
                 Nossos Locais de Treino
               </h2>
               <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-                Conheça cada um dos espaços onde levamos o karatê tradicional
-                para a comunidade
+                Mostre cada um dos seus espaços, e locais de treino da maneira que você desejar, com as imagens, endereço, horários e mais.
               </p>
             </div>
 
@@ -400,7 +397,7 @@ const Home = () => {
                         </div>
                         <p className="text-muted-foreground mb-4 leading-relaxed">
                           {selectedLoc.description ||
-                            "Espaço dedicado ao treinamento de karatê tradicional."}
+                            "Mostre cada um dos seus espaços, e locais de treino da maneira que você desejar, com as imagens, endereço, horários e mais."}
                         </p>
                         {selectedLoc.schedule && selectedLoc.schedule.length > 0 && (
                           <div className="mt-6">
@@ -440,8 +437,7 @@ const Home = () => {
               Pronto para Começar sua Jornada?
             </h2>
             <p className="text-xl text-primary-foreground/90 mb-8 max-w-2xl mx-auto">
-              Junte-se a nós e descubra o verdadeiro espírito do karatê
-              tradicional
+              Aqui você pode convidar a todos para conhecer o seu trabalho com apenas um clique. Assim como te convido a conhecer o meu caso tenha interesse em ter um portal para seu o negócio.
             </p>
             <Link to="/contato">
               <Button

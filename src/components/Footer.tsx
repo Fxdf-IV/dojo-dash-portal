@@ -20,7 +20,7 @@ const Footer = () => {
               />
               <div>
                 <h3 className="text-primary-foreground font-bold text-lg">{dojoConfig.name}</h3>
-                <p className="text-muted-foreground text-xs">Dojo {dojoConfig.location}</p>
+                <p className="text-muted-foreground text-xs">{dojoConfig.location}</p>
               </div>
             </div>
             <p className="text-sm text-muted-foreground">

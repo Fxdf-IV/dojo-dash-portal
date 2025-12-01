@@ -128,7 +128,7 @@ const Gallery = () => {
             Galeria de Fotos
           </h1>
           <p className="text-xl text-primary-foreground/90 text-center max-w-3xl mx-auto">
-            Veja fotos dos nossos dojos, eventos e momentos de treino. Selecione
+            Publique suas fotos para que todos possam ver os seus momentos com seus alunos. Selecione
             um local para visualizar as imagens correspondentes.
           </p>
         </div>

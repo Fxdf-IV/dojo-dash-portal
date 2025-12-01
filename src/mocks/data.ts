@@ -3,9 +3,9 @@ import { Sensei, Location, Event, Student, Material } from '../types';
 export const mockSenseis: Sensei[] = [
   {
     id: '1',
-    name: 'Mestre Exemplo 3',
+    name: 'Sensei Principal',
     rank: '7º Dan',
-    description: 'Mestre principal com mais de 40 anos de experiência em Karate Shotokan. Dedicado ao ensino da filosofia e técnica.',
+    description: 'Mestre com vasta experiência, responsável pela direção técnica do Dojo. Dedicado ao ensino da filosofia e técnica.',
     imageUrl: 'https://images.unsplash.com/photo-1544367563-12123d8965cd?q=80&w=2070&auto=format&fit=crop',
     orderIndex: 0,
     createdAt: new Date().toISOString(),
@@ -13,9 +13,9 @@ export const mockSenseis: Sensei[] = [
   },
   {
     id: '2',
-    name: 'Sensei Exemplo 2',
+    name: 'Instrutor Sênior',
     rank: '4º Dan',
-    description: 'Especialista em Kata e defesa pessoal. Campeã nacional por 3 anos consecutivos.',
+    description: 'Especialista em Kata e defesa pessoal. Focado no desenvolvimento técnico dos alunos avançados.',
     imageUrl: 'https://images.unsplash.com/photo-1583487566148-523170967526?q=80&w=1974&auto=format&fit=crop',
     orderIndex: 1,
     createdAt: new Date().toISOString(),
@@ -23,9 +23,9 @@ export const mockSenseis: Sensei[] = [
   },
   {
     id: '3',
-    name: 'Sensei Exemplo 1',
+    name: 'Instrutor de Base',
     rank: '3º Dan',
-    description: 'Focado no treinamento de competição e Kumite. Responsável pela equipe juvenil.',
+    description: 'Responsável pelas turmas infantis e iniciantes. Focado na formação de base e disciplina.',
     imageUrl: 'https://images.unsplash.com/photo-1555597673-b21d5c935865?q=80&w=2072&auto=format&fit=crop',
     orderIndex: 2,
     createdAt: new Date().toISOString(),
@@ -36,8 +36,8 @@ export const mockSenseis: Sensei[] = [
 export const mockLocations: Location[] = [
   {
     id: '1',
-    name: 'Dojo Central - Matriz',
-    description: 'Nossa sede principal, com amplo espaço, tatame olímpico e área de musculação.',
+    name: 'Unidade Principal',
+    description: 'Nossa sede principal, com amplo espaço, tatame olímpico e infraestrutura completa para treinos de alto nível.',
     mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.1975860215!2d-46.6520!3d-23.5629!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjPCsDMzJzQ2LjQiUyA0NsKwMzknMDcuMiJX!5e0!3m2!1spt-BR!2sbr!4v1620000000000!5m2!1spt-BR!2sbr',
     imageUrl: 'https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?q=80&w=2069&auto=format&fit=crop',
     images: [
@@ -55,8 +55,8 @@ export const mockLocations: Location[] = [
   },
   {
     id: '2',
-    name: 'Unidade Jardins',
-    description: 'Localizada no coração dos Jardins, ideal para quem busca treinos no horário de almoço ou início da noite.',
+    name: 'Unidade Filial',
+    description: 'Localizada em ponto estratégico, ideal para quem busca treinos em horários alternativos.',
     mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.0!2d-46.66!3d-23.56!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjPCsDMzJzM2LjAiUyA0NsKwMzknMzYuMCJX!5e0!3m2!1spt-BR!2sbr!4v1620000000000!5m2!1spt-BR!2sbr',
     imageUrl: 'https://images.unsplash.com/photo-1555597673-b21d5c935865?q=80&w=2072&auto=format&fit=crop',
     images: [
@@ -75,8 +75,8 @@ export const mockLocations: Location[] = [
 export const mockEvents: Event[] = [
   {
     id: '1',
-    title: 'Exame de Faixa - Inverno 2025',
-    description: 'Exame de graduação para todas as faixas coloridas (Kyu). Inscrições abertas na secretaria.',
+    title: 'Exame de Faixa',
+    description: 'Evento de graduação para avaliação técnica e promoção de faixas dos alunos.',
     date: '2025-07-15T09:00:00.000Z',
     imageUrl: 'https://images.unsplash.com/photo-1518310952931-b1de3221b65c?q=80&w=2070&auto=format&fit=crop',
     registrationPrice: 150.00,
@@ -87,8 +87,8 @@ export const mockEvents: Event[] = [
   },
   {
     id: '2',
-    title: 'Seminário de Kumite com Mestre Tanaka',
-    description: 'Seminário especial focado em técnicas avançadas de luta e estratégia de competição.',
+    title: 'Seminário Técnico',
+    description: 'Workshop especial focado no aprimoramento de técnicas avançadas e estratégias.',
     date: '2025-08-20T14:00:00.000Z',
     imageUrl: 'https://images.unsplash.com/photo-1555597673-b21d5c935865?q=80&w=2072&auto=format&fit=crop',
     registrationPrice: 200.00,
@@ -99,8 +99,8 @@ export const mockEvents: Event[] = [
   },
   {
     id: '3',
-    title: 'Torneio Interno de Kata',
-    description: 'Competição amistosa entre os alunos de todas as unidades. Categorias por idade e graduação.',
+    title: 'Torneio Interno',
+    description: 'Competição amistosa para integração dos alunos e vivência esportiva.',
     date: '2025-09-10T08:00:00.000Z',
     imageUrl: 'https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?q=80&w=2069&auto=format&fit=crop',
     registrationPrice: 50.00,
@@ -159,10 +159,10 @@ export const mockStudents: Student[] = [
 export const mockMaterials: Material[] = [
   {
     id: '1',
-    title: 'Heian Shodan - Passo a Passo',
+    title: 'Exemplo de Matéria 2',
     type: 'kata',
-    description: 'Vídeo detalhado com a execução do primeiro kata.',
-    content: 'O Heian Shodan é o primeiro kata da série Heian...',
+    description: 'Descrição do material de estudo.',
+    content: 'Conteúdo detalhado do material...',
     videoUrl: 'https://www.youtube.com/embed/9Z6WwD7y3j4', // Exemplo
     imageUrl: 'https://images.unsplash.com/photo-1555597673-b21d5c935865?q=80&w=2072&auto=format&fit=crop',
     minBeltId: 'white',
@@ -171,10 +171,10 @@ export const mockMaterials: Material[] = [
   },
   {
     id: '2',
-    title: 'Fundamentos de Kihon - Faixa Branca',
+    title: 'Exemplo de Matéria 1',
     type: 'kihon',
-    description: 'Guia de técnicas básicas para iniciantes.',
-    content: 'Lista de técnicas: Oi Zuki, Age Uke, Gedan Barai...',
+    description: 'Guia de técnicas básicas.',
+    content: 'Lista de técnicas e fundamentos...',
     imageUrl: 'https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?q=80&w=2069&auto=format&fit=crop',
     minBeltId: 'white',
     createdAt: new Date().toISOString(),
@@ -182,9 +182,9 @@ export const mockMaterials: Material[] = [
   },
   {
     id: '3',
-    title: 'Bunkai do Heian Nidan',
+    title: 'Exemplo de Matéria 4',
     type: 'bunkai',
-    description: 'Aplicação prática das técnicas do segundo kata.',
+    description: 'Aplicação prática das técnicas.',
     videoUrl: 'https://www.youtube.com/embed/example',
     minBeltId: 'yellow',
     createdAt: new Date().toISOString(),

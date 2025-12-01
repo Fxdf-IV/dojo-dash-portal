@@ -122,7 +122,7 @@ const Events = () => {
                   Eventos
                 </h1>
                 <p className="text-xl text-primary-foreground/90 text-center max-w-3xl mx-auto">
-                  Participe dos eventos do dojo e acompanhe nossa agenda de atividades.
+                  Informe os eventos ou agenda do seu negócio.
                 </p>
               </div>
           </section>

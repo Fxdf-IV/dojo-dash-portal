@@ -124,7 +124,7 @@ const Login = () => {
       <div className="max-w-md mx-auto">
         <div className="text-center mb-8">
           <img src={logo} alt="Dojo Dash Portal" className="h-20 w-20 mx-auto mb-4" />
-          <h1 className="text-3xl font-bold text-primary-foreground mb-4">Área do Aluno</h1>
+          <h1 className="text-3xl font-bold text-primary-foreground mb-4">Área de Login e Cadastro</h1>
           <p className="text-primary-foreground mb-4">Acesse sua conta ou cadastre-se</p>
         </div>
 
@@ -144,7 +144,7 @@ const Login = () => {
                 {import.meta.env.VITE_USE_MOCK === 'true' && (
                   <div className="mb-6 p-4 bg-secondary/20 rounded-lg border border-secondary space-y-3">
                     <p className="text-sm font-medium text-center text-muted-foreground mb-2">
-                      ⚡ Modo Portfólio (Mock)
+                      ⚡ Acesse a área do admin ou aluno para testar
                     </p>
                     <div className="grid grid-cols-2 gap-2">
                       <Button 
@@ -159,7 +159,7 @@ const Login = () => {
                           });
                         }}
                       >
-                        Admin Mock
+                        Admin
                       </Button>
                       <Button 
                         variant="outline" 
@@ -173,7 +173,7 @@ const Login = () => {
                           });
                         }}
                       >
-                        Aluno Mock
+                        Aluno
                       </Button>
                     </div>
                   </div>

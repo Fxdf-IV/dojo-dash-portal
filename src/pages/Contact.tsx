@@ -94,8 +94,8 @@ const Contact = () => {
             Entre em Contato
           </h1>
           <p className="text-xl text-primary-foreground/90 text-center max-w-3xl mx-auto">
-            Tem dúvidas ou quer começar a treinar? Estamos prontos para ajudar
-            você!
+            Essa área é dedicada a você fornecer as suas informações de contato.
+            Assim como você pode nos enviar uma mensagem caso tenha interesse em saber mais sobre o projeto.
           </p>
         </div>
       </section>
@@ -120,7 +120,7 @@ const Contact = () => {
                       <p className="text-muted-foreground text-lg text-center">
                         Clique no botão abaixo para conversar conosco via WhatsApp.
                         Estamos prontos para responder suas dúvidas! <br />
-                        <strong>Começe sua jornada no karatê!</strong>
+                        <strong>Coloque agora seu negócio online!</strong>
                       </p>
                       <Button
                         onClick={handleWhatsAppClick}
@@ -200,7 +200,7 @@ const Contact = () => {
                 <div className="p-4 border-b bg-card">
                   <h2 className="text-2xl font-bold flex items-center gap-2">
                     <MapPin className="w-6 h-6 text-primary" />
-                    Localizações
+                    Exiba as localizações do seu negócio
                   </h2>
                 </div>
                 <CardContent className="p-0 flex-1 bg-muted/50 relative">
@@ -245,7 +245,7 @@ const Contact = () => {
             <div className="h-[500px] lg:h-full flex flex-col">
               <Card className="h-full border-primary/20 shadow-md flex flex-col overflow-hidden">
                 <div className="p-6 border-b bg-card">
-                  <h3 className="text-xl font-bold">Nossos Locais</h3>
+                  <h3 className="text-xl font-bold">Seus locais</h3>
                   <p className="text-sm text-muted-foreground mt-1">
                     Selecione para visualizar no mapa
                   </p>

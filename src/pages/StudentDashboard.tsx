@@ -51,13 +51,11 @@ const StudentDashboard = () => {
 
   // Filter materials by user's belt level
   const availableMaterials = {
-    kihons: materials.filter(m => m.type === "kihon" && canAccessMaterial(user?.beltId, m.minBeltId)),
-    katas: materials.filter(m => m.type === "kata" && canAccessMaterial(user?.beltId, m.minBeltId)),
-    theory: materials.filter(m => m.type === "theory" && canAccessMaterial(user?.beltId, m.minBeltId)),
-    bunkai: materials.filter(m => m.type === "bunkai" && canAccessMaterial(user?.beltId, m.minBeltId)),
+    kihons: materials.filter(m => m.type === "Materia 1 (ex: Kihon)" && canAccessMaterial(user?.beltId, m.minBeltId)),
+    katas: materials.filter(m => m.type === "Materia 2 (ex: Kata)" && canAccessMaterial(user?.beltId, m.minBeltId)),
+    theory: materials.filter(m => m.type === "Materia 3 (ex: Teoria)" && canAccessMaterial(user?.beltId, m.minBeltId)),
+    bunkai: materials.filter(m => m.type === "Materia 4 (ex: Bunkai)" && canAccessMaterial(user?.beltId, m.minBeltId)),
   };
-
-
 
   // Refresh user data on page load
   useEffect(() => {
@@ -106,7 +104,7 @@ const StudentDashboard = () => {
                 Bem-vindo, {user?.name}!
               </h1>
               <p className="text-primary-foreground/90">
-                Acesse seus materiais de treinamento
+                Aqui cada aluno terá acesso a matéria que dele.
               </p>
             </div>
             {beltDisplay && (
@@ -137,19 +135,19 @@ const StudentDashboard = () => {
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="kihons">
               <BookOpen className="w-4 h-4 mr-2" />
-              Kihons
+              Materia 1 (ex: Kihon)
             </TabsTrigger>
             <TabsTrigger value="katas">
               <Trophy className="w-4 h-4 mr-2" />
-              Katas
+              Materia 2 (ex: Kata)
             </TabsTrigger>
             <TabsTrigger value="theory">
               <FileText className="w-4 h-4 mr-2" />
-              Teoria
+              Materia 3 (ex: Teoria)
             </TabsTrigger>
             <TabsTrigger value="bunkai">
               <Swords className="w-4 h-4 mr-2" />
-              Bunkai
+              Materia 4 (ex: Bunkai)
             </TabsTrigger>
           </TabsList>
 
@@ -165,7 +163,7 @@ const StudentDashboard = () => {
               ) : availableMaterials.kihons.length === 0 ? (
                 <Card className="col-span-full">
                   <CardContent className="py-8 text-center text-muted-foreground">
-                    Nenhum kihon disponível para sua graduação atual
+                    Nenhum material disponível para sua graduação atual
                   </CardContent>
                 </Card>
               ) : (
@@ -220,7 +218,7 @@ const StudentDashboard = () => {
               ) : availableMaterials.katas.length === 0 ? (
                 <Card className="col-span-full">
                   <CardContent className="py-8 text-center text-muted-foreground">
-                    Nenhum kata disponível para sua graduação atual
+                    Nenhum material disponível para sua graduação atual
                   </CardContent>
                 </Card>
               ) : (
@@ -285,7 +283,7 @@ const StudentDashboard = () => {
               ) : availableMaterials.theory.length === 0 ? (
                 <Card className="col-span-full">
                   <CardContent className="py-8 text-center text-muted-foreground">
-                    Nenhum material teórico disponível para sua graduação atual
+                    Nenhum material disponível para sua graduação atual
                   </CardContent>
                 </Card>
               ) : (
@@ -346,7 +344,7 @@ const StudentDashboard = () => {
               ) : availableMaterials.bunkai.length === 0 ? (
                 <Card className="col-span-full">
                   <CardContent className="py-8 text-center text-muted-foreground">
-                    Nenhum bunkai disponível para sua graduação atual
+                    Nenhum material disponível para sua graduação atual
                   </CardContent>
                 </Card>
               ) : (

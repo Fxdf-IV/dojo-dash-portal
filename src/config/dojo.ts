@@ -12,11 +12,11 @@ export interface DojoConfig {
 }
 
 export const dojoConfig: DojoConfig = {
-  name: 'Dojo Exemplo (Mock)',
-  description: 'Este é um dojo fictício para demonstração do portfólio. Nenhum dado aqui é real.',
-  location: 'Cidade Exemplo - EX',
-  phone: '(00) 00000-0000',
-  email: 'contato@dojoexemplo.com',
+  name: 'Dojo Dash Portal',
+  description: 'A plataforma completa para gestão do seu Dojo ou negócio. Organize alunos, eventos, graduações e muito mais em um só lugar.',
+  location: 'Seu negocio aqui',
+  phone: '(11) 99999-9999',
+  email: 'contato@dojodash.com',
   social: {
     facebook: 'https://facebook.com',
     instagram: 'https://instagram.com',

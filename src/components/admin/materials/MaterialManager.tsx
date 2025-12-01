@@ -22,7 +22,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { BeltSelect, BELT_GRADES } from "@/components/BeltSelect";
 import { ImageUpload } from "@/components/ui/image-upload";
 import { useToast } from "@/hooks/use-toast";
-import { Material } from "@/types";
+import { Material, MaterialType } from "@/types";
 import { materialsService } from "@/services";
 import { uploadService } from "@/services/upload";
 
@@ -44,7 +44,7 @@ export const MaterialManager = ({
 
   const [form, setForm] = useState({
     title: "",
-    type: "kihon" as "kihon" | "kata" | "theory" | "bunkai",
+    type: "kihon" as MaterialType,
     description: "",
     content: "",
     videoUrl: "",
@@ -192,11 +192,7 @@ export const MaterialManager = ({
                       onChange={(e) =>
                         setForm({
                           ...form,
-                          type: e.target.value as
-                            | "kihon"
-                            | "kata"
-                            | "theory"
-                            | "bunkai",
+                          type: e.target.value as MaterialType,
                         })
                       }
                       className="w-full px-3 py-2 border rounded-md"
@@ -278,10 +274,10 @@ export const MaterialManager = ({
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {Object.entries({
-              kihon: "Kihons",
-              kata: "Katas",
-              theory: "Teoria",
-              bunkai: "Bunkai",
+              kihon: "Materia 1 (ex: Kihon)",
+              kata: "Materia 2 (ex: Kata)",
+              theory: "Materia 3 (ex: Teoria)",
+              bunkai: "Materia 4 (ex: Bunkai)",
             }).map(([type, label]) => (
               <Card key={type} className="border-primary/20">
                 <CardHeader>

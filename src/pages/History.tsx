@@ -8,32 +8,32 @@ import HERO_IMAGE from "@/assets/images/hero/HistoryCover.webp";
 const History = () => {
   const timeline = [
     {
-      year: "2010",
-      title: "Fundação",
-      description: "O Dojo Exemplo foi fundado com o objetivo de promover a saúde e a disciplina através das artes marciais."
+      year: "Início",
+      title: "Sua História",
+      description: "Conte como tudo começou. Datas importantes, fundadores e a motivação inicial do seu projeto."
     },
     {
-      year: "2015",
-      title: "Expansão",
-      description: "Inauguração da segunda unidade e início das turmas infantis."
+      year: "Evolução",
+      title: "Seus Marcos",
+      description: "Destaque momentos de crescimento, mudanças importantes e conquistas da sua trajetória."
     },
     {
-      year: "2020",
-      title: "Reconhecimento",
-      description: "Prêmio de melhor escola de artes marciais da região."
+      year: "Hoje",
+      title: "Seu Momento",
+      description: "Mostre sua estrutura atual, metodologia e o que torna seu dojo ou negócio único."
     },
     {
-      year: "2024",
-      title: "Nova Era",
-      description: "Implementação de novas metodologias e modernização das instalações."
+      year: "Futuro",
+      title: "Sua Visão",
+      description: "Compartilhe seus objetivos e onde você quer chegar, inspirando alunos e parceiros."
     }
   ];
   
   return <div className="min-h-screen pt-20">
       <SEO
-        title="História - Dojo Exemplo"
-        description="Conheça a história do Dojo Exemplo. Uma jornada dedicada à tradição e formação de caráter."
-        keywords="história karate, dojo exemplo, artes marciais"
+        title="Sobre o Projeto - Dojo Dash Portal"
+        description="Conheça o Dojo Dash Portal, a solução completa para gestão de artes marciais."
+        keywords="gestão dojo, sistema karate, artes marciais, software dojo"
       />
       {/* Hero Section */}
       <section className="relative py-20 bg-gradient-hero" aria-labelledby="history-hero">
@@ -43,40 +43,37 @@ const History = () => {
         />
         <div className="container mx-auto px-4 relative z-10">
           <h1 className="text-5xl md:text-6xl font-bold text-primary-foreground text-center mb-6">
-            Nossa História
+            Sobre o Projeto
           </h1>
           <p className="text-xl text-primary-foreground/90 text-center max-w-3xl mx-auto">
-            Uma jornada dedicada à excelência e ao desenvolvimento humano.
+            Uma solução moderna e eficiente para a gestão do seu Dojo.
           </p>
         </div>
     </section>
     <AnimatedDivider />
 
-      {/* History of Life and Dojo Section */}
+      {/* Project Description Section */}
       <section className="py-20 bg-gradient-to-br from-background to-secondary/30">
         <div className="container mx-auto px-4 max-w-4xl">
           <h2 className="text-4xl font-bold text-center mb-12 text-foreground">
-            Sobre o Dojo
+            A Plataforma
           </h2>
           
           <div className="prose prose-lg max-w-none space-y-6 text-muted-foreground">
             <p>
-              O <strong className="text-primary">Dojo Exemplo</strong> é uma instituição fictícia criada para demonstrar as capacidades desta plataforma de gerenciamento.
-              Nossa missão (fictícia) é transformar vidas através do esporte.
+              O <strong className="text-primary">Dojo Dash Portal</strong> um projeto criado para demonstrar as capacidades desta plataforma de gerenciamento.
+              Desenvolvido pelo time <strong className="text-primary">Maneki Neeko</strong>, com o objetivo de fornecer uma plataforma completa para gestão do seu dojo em um preço acessível.
             </p>
 
             <div className="bg-secondary/50 border-l-4 border-primary p-6 my-8 rounded-r">
               <p className="text-lg font-semibold text-foreground mb-2">
-                “A disciplina é a ponte entre metas e realizações.”
-              </p>
-              <p className="text-sm text-muted-foreground text-white">
-                — Citação Exemplo
+                “Tecnologia e tradição caminhando juntas para a evolução do seu negócio.”
               </p>
             </div>
 
             <p>
-              Nossas instalações contam com equipamentos modernos e um ambiente acolhedor para alunos de todas as idades.
-              Oferecemos aulas de Karatê, Kobudo e Defesa Pessoal.
+            Tudo que você está lendo pode ser editado e alterado a seu gosto.
+            Incluindo também cores, layout, conteúdo, imagens, e etc.
             </p>
           </div>
         </div>
@@ -91,14 +88,14 @@ const History = () => {
         />
         <div className="container mx-auto px-4 relative z-10">
           <h2 className="text-4xl font-bold text-center text-primary-foreground mb-16 animate-fade-in">
-            Linha do Tempo
+            Exiba sua linha do tempo, ou oque mais desejar.
           </h2>
 
           <div className="max-w-4xl mx-auto space-y-8">
             {timeline.map((event, index) => <Card key={index} className="border-primary/20 hover:border-primary transition-all hover:shadow-glow">
                 <CardContent className="p-6">
                   <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0">
+                  <div className="flex-shrink-0">
                       <div className="flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full">
                         <Calendar className="w-8 h-8 text-primary" />
                       </div>
@@ -122,7 +119,7 @@ const History = () => {
       <section className="py-20 border-primary bg-gradient-to-br from-background to-secondary/30">
         <div className="container mx-auto px-20 max-w-5xl">
           <h2 className="text-4xl font-bold text-center mb-16 text-foreground">
-            Sistema de Graduação
+            Mostre seu sistema de graduação
           </h2>
           <BeltGrades />
         </div>
