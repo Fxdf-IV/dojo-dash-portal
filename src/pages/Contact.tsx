@@ -8,9 +8,9 @@ import { SEO } from "@/components/SEO";
 import { AnimatedDivider } from "@/components/AnimatedDivider";
 import HERO_IMAGE from "@/assets/images/hero/ContactCover.webp";
 
-const DEFAULT_WHATSAPP_NUMBER = "18987654321";
+const DEFAULT_WHATSAPP_NUMBER = "9196310510";
 const DEFAULT_WHATSAPP_MESSAGE =
-  "Olá, gostaria de conhecer o karatê do Dojo Dash. Como eu posso começar?";
+  "Olá, gostaria de conhecer mais sobre o projeto Dojo Dash, para usar no meu negócio.";
 
 const Contact = () => {
   const [whatsappNumber, setWhatsappNumber] = useState(DEFAULT_WHATSAPP_NUMBER);
