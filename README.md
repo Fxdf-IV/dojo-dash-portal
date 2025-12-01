@@ -3,6 +3,7 @@
 Portal completo para gerenciamento de dojo de karatê com backend API integrado.
 
 > 📘 **Relatório Detalhado:** Para uma visão aprofundada sobre as tecnologias, arquitetura e funcionalidades, consulte o [Relatório do Projeto](./PROJECT_REPORT.md).
+> 🌟 **Repositório Principal:** [maneki-neeko/dojo-dash-portal](https://github.com/maneki-neeko/dojo-dash-portal)
 
 ## 🚀 Quick Start
 
