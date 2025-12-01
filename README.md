@@ -2,6 +2,7 @@
 
 Portal completo para gerenciamento de dojo de karatê com backend API integrado.
 
+> 🌐 **Live Demo:** [https://dojo-dash-portal.vercel.app/](https://dojo-dash-portal.vercel.app/)
 > 📘 **Relatório Detalhado:** Para uma visão aprofundada sobre as tecnologias, arquitetura e funcionalidades, consulte o [Relatório do Projeto](./PROJECT_REPORT.md).
 > 🌟 **Repositório Principal:** [maneki-neeko/dojo-dash-portal](https://github.com/maneki-neeko/dojo-dash-portal)
 
@@ -30,11 +31,17 @@ VITE_USE_MOCK=true
 
 3. Reinicie o servidor de desenvolvimento: `npm run dev`.
 
+**Credenciais de Teste (Mock Mode):**
+- **Administrador:** `admin@test.com` (qualquer senha)
+- **Aluno:** `student@test.com` (qualquer senha)
+
+**Deploy no Vercel/Netlify:**
+Adicione a variável de ambiente `VITE_USE_MOCK` com valor `true` nas configurações do projeto.
+
 ## 📚 Documentação
 
 - **[API Documentation](./docs/API_DOCUMENTATION.md)** - Referência completa da API
 - **[Integração Frontend](./docs/INTEGRACAO_FRONTEND.md)** - Guia de integração
-
 - **[Testes](./docs/TESTES.sh)** - Script automatizado de testes
 
 ## Como editar este código?

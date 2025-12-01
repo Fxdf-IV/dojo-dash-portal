@@ -28,6 +28,8 @@ import { LoadingGrid } from "@/components/LoadingStates";
 import { SenseisCarousel } from "@/components/SenseisCarousel";
 import HERO_IMAGE from "@/assets/images/hero/HomeCover.webp";
 
+import { dojoConfig } from "@/config/dojo";
+
 const Home = () => {
   const [senseis, setSenseis] = useState<Sensei[]>([]);
   const [loadingSenseis, setLoadingSenseis] = useState(true);
@@ -158,9 +160,9 @@ const Home = () => {
     <>
       <div className="min-h-screen overflow-x-hidden">
         <SEO
-          title="Alessandro Karatê e Kobudo - Dojo Palmital SP"
-          description="Escola de Karatê Shorin-Ryu e Kobudo em Palmital SP. Tradição, disciplina e respeito. Formando não apenas karatecas, mas cidadãos de caráter."
-          keywords="karate palmital, kobudo palmital, shorin-ryu, artes marciais palmital, dojo alessandro, karatê tradicional"
+          title={`${dojoConfig.name} - Dojo ${dojoConfig.location}`}
+          description={dojoConfig.description}
+          keywords="karate, kobudo, shorin-ryu, artes marciais, dojo"
         />
         {/* Hero Section */}
         <section
@@ -176,14 +178,14 @@ const Home = () => {
           <div className="relative z-10 container mx-auto px-4 text-center">
             <img
               src={logo}
-              alt="Logo Alessandro Karatê e Kobudo - Dojo Palmital SP"
+              alt={`Logo ${dojoConfig.name}`}
               className="w-32 h-32 md:w-40 md:h-40 mx-auto mb-6 animate-fade-in"
               loading="eager"
               width="160"
               height="160"
             />
             <h1 className="text-5xl md:text-7xl font-bold text-primary-foreground mb-6 animate-fade-in">
-              Alessandro Karatê e Kobudo
+              {dojoConfig.name}
             </h1>
             <p className="text-xl md:text-2xl text-primary-foreground/90 mb-8 max-w-2xl mx-auto">
               Tradição Shorin-Ryu

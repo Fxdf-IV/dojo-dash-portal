@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import logo from "@/assets/logo.webp";
 import { useAuth } from "@/contexts/AuthContext";
 
+import { dojoConfig } from "@/config/dojo";
+
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
@@ -45,12 +47,12 @@ const Navbar = () => {
           <Link to="/" className="flex items-center gap-3 group">
             <img
               src={logo}
-              alt="Alessandro Karatê e Kobudo"
+              alt={dojoConfig.name}
               className="h-14 w-14 transition-transform group-hover:scale-110"
             />
             <div className="md:block">
-              <span className="text-primary-foreground font-bold text-xl">Alessandro Karatê e Kobudo</span>
-              <p className="text-muted-foreground text-xs">Palmital - SP</p>
+              <span className="text-primary-foreground font-bold text-xl">{dojoConfig.name}</span>
+              <p className="text-muted-foreground text-xs">Dojo {dojoConfig.location}</p>
             </div>
           </Link>
 

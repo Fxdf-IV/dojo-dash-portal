@@ -11,11 +11,14 @@ import { locationsService as mockLocations } from './mock/locations';
 import { eventsService as realEvents } from './events';
 import { eventsService as mockEvents } from './mock/events';
 
+import { authService as realAuth } from './auth';
+import { authService as mockAuth } from './mock/auth';
+
 export const senseisService = useMock ? mockSenseis : realSenseis;
 export const locationsService = useMock ? mockLocations : realLocations;
 export const eventsService = useMock ? mockEvents : realEvents;
+export const authService = useMock ? mockAuth : realAuth;
 
-export * from './auth';
 export * from './users';
 export * from './students';
 export * from './materials';
