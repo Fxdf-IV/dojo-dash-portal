@@ -12,8 +12,8 @@ router.get('/', async (req, res) => {
     if (!settings) {
       // Criar com valores padrão se não existir
       settings = new ContactSettings({
-        whatsappNumber: '18987654321',
-        whatsappMessage: 'Olá, gostaria de conhecer o karatê do Dojo Dash. Como eu posso começar?'
+        whatsappNumber: '9196310510',
+        whatsappMessage: 'Olá, gostaria de conhecer mais sobre o projeto Dojo Dash, para usar no meu negócio.'
       });
       await settings.save();
     }
