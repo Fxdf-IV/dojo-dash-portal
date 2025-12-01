@@ -89,7 +89,7 @@ export const authService = {
     // A simple way is to decode the mock token if we made it meaningful, or just return a default user if a token exists.
     // Let's assume if token is 'mock-admin-token' it's admin, else student.
     
-    const token = localStorage.getItem('auth_token');
+    const token = localStorage.getItem('token');
     
     if (!token) {
       throw new Error('Not authenticated');
