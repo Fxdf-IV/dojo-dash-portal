@@ -26,6 +26,10 @@ export const authService = {
     // Simulating network delay
     await new Promise(resolve => setTimeout(resolve, 500));
 
+    if (credentials.password !== '1234') {
+      throw new Error('Credenciais inválidas.');
+    }
+
     if (credentials.email === 'admin@test.com') {
       const token = 'mock-admin-token';
       setAuthToken(token);
@@ -44,10 +48,6 @@ export const authService = {
       };
     }
 
-    // Default to student for any other email for easier testing, or throw error?
-    // Let's throw error to be realistic, but maybe allow a generic "test" user?
-    // The user asked for "login teste para adm e para aluno".
-    
     throw new Error('Credenciais inválidas. Use admin@test.com ou student@test.com');
   },
 

@@ -14,14 +14,20 @@ import { eventsService as mockEvents } from './mock/events';
 import { authService as realAuth } from './auth';
 import { authService as mockAuth } from './mock/auth';
 
+import { studentsService as realStudents } from './students';
+import { studentsService as mockStudents } from './mock/students';
+
+import { materialsService as realMaterials } from './materials';
+import { materialsService as mockMaterials } from './mock/materials';
+
 export const senseisService = useMock ? mockSenseis : realSenseis;
 export const locationsService = useMock ? mockLocations : realLocations;
 export const eventsService = useMock ? mockEvents : realEvents;
 export const authService = useMock ? mockAuth : realAuth;
+export const studentsService = useMock ? mockStudents : realStudents;
+export const materialsService = useMock ? mockMaterials : realMaterials;
 
 export * from './users';
-export * from './students';
-export * from './materials';
 export * from './contacts';
 export * from './upload';
 export * from './contactSettings';

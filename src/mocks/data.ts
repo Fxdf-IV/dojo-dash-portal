@@ -1,4 +1,4 @@
-import { Sensei, Location, Event } from '../types';
+import { Sensei, Location, Event, Student, Material } from '../types';
 
 export const mockSenseis: Sensei[] = [
   {
@@ -106,6 +106,87 @@ export const mockEvents: Event[] = [
     registrationPrice: 50.00,
     registeredStudents: [],
     registeredCount: 30,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  }
+];
+
+export const mockStudents: Student[] = [
+  {
+    id: '1',
+    userId: 'user-1',
+    name: 'João Silva',
+    email: 'joao.silva@email.com',
+    birthDate: '2010-05-15',
+    phone: '(11) 99999-1111',
+    startDate: '2023-02-10',
+    beltId: 'yellow',
+    location: '1', // Dojo Central
+    status: 'active',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: '2',
+    userId: 'user-2',
+    name: 'Maria Oliveira',
+    email: 'maria.oliveira@email.com',
+    birthDate: '2012-08-20',
+    phone: '(11) 98888-2222',
+    startDate: '2023-06-15',
+    beltId: 'orange',
+    location: '2', // Unidade Jardins
+    status: 'active',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: '3',
+    userId: 'user-3',
+    name: 'Pedro Santos',
+    email: 'pedro.santos@email.com',
+    birthDate: '2008-03-10',
+    phone: '(11) 97777-3333',
+    startDate: '2022-01-20',
+    beltId: 'green',
+    location: '1', // Dojo Central
+    status: 'inactive',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  }
+];
+
+export const mockMaterials: Material[] = [
+  {
+    id: '1',
+    title: 'Heian Shodan - Passo a Passo',
+    type: 'kata',
+    description: 'Vídeo detalhado com a execução do primeiro kata.',
+    content: 'O Heian Shodan é o primeiro kata da série Heian...',
+    videoUrl: 'https://www.youtube.com/embed/9Z6WwD7y3j4', // Exemplo
+    imageUrl: 'https://images.unsplash.com/photo-1555597673-b21d5c935865?q=80&w=2072&auto=format&fit=crop',
+    minBeltId: 'white',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: '2',
+    title: 'Fundamentos de Kihon - Faixa Branca',
+    type: 'kihon',
+    description: 'Guia de técnicas básicas para iniciantes.',
+    content: 'Lista de técnicas: Oi Zuki, Age Uke, Gedan Barai...',
+    imageUrl: 'https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?q=80&w=2069&auto=format&fit=crop',
+    minBeltId: 'white',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: '3',
+    title: 'Bunkai do Heian Nidan',
+    type: 'bunkai',
+    description: 'Aplicação prática das técnicas do segundo kata.',
+    videoUrl: 'https://www.youtube.com/embed/example',
+    minBeltId: 'yellow',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   }

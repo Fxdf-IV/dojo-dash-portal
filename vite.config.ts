@@ -14,9 +14,14 @@ export default defineConfig(() => ({
     {
       name: 'configure-server',
       configureServer: async (server: any) => {
-        // Importa e configura o servidor API
-        const { setupApiServer } = await import('./server/index.js');
-        setupApiServer(server.middlewares as any);
+        // Só inicia o servidor API se NÃO estiver em modo mock
+        if (process.env.VITE_USE_MOCK !== 'true') {
+          // Importa e configura o servidor API
+          const { setupApiServer } = await import('./server/index.js');
+          setupApiServer(server.middlewares as any);
+        } else {
+          console.log('🔶 Mock Mode ativado: Backend API não será iniciado.');
+        }
       }
     }
   ],
