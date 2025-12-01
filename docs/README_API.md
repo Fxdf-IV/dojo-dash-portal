@@ -168,5 +168,5 @@ Este setup demonstra:
 
 ---
 
-**Desenvolvido por:** Alessandro Karatê e Kobudo
+**Desenvolvido por:** Dojo Dash Portal
 **Stack:** React + TypeScript + Vite + Express

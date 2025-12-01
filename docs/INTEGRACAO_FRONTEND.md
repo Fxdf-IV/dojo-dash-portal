@@ -228,7 +228,7 @@ const Home = () => {
       console.error('Erro ao carregar senseis:', error);
       // Fallback para dados mock se API falhar
       setSenseis([
-        { name: "Sensei Alessandro", rank: "4º Dan - Faixa Preta", description: "..." },
+        { name: "Sensei DojoDash", rank: "4º Dan - Faixa Preta", description: "..." },
         { name: "Sensei Milena", rank: "2º Dan - Faixa Preta", description: "..." },
         { name: "Sensei Vinicius", rank: "1º Dan - Faixa Preta", description: "..." },
       ]);

@@ -3,7 +3,7 @@ import { Sensei, Location, Event } from '../types';
 export const mockSenseis: Sensei[] = [
   {
     id: '1',
-    name: 'Mestre Akira',
+    name: 'Mestre Exemplo 3',
     rank: '7º Dan',
     description: 'Mestre principal com mais de 40 anos de experiência em Karate Shotokan. Dedicado ao ensino da filosofia e técnica.',
     imageUrl: 'https://images.unsplash.com/photo-1544367563-12123d8965cd?q=80&w=2070&auto=format&fit=crop',
@@ -13,7 +13,7 @@ export const mockSenseis: Sensei[] = [
   },
   {
     id: '2',
-    name: 'Sensei Yuki',
+    name: 'Sensei Exemplo 2',
     rank: '4º Dan',
     description: 'Especialista em Kata e defesa pessoal. Campeã nacional por 3 anos consecutivos.',
     imageUrl: 'https://images.unsplash.com/photo-1583487566148-523170967526?q=80&w=1974&auto=format&fit=crop',
@@ -23,7 +23,7 @@ export const mockSenseis: Sensei[] = [
   },
   {
     id: '3',
-    name: 'Sensei Kenji',
+    name: 'Sensei Exemplo 1',
     rank: '3º Dan',
     description: 'Focado no treinamento de competição e Kumite. Responsável pela equipe juvenil.',
     imageUrl: 'https://images.unsplash.com/photo-1555597673-b21d5c935865?q=80&w=2072&auto=format&fit=crop',

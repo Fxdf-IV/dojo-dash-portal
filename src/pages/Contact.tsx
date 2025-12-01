@@ -8,9 +8,9 @@ import { SEO } from "@/components/SEO";
 import { AnimatedDivider } from "@/components/AnimatedDivider";
 import HERO_IMAGE from "@/assets/images/hero/ContactCover.webp";
 
-const DEFAULT_WHATSAPP_NUMBER = "18997558617";
+const DEFAULT_WHATSAPP_NUMBER = "18987654321";
 const DEFAULT_WHATSAPP_MESSAGE =
-  "Olá, gostaria de conhecer o karatê do Alessandro Dojo. Como eu posso começar?";
+  "Olá, gostaria de conhecer o karatê do Dojo Dash. Como eu posso começar?";
 
 const Contact = () => {
   const [whatsappNumber, setWhatsappNumber] = useState(DEFAULT_WHATSAPP_NUMBER);
@@ -73,9 +73,9 @@ const Contact = () => {
   return (
     <div className="min-h-screen pt-20">
       <SEO
-        title="Contato - Alessandro Karatê e Kobudo"
-        description="Entre em contato conosco. Tire suas dúvidas ou venha conhecer nossos dojos em Palmital, Marília e Pirapozinho. WhatsApp disponível."
-        keywords="contato karate palmital, dojo palmital telefone, whatsapp karate, aulas karate contato"
+        title="Contato - Dojo Dash Portal"
+        description="Entre em contato conosco. Tire suas dúvidas ou venha conhecer nossos dojos em Cidade Exemplo, Marília e Pirapozinho. WhatsApp disponível."
+        keywords="contato karate Cidade Exemplo, dojo Cidade Exemplo telefone, whatsapp karate, aulas karate contato"
       />
       {/* Hero Section */}
       <section
@@ -153,7 +153,7 @@ const Contact = () => {
                     <div>
                       <p className="font-semibold text-card-foreground">Telefone</p>
                       <p className="text-sm text-muted-foreground">
-                        (18) 99755-8617
+                        (00) 00000-0000
                       </p>
                     </div>
                   </CardContent>
@@ -167,7 +167,7 @@ const Contact = () => {
                     <div>
                       <p className="font-semibold text-card-foreground">Email</p>
                       <p className="text-sm text-muted-foreground">
-                        alekaratepalmital1@gmail.com
+                        contato@exemplo.com
                       </p>
                     </div>
                   </CardContent>
@@ -182,7 +182,7 @@ const Contact = () => {
                       <p className="font-semibold text-card-foreground">
                         Localização
                       </p>
-                      <p className="text-sm text-muted-foreground">Palmital - SP</p>
+                      <p className="text-sm text-muted-foreground">Cidade Exemplo - EX</p>
                     </div>
                   </CardContent>
                 </Card>

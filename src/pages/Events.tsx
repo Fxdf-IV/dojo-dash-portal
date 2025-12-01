@@ -107,9 +107,9 @@ const Events = () => {
   return (
     <div className="min-h-screen pt-20">
       <SEO
-        title="Eventos - Alessandro Karatê e Kobudo"
+        title="Eventos - Dojo Dash Portal"
         description="Acompanhe os próximos eventos, campeonatos e atividades do dojo. Faça sua inscrição e participe das competições de karatê e kobudo."
-        keywords="eventos karate, campeonato karate palmital, competições artes marciais, treinos especiais"
+        keywords="eventos karate, campeonato karate Cidade Exemplo, competições artes marciais, treinos especiais"
       />
       {/* Hero Section */}
       <section className="relative py-20 bg-gradient-hero" aria-labelledby="gallery-hero">

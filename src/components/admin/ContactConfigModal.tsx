@@ -125,7 +125,7 @@ export const ContactConfigModal = ({ onUpdate }: ContactConfigModalProps) => {
               name="whatsappMessage"
               value={formData.whatsappMessage}
               onChange={handleChange}
-              placeholder="Olá, gostaria de conhecer o karatê do Alessandro Dojo. Como eu posso começar?"
+              placeholder="Olá, gostaria de conhecer o karatê do Dojo Dash. Como eu posso começar?"
               rows={4}
               required
             />

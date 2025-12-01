@@ -106,9 +106,9 @@ const Gallery = () => {
   return (
     <div className="min-h-screen pt-20">
       <SEO
-        title="Galeria - Alessandro Karatê e Kobudo"
-        description="Confira fotos dos nossos dojos e espaços de treinamento. Veja o karatê tradicional Shorin-Ryu em ação em Palmital e região."
-        keywords="galeria karate, fotos dojo, locais treino karate palmital, academia karate"
+        title="Galeria - Dojo Dash Portal"
+        description="Confira fotos dos nossos dojos e espaços de treinamento. Veja o karatê tradicional Shorin-Ryu em ação em Cidade Exemplo e região."
+        keywords="galeria karate, fotos dojo, locais treino karate Cidade Exemplo, academia karate"
       />
 
       {/* Hero Section */}

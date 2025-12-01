@@ -123,7 +123,7 @@ const Login = () => {
     <div className="container mx-auto px-4 py-12 relative z-10">
       <div className="max-w-md mx-auto">
         <div className="text-center mb-8">
-          <img src={logo} alt="Alessandro Karatê e Kobudo" className="h-20 w-20 mx-auto mb-4" />
+          <img src={logo} alt="Dojo Dash Portal" className="h-20 w-20 mx-auto mb-4" />
           <h1 className="text-3xl font-bold text-primary-foreground mb-4">Área do Aluno</h1>
           <p className="text-primary-foreground mb-4">Acesse sua conta ou cadastre-se</p>
         </div>

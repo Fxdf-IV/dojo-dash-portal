@@ -9,11 +9,11 @@ interface SEOProps {
 }
 
 export const SEO = ({
-  title = "Alessandro Karatê e Kobudo - Palmital SP",
-  description = "Tradição Shorin-Ryu em Palmital. Mais que um dojo, uma família dedicada à formação integral através do karatê tradicional. Disciplina, respeito e excelência.",
-  keywords = "karate, kobudo, shorin-ryu, palmital, artes marciais, dojo, alessandro, karatê tradicional",
+  title = "Dojo Dash Portal - Cidade Exemplo SP",
+  description = "Tradição Shorin-Ryu em Cidade Exemplo. Mais que um dojo, uma família dedicada à formação integral através do karatê tradicional. Disciplina, respeito e excelência.",
+  keywords = "karate, kobudo, shorin-ryu, Cidade Exemplo, artes marciais, dojo, DojoDash, karatê tradicional",
   image = "/logo.webp",
-  url = "https://alessandrokarate.com.br",
+  url = "https://DojoDashkarate.com.br",
 }: SEOProps) => {
   useEffect(() => {
     // Update title

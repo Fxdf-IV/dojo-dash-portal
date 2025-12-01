@@ -437,4 +437,4 @@ Todos os requests da API são logados no console:
 
 ---
 
-Desenvolvido com ❤️ para Alessandro Karatê e Kobudo
+Desenvolvido com ❤️ para Dojo Dash Portal
