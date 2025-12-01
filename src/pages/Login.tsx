@@ -141,6 +141,43 @@ const Login = () => {
                 <CardDescription>Digite suas credenciais para acessar</CardDescription>
               </CardHeader>
               <CardContent>
+                {import.meta.env.VITE_USE_MOCK === 'true' && (
+                  <div className="mb-6 p-4 bg-secondary/20 rounded-lg border border-secondary space-y-3">
+                    <p className="text-sm font-medium text-center text-muted-foreground mb-2">
+                      ⚡ Modo Portfólio (Mock)
+                    </p>
+                    <div className="grid grid-cols-2 gap-2">
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        className="w-full text-xs border-primary/50 hover:bg-primary/10"
+                        onClick={() => {
+                          setLoginData({ email: 'admin@test.com', password: '1234' });
+                          login('admin@test.com', '1234').then(({ user }) => {
+                             toast({ title: "Login Mock (Admin)", description: "Redirecionando..." });
+                             setTimeout(() => navigate("/admin"), 100);
+                          });
+                        }}
+                      >
+                        Admin Mock
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        className="w-full text-xs border-primary/50 hover:bg-primary/10"
+                        onClick={() => {
+                          setLoginData({ email: 'student@test.com', password: '1234' });
+                          login('student@test.com', '1234').then(({ user }) => {
+                             toast({ title: "Login Mock (Aluno)", description: "Redirecionando..." });
+                             setTimeout(() => navigate("/student"), 100);
+                          });
+                        }}
+                      >
+                        Aluno Mock
+                      </Button>
+                    </div>
+                  </div>
+                )}
                 <form onSubmit={async (e) => {
                   e.preventDefault();
                   try {
