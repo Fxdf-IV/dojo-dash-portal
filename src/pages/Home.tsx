@@ -437,7 +437,7 @@ const Home = () => {
               Pronto para Começar sua Jornada?
             </h2>
             <p className="text-xl text-primary-foreground/90 mb-8 max-w-2xl mx-auto">
-              Aqui você pode convidar a todos para conhecer o seu trabalho com apenas um clique. Assim como te convido a conhecer o meu caso tenha interesse em ter um portal para seu o negócio.
+              Aqui você pode convidar a todos para conhecer o seu trabalho com apenas um clique. Assim como te convido a conhecer o nosso, caso tenha interesse em ter um portal para seu o negócio.
             </p>
             <Link to="/contato">
               <Button
