@@ -4,8 +4,6 @@
 
 > 🚀 **Portfolio Showcase:** Este projeto demonstra uma aplicação Full Stack completa (Frontend + Backend), focada em **UX/UI Premium**, **Arquitetura Limpa** e **Boas Práticas**.
 
-![Dojo Dash Preview](https://images.unsplash.com/photo-1555597673-b21d5c935865?q=80&w=2072&auto=format&fit=crop)
-
 ---
 
 ## 🎯 Sobre o Projeto
