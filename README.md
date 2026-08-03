@@ -118,4 +118,4 @@ JWT_SECRET=dev-secret-123
 
 ---
 
-**Desenvolvido por [Seu Nome/Username]**
+**Desenvolvido por Maneki Neeko**
