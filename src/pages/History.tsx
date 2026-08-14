@@ -66,10 +66,10 @@ const History = () => {
             </p>
 
             <blockquote className="my-8 rounded-r-xl border-l-4 border-primary bg-muted/70 p-6 text-foreground shadow-soft">
-              <p className="text-lg font-semibold text-foreground mb-2">
+              <p className="text-lg font-semibold leading-relaxed text-foreground">
                 “Tecnologia e tradição caminhando juntas para a evolução do seu negócio.”
               </p>
-            </div>
+            </blockquote>
 
             <p>
             Tudo que você está lendo pode ser editado e alterado a seu gosto.
