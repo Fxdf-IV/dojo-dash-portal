@@ -160,11 +160,10 @@ export const StudentManager = ({
       const { confirmPassword, ...payload } = form;
       const newStudent = await studentsService.create({
         ...payload,
-        userId: "",
         birthDate: form.birthDate || undefined,
         startDate: form.startDate || undefined,
         phone: form.phone || undefined,
-      });
+      } as never);
       onUpdate([...students, newStudent]);
       setIsAddOpen(false);
       resetForm();
