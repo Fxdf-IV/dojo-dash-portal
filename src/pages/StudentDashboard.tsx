@@ -51,10 +51,10 @@ const StudentDashboard = () => {
 
   // Filter materials by user's belt level
   const availableMaterials = {
-    kihons: materials.filter(m => m.type === "Materia 1 (ex: Kihon)" && canAccessMaterial(user?.beltId, m.minBeltId)),
-    katas: materials.filter(m => m.type === "Materia 2 (ex: Kata)" && canAccessMaterial(user?.beltId, m.minBeltId)),
-    theory: materials.filter(m => m.type === "Materia 3 (ex: Teoria)" && canAccessMaterial(user?.beltId, m.minBeltId)),
-    bunkai: materials.filter(m => m.type === "Materia 4 (ex: Bunkai)" && canAccessMaterial(user?.beltId, m.minBeltId)),
+    kihons: materials.filter(m => (m.type as string) === "Materia 1 (ex: Kihon)" && canAccessMaterial(user?.beltId, m.minBeltId)),
+    katas: materials.filter(m => (m.type as string) === "Materia 2 (ex: Kata)" && canAccessMaterial(user?.beltId, m.minBeltId)),
+    theory: materials.filter(m => (m.type as string) === "Materia 3 (ex: Teoria)" && canAccessMaterial(user?.beltId, m.minBeltId)),
+    bunkai: materials.filter(m => (m.type as string) === "Materia 4 (ex: Bunkai)" && canAccessMaterial(user?.beltId, m.minBeltId)),
   };
 
   // Refresh user data on page load
