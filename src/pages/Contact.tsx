@@ -285,9 +285,12 @@ const Contact = () => {
                       </Card>
                     ))
                   ) : (
-                    <p className="text-sm text-muted-foreground text-center py-8">
-                      Nenhum local cadastrado no momento.
-                    </p>
+                    <EmptyState
+                      icon={MapPin}
+                      title="Nenhum local cadastrado"
+                      description="Os endereços aparecerão aqui assim que forem cadastrados."
+                      className="border-0 bg-transparent py-8"
+                    />
                   )}
                 </div>
               </Card>

@@ -24,7 +24,7 @@ import { AnimatedDivider } from "@/components/AnimatedDivider";
 import { senseisService, locationsService } from "@/services";
 import type { Sensei, Location } from "@/types";
 import { SEO } from "@/components/SEO";
-import { LoadingGrid } from "@/components/LoadingStates";
+import { LoadingGrid, LoadingSpinner, EmptyState } from "@/components/LoadingStates";
 import { SenseisCarousel } from "@/components/SenseisCarousel";
 import HERO_IMAGE from "@/assets/images/hero/HomeCover.webp";
 
@@ -293,15 +293,14 @@ const Home = () => {
             </div>
 
             {loadingLocations ? (
-              <div className="text-center py-12">
-                <p className="text-muted-foreground">Carregando locais...</p>
-              </div>
+              <LoadingSpinner label="Carregando locais" />
             ) : locations.length === 0 ? (
-              <div className="text-center py-12">
-                <p className="text-muted-foreground">
-                  Nenhum local cadastrado.
-                </p>
-              </div>
+              <EmptyState
+                icon={MapPin}
+                title="Nenhum local cadastrado"
+                description="Assim que os locais de treino forem adicionados, eles aparecerão aqui."
+                className="mx-auto max-w-2xl"
+              />
             ) : (
               <div className="max-w-6xl mx-auto">
                 <div className="w-full flex justify-center mb-6">

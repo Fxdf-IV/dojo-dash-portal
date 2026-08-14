@@ -49,9 +49,12 @@ export function SenseisCarousel({ senseis }: SenseisCarouselProps) {
 
   if (!senseis || senseis.length === 0) {
     return (
-      <div className="text-center py-12">
-        <p className="text-muted-foreground">Nenhum sensei encontrado.</p>
-      </div>
+      <EmptyState
+        icon={Users}
+        title="Nenhum profissional cadastrado"
+        description="Os perfis da sua equipe aparecerão aqui assim que forem adicionados."
+        className="mx-auto max-w-2xl"
+      />
     );
   }
 

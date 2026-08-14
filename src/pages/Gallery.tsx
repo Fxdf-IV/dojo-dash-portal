@@ -302,12 +302,11 @@ const Gallery = () => {
                         )}
                       </div>
                     ) : (
-                      <div className="text-center py-12">
-                        <ImageIcon className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
-                        <p className="text-muted-foreground">
-                          Nenhuma foto disponível para este local ainda.
-                        </p>
-                      </div>
+                      <EmptyState
+                        icon={ImageIcon}
+                        title="Nenhuma foto por aqui ainda"
+                        description="As imagens deste local aparecerão assim que forem publicadas."
+                      />
                     )}
                   </div>
                 );
