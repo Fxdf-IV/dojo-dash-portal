@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Manrope:wght@400;500;600;700&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,52 +11,63 @@ All colors MUST be HSL.
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 0 0% 5%;
+    --foreground: 0 0% 8%;
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 5%;
+    --card-foreground: 0 0% 8%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 5%;
+    --popover-foreground: 0 0% 8%;
 
-    --primary: 0 85% 50%;
+    --primary: 0 85% 46%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 0 0% 10%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 45%;
+    --muted: 0 0% 96.5%;
+    --muted-foreground: 0 0% 38%;
 
     --accent: 0 75% 40%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 72% 45%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
-    --ring: 0 85% 50%;
+    --success: 152 60% 32%;
+    --success-foreground: 0 0% 100%;
 
-    --radius: 0.5rem;
+    --warning: 38 92% 42%;
+    --warning-foreground: 0 0% 100%;
+
+    --border: 0 0% 89%;
+    --input: 0 0% 87%;
+    --ring: 0 85% 46%;
+
+    --radius: 0.75rem;
 
     /* Karate Dojo specific colors */
-    --dojo-red: 0 85% 50%;
-    --dojo-red-dark: 0 75% 40%;
+    --dojo-red: 0 85% 46%;
+    --dojo-red-dark: 0 75% 38%;
     --dojo-red-light: 0 85% 60%;
     --dojo-black: 0 0% 5%;
     --dojo-gray: 0 0% 20%;
 
     /* Gradients */
     --gradient-hero: linear-gradient(135deg, hsl(0 0% 0%) 15%, hsl(0 75% 25%) 100%);
-    --gradient-overlay: linear-gradient(180deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.4) 100%);
+    --gradient-overlay: linear-gradient(180deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.45) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(var(--dojo-red)) 0%, hsl(var(--dojo-red-dark)) 100%);
+    --gradient-subtle: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(0 0% 97%) 100%);
 
-    /* Shadows */
-    --shadow-glow: 0 0 40px hsl(0 85% 50% / 0.3);
-    --shadow-card: 0 10px 30px -10px hsl(0 0% 0% / 0.2);
+    /* Elevation */
+    --shadow-glow: 0 0 40px hsl(var(--primary) / 0.28);
+    --shadow-card: 0 1px 2px hsl(0 0% 0% / 0.04), 0 8px 24px -12px hsl(0 0% 0% / 0.16);
+    --shadow-elevated: 0 2px 4px hsl(0 0% 0% / 0.05), 0 18px 40px -16px hsl(0 0% 0% / 0.24);
+    --shadow-soft: 0 1px 2px hsl(0 0% 0% / 0.05);
 
-    /* Animation */
+    /* Motion */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 0 0% 20%;
@@ -63,11 +76,11 @@ All colors MUST be HSL.
     --sidebar-accent: 0 0% 96%;
     --sidebar-accent-foreground: 0 0% 10%;
     --sidebar-border: 0 0% 90%;
-    --sidebar-ring: 0 85% 50%;
+    --sidebar-ring: 0 85% 46%;
   }
 
   .dark {
-    --background: 0 0% 5%;
+    --background: 0 0% 6%;
     --foreground: 0 0% 98%;
 
     --card: 0 0% 10%;
@@ -76,33 +89,43 @@ All colors MUST be HSL.
     --popover: 0 0% 10%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 0 85% 50%;
+    --primary: 0 85% 55%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 0 0% 15%;
     --secondary-foreground: 0 0% 98%;
 
     --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 65%;
+    --muted-foreground: 0 0% 68%;
 
-    --accent: 0 75% 40%;
+    --accent: 0 75% 45%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 75% 50%;
+    --destructive: 0 72% 52%;
     --destructive-foreground: 0 0% 98%;
 
+    --success: 152 50% 45%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 55%;
+    --warning-foreground: 0 0% 8%;
+
     --border: 0 0% 20%;
-    --input: 0 0% 20%;
-    --ring: 0 85% 50%;
+    --input: 0 0% 24%;
+    --ring: 0 85% 55%;
+
+    --gradient-subtle: linear-gradient(180deg, hsl(0 0% 11%) 0%, hsl(0 0% 8%) 100%);
+    --shadow-card: 0 1px 2px hsl(0 0% 0% / 0.4), 0 8px 24px -12px hsl(0 0% 0% / 0.6);
+    --shadow-elevated: 0 2px 4px hsl(0 0% 0% / 0.4), 0 18px 40px -16px hsl(0 0% 0% / 0.7);
 
     --sidebar-background: 0 0% 10%;
     --sidebar-foreground: 0 0% 95%;
-    --sidebar-primary: 0 85% 50%;
+    --sidebar-primary: 0 85% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 0 0% 15%;
     --sidebar-accent-foreground: 0 0% 95%;
     --sidebar-border: 0 0% 20%;
-    --sidebar-ring: 0 85% 50%;
+    --sidebar-ring: 0 85% 55%;
   }
 }
 
@@ -111,8 +134,103 @@ All colors MUST be HSL.
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display font-bold tracking-tight;
+    text-wrap: balance;
+  }
+
+  h1 {
+    letter-spacing: -0.03em;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Consistent, visible keyboard focus across the whole app */
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  ::selection {
+    background-color: hsl(var(--primary) / 0.2);
+  }
+
+  /* Refined scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--muted-foreground) / 0.35) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--muted-foreground) / 0.3);
+    border-radius: 9999px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(var(--muted-foreground) / 0.5);
+  }
+}
+
+@layer components {
+  /* Vertical rhythm shared by every page section */
+  .section-y {
+    @apply py-16 md:py-24;
+  }
+
+  .section-header {
+    @apply mx-auto mb-12 max-w-2xl text-center md:mb-16;
+  }
+
+  .eyebrow {
+    @apply mb-3 inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-primary;
+  }
+
+  .heading-1 {
+    @apply font-display text-4xl font-extrabold leading-[1.08] tracking-tight md:text-6xl;
+  }
+
+  .heading-2 {
+    @apply font-display text-3xl font-bold leading-[1.15] tracking-tight md:text-4xl;
+  }
+
+  .heading-3 {
+    @apply font-display text-xl font-semibold leading-snug md:text-2xl;
+  }
+
+  .lead {
+    @apply text-base leading-relaxed text-muted-foreground md:text-lg;
+  }
+
+  .card-interactive {
+    @apply transition-all duration-300 ease-out hover:-translate-y-1 hover:border-primary/40 hover:shadow-elevated;
   }
 }
 
@@ -127,18 +245,49 @@ All colors MUST be HSL.
   }
 
   .animate-fade-in {
-    animation: fade-in 0.3s ease-out;
+    animation: fade-in 0.4s var(--ease-out-soft) both;
   }
 
   .animate-scale-in {
-    animation: scale-in 0.3s ease-out;
+    animation: scale-in 0.3s var(--ease-out-soft) both;
   }
-  
+
+  .hover-lift {
+    @apply transition-transform duration-300 ease-out hover:-translate-y-0.5;
+  }
+
+  .press {
+    @apply active:scale-[0.98];
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
   .text-outline-black {
-    text-shadow: 
+    text-shadow:
       -1px -1px 0 #000,
-       1px -1px 0 #000,
+      1px -1px 0 #000,
       -1px 1px 0 #000,
-       1px 1px 0 #000;
+      1px 1px 0 #000;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
