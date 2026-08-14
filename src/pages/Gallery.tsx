@@ -17,7 +17,7 @@ import { useState, useEffect } from "react";
 import { locationsService } from "@/services";
 import type { Location } from "@/types";
 import { SEO } from "@/components/SEO";
-import { LoadingSpinner } from "@/components/LoadingStates";
+import { LoadingSpinner, EmptyState } from "@/components/LoadingStates";
 import { AnimatedDivider } from "@/components/AnimatedDivider";
 import HERO_IMAGE from "@/assets/images/hero/GalleryCover.webp";
 

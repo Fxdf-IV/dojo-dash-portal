@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
 import { BookOpen, Video, FileText, Trophy, Swords } from "lucide-react";
+import { LoadingSpinner, EmptyState } from "@/components/LoadingStates";
 import BeltGrades from "@/components/BeltGrades";
 import { BELT_GRADES } from "@/components/BeltSelect";
 import { materialsService } from "@/services";

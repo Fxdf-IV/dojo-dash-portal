@@ -1,4 +1,6 @@
 import * as React from "react";
+import { Users } from "lucide-react";
+import { EmptyState } from "@/components/LoadingStates";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,

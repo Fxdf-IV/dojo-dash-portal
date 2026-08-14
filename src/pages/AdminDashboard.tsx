@@ -1,6 +1,7 @@
 ﻿import { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Users, BookOpen, MapPin, User2, Calendar, Shield } from "lucide-react";
+import { LoadingSpinner } from "@/components/LoadingStates";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import {

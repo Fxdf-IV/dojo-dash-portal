@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { MapPin, Phone, Mail, Facebook, Instagram, MessageCircle, MapPinOff } from "lucide-react";
+import { EmptyState } from "@/components/LoadingStates";
 import { contactSettingsService, locationsService } from "@/services";
 import type { Location } from "@/types";
 import { SEO } from "@/components/SEO";
