@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { MapPin, Phone, Mail, Facebook, Instagram, MessageCircle, MapPinOff } from "lucide-react";
+import { EmptyState } from "@/components/LoadingStates";
 import { contactSettingsService, locationsService } from "@/services";
 import type { Location } from "@/types";
 import { SEO } from "@/components/SEO";
@@ -285,9 +286,12 @@ const Contact = () => {
                       </Card>
                     ))
                   ) : (
-                    <p className="text-sm text-muted-foreground text-center py-8">
-                      Nenhum local cadastrado no momento.
-                    </p>
+                    <EmptyState
+                      icon={MapPin}
+                      title="Nenhum local cadastrado"
+                      description="Os endereços aparecerão aqui assim que forem cadastrados."
+                      className="border-0 bg-transparent py-8"
+                    />
                   )}
                 </div>
               </Card>

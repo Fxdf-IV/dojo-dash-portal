@@ -11,7 +11,7 @@ import HERO_IMAGE from "@/assets/images/hero/LoginCover.webp";
 const PendingApproval = () => {
   const { user, refreshUser } = useAuth();
   const navigate = useNavigate();
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Check if user is already approved - separate effect for redirect
   useEffect(() => {

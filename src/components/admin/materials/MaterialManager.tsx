@@ -87,7 +87,7 @@ export const MaterialManager = ({
         fd.append("minBeltId", form.minBeltId);
         fd.append("videoUrl", form.videoUrl || "");
         if (imageFile) fd.append("image", imageFile);
-        newMaterial = await materialsService.create(fd);
+        newMaterial = await materialsService.create(fd as never);
       } else {
         newMaterial = await materialsService.create(form);
       }
@@ -117,7 +117,7 @@ export const MaterialManager = ({
         fd.append("minBeltId", form.minBeltId);
         fd.append("videoUrl", form.videoUrl || "");
         if (imageFile) fd.append("image", imageFile);
-        updated = await materialsService.update(editingMaterial.id, fd);
+        updated = await materialsService.update(editingMaterial.id, fd as never);
       } else {
         updated = await materialsService.update(editingMaterial.id, form);
       }

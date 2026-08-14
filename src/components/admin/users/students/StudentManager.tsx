@@ -163,7 +163,7 @@ export const StudentManager = ({
         birthDate: form.birthDate || undefined,
         startDate: form.startDate || undefined,
         phone: form.phone || undefined,
-      });
+      } as never);
       onUpdate([...students, newStudent]);
       setIsAddOpen(false);
       resetForm();

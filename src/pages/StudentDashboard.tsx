@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
 import { BookOpen, Video, FileText, Trophy, Swords } from "lucide-react";
+import { LoadingSpinner, EmptyState } from "@/components/LoadingStates";
 import BeltGrades from "@/components/BeltGrades";
 import { BELT_GRADES } from "@/components/BeltSelect";
 import { materialsService } from "@/services";
@@ -51,10 +52,10 @@ const StudentDashboard = () => {
 
   // Filter materials by user's belt level
   const availableMaterials = {
-    kihons: materials.filter(m => m.type === "Materia 1 (ex: Kihon)" && canAccessMaterial(user?.beltId, m.minBeltId)),
-    katas: materials.filter(m => m.type === "Materia 2 (ex: Kata)" && canAccessMaterial(user?.beltId, m.minBeltId)),
-    theory: materials.filter(m => m.type === "Materia 3 (ex: Teoria)" && canAccessMaterial(user?.beltId, m.minBeltId)),
-    bunkai: materials.filter(m => m.type === "Materia 4 (ex: Bunkai)" && canAccessMaterial(user?.beltId, m.minBeltId)),
+    kihons: materials.filter(m => (m.type as string) === "Materia 1 (ex: Kihon)" && canAccessMaterial(user?.beltId, m.minBeltId)),
+    katas: materials.filter(m => (m.type as string) === "Materia 2 (ex: Kata)" && canAccessMaterial(user?.beltId, m.minBeltId)),
+    theory: materials.filter(m => (m.type as string) === "Materia 3 (ex: Teoria)" && canAccessMaterial(user?.beltId, m.minBeltId)),
+    bunkai: materials.filter(m => (m.type as string) === "Materia 4 (ex: Bunkai)" && canAccessMaterial(user?.beltId, m.minBeltId)),
   };
 
   // Refresh user data on page load
@@ -155,17 +156,16 @@ const StudentDashboard = () => {
           <TabsContent value="kihons" className="mt-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {loadingMaterials ? (
-                <Card className="col-span-full">
-                  <CardContent className="py-8 text-center">
-                    Carregando materiais...
-                  </CardContent>
-                </Card>
+                <div className="col-span-full">
+                  <LoadingSpinner label="Carregando materiais" />
+                </div>
               ) : availableMaterials.kihons.length === 0 ? (
-                <Card className="col-span-full">
-                  <CardContent className="py-8 text-center text-muted-foreground">
-                    Nenhum material disponível para sua graduação atual
-                  </CardContent>
-                </Card>
+                <EmptyState
+                  className="col-span-full"
+                  icon={BookOpen}
+                  title="Nenhum material disponível"
+                  description="Ainda não há conteúdo liberado para a sua graduação atual."
+                />
               ) : (
                 availableMaterials.kihons.map((kihon) => (
                   <Card key={kihon.id} className="border-primary/20 hover:border-primary transition-all">
@@ -210,17 +210,16 @@ const StudentDashboard = () => {
           <TabsContent value="katas" className="mt-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {loadingMaterials ? (
-                <Card className="col-span-full">
-                  <CardContent className="py-8 text-center">
-                    Carregando materiais...
-                  </CardContent>
-                </Card>
+                <div className="col-span-full">
+                  <LoadingSpinner label="Carregando materiais" />
+                </div>
               ) : availableMaterials.katas.length === 0 ? (
-                <Card className="col-span-full">
-                  <CardContent className="py-8 text-center text-muted-foreground">
-                    Nenhum material disponível para sua graduação atual
-                  </CardContent>
-                </Card>
+                <EmptyState
+                  className="col-span-full"
+                  icon={BookOpen}
+                  title="Nenhum material disponível"
+                  description="Ainda não há conteúdo liberado para a sua graduação atual."
+                />
               ) : (
                 availableMaterials.katas.map((kata) => (
                   <Card key={kata.id} className="border-primary/20 hover:border-primary transition-all">
@@ -275,17 +274,16 @@ const StudentDashboard = () => {
           <TabsContent value="theory" className="mt-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {loadingMaterials ? (
-                <Card className="col-span-full">
-                  <CardContent className="py-8 text-center">
-                    Carregando materiais...
-                  </CardContent>
-                </Card>
+                <div className="col-span-full">
+                  <LoadingSpinner label="Carregando materiais" />
+                </div>
               ) : availableMaterials.theory.length === 0 ? (
-                <Card className="col-span-full">
-                  <CardContent className="py-8 text-center text-muted-foreground">
-                    Nenhum material disponível para sua graduação atual
-                  </CardContent>
-                </Card>
+                <EmptyState
+                  className="col-span-full"
+                  icon={BookOpen}
+                  title="Nenhum material disponível"
+                  description="Ainda não há conteúdo liberado para a sua graduação atual."
+                />
               ) : (
                 availableMaterials.theory.map((item) => (
                   <Card key={item.id} className="border-primary/20 hover:border-primary transition-all">
@@ -336,17 +334,16 @@ const StudentDashboard = () => {
           <TabsContent value="bunkai" className="mt-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {loadingMaterials ? (
-                <Card className="col-span-full">
-                  <CardContent className="py-8 text-center">
-                    Carregando materiais...
-                  </CardContent>
-                </Card>
+                <div className="col-span-full">
+                  <LoadingSpinner label="Carregando materiais" />
+                </div>
               ) : availableMaterials.bunkai.length === 0 ? (
-                <Card className="col-span-full">
-                  <CardContent className="py-8 text-center text-muted-foreground">
-                    Nenhum material disponível para sua graduação atual
-                  </CardContent>
-                </Card>
+                <EmptyState
+                  className="col-span-full"
+                  icon={BookOpen}
+                  title="Nenhum material disponível"
+                  description="Ainda não há conteúdo liberado para a sua graduação atual."
+                />
               ) : (
                 availableMaterials.bunkai.map((bunkai) => (
                   <Card key={bunkai.id} className="border-primary/20 hover:border-primary transition-all">

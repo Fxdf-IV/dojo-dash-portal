@@ -1,6 +1,7 @@
 ﻿import { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Users, BookOpen, MapPin, User2, Calendar, Shield } from "lucide-react";
+import { LoadingSpinner } from "@/components/LoadingStates";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -161,10 +162,8 @@ const AdminDashboard = () => {
 
   if (!user) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <p className="text-lg text-muted-foreground">Carregando...</p>
-        </div>
+      <div className="flex min-h-screen items-center justify-center">
+        <LoadingSpinner label="Carregando painel" />
       </div>
     );
   }

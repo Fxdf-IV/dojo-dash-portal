@@ -4,7 +4,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import type { Event } from "@/types";
 import { SEO } from "@/components/SEO";
-import { LoadingSpinner } from "@/components/LoadingStates";
+import { LoadingSpinner, EmptyState } from "@/components/LoadingStates";
+import { CalendarDays } from "lucide-react";
 import { AnimatedDivider } from "@/components/AnimatedDivider";
 import HERO_IMAGE from "@/assets/images/hero/EventCover.webp";
 import { EventCard } from "@/components/EventCard";
@@ -135,11 +136,14 @@ const Events = () => {
             Próximos Eventos
           </h2>
           {loading ? (
-            <LoadingSpinner />
+            <LoadingSpinner label="Carregando eventos" />
           ) : upcomingEvents.length === 0 ? (
-            <div className="text-center text-muted-foreground py-12">
-              <p>Não há eventos programados no momento.</p>
-            </div>
+            <EmptyState
+              icon={CalendarDays}
+              title="Nenhum evento programado"
+              description="Assim que novas datas forem divulgadas, elas aparecerão aqui."
+              className="mx-auto max-w-2xl"
+            />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {upcomingEvents.map((event) => (
