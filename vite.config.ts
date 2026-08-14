@@ -18,10 +18,15 @@ export default defineConfig(({ mode }) => {
         name: 'configure-server',
         configureServer: async (server: any) => {
           // Só inicia o servidor API se NÃO estiver em modo mock
-          if (env.VITE_USE_MOCK !== 'true') {
-            // Importa e configura o servidor API
-            const { setupApiServer } = await import('./server/index.js');
-            setupApiServer(server.middlewares as any);
+          const mockMode = env.VITE_USE_MOCK === 'true' || !env.MONGODB_URI;
+          if (!mockMode) {
+            try {
+              // Importa e configura o servidor API
+              const { setupApiServer } = await import('./server/index.js');
+              setupApiServer(server.middlewares as any);
+            } catch (error) {
+              console.warn('⚠️ Backend API não iniciado:', (error as Error).message);
+            }
           } else {
             console.log('🔶 Mock Mode ativado: Backend API não será iniciado.');
           }
